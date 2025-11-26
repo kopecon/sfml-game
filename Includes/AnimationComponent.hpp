@@ -54,23 +54,22 @@ class AnimationComponent {
 public:
 #pragma region constructors
     AnimationComponent();
-    explicit AnimationComponent(const AnimationSheet &animationSheet);
+    explicit AnimationComponent(const AnimationSheet &animationSheet, sf::Shape &target);
 #pragma endregion
 
     AnimationSheet animationSheet{};
     AnimationEntry *pPreviousAnimation{nullptr};
     AnimationEntry *pCurrentAnimation{nullptr};
     std::unordered_map<int, AnimationEntry> animationSet;
+    sf::Shape *target{};
 
     void set(const int &animationID);
 
     void add(const AnimationEntry &animation);
 
-    void update(entities::Player &player, const float &dt);
+    void update(const float &dt);
 
     [[nodiscard]] sf::IntRect getFrame() const;
-
-    void selectAnimation(const entities::Player &player);
 };
 
 #endif //BONK_GAME_ANIMATED_HPP

@@ -28,7 +28,7 @@ public:
 
     Controls controls{};
 
-    void update(entities::Player &player) const;
+    int update(entities::Player &player) const;
 };
 
 #endif //BONK_GAME_INPUTCOMPONENT_HPP

@@ -38,6 +38,8 @@ add_executable("${CMAKE_PROJECT_NAME}" src/main.cpp
         Includes/PhysicsComponent.hpp
         src/InputComponent.cpp
         Includes/InputComponent.hpp
+        utils/utils.cpp
+        Includes/utils.hpp
 )
 
 if (PRODUCTION_BUILD)

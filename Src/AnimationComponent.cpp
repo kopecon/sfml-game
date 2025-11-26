@@ -37,7 +37,9 @@ size_t AnimationEntry::Hash::operator()(const AnimationEntry &anim) const noexce
 
 AnimationComponent::AnimationComponent() = default;
 
-AnimationComponent::AnimationComponent(const AnimationSheet &animationSheet): animationSheet(animationSheet) {}
+AnimationComponent::AnimationComponent(const AnimationSheet &animationSheet, sf::Shape &target) :
+animationSheet(animationSheet),
+target(&target) {}
 
 void AnimationComponent::set(const int &animationID) {
     auto *pNewAnimation = &animationSet[animationID];
@@ -63,9 +65,8 @@ void AnimationComponent::add(const AnimationEntry &animation) {
     }
 }
 
-void AnimationComponent::update(entities::Player &player, const float &dt) {
-    selectAnimation(player);
-    player.shape.setTextureRect(getFrame());
+void AnimationComponent::update(const float &dt) {
+    target->setTextureRect(getFrame());
     pCurrentAnimation->state = AnimationEntry::PLAYING;
     pCurrentAnimation->timer += dt;
     // When it is the time to move to the next frame
@@ -91,29 +92,4 @@ sf::IntRect AnimationComponent::getFrame() const {
         pCurrentAnimation->frameIndex.y*animationSheet.frameSize.y
     );
     return {frameCoord, animationSheet.frameSize};
-}
-
-void AnimationComponent::selectAnimation(const entities::Player &player) {
-    using enum entities::Player::PlayerAnimations;
-    using enum entities::Player::PlayerStates;
-    switch (player.state) {
-        case JUMPING : {
-            set(JUMP);
-            animationSet[JUMP].fps = std::fabs(player.maxWalkingSpeed.y / player.maxSpeed.y)*24.f;
-            break;
-        }
-        case WALKING : {
-            set(WALK);
-            pCurrentAnimation->fps = std::fabs(player.velocity.x / player.maxWalkingSpeed.x) * static_cast<float>(pCurrentAnimation->framesPerRow) * 2.f;
-            break;
-        }
-        case RUNNING : {
-            set(RUN);
-            pCurrentAnimation->fps = std::fabs(player.velocity.x / player.maxRunningSpeed.x) * static_cast<float>(pCurrentAnimation->framesPerRow) * 2.f;
-            break;
-        }
-        default: {
-            set(IDLE);
-        }
-    }
 }
