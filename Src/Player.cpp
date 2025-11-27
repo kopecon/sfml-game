@@ -6,6 +6,8 @@
 #include "../Includes/utils.hpp"
 #include <iostream>
 
+#include "../Includes/World.hpp"
+
 
 #pragma region constructors
 Player::Player() = default;
@@ -27,6 +29,7 @@ Player::Player(sf::Texture &texture, const Controls &controls) : input(controls)
     animation.add(AnimationEntry(DISAPPEARING, 4, false));
     animation.add(AnimationEntry(ATTACKING,    8, false));
     this->shape.setTextureRect(animation.getFrame());
+    this->pShape = &shape;  // Give reference to the shape to the entity parent class
 }
 #pragma endregion
 
@@ -38,6 +41,10 @@ void Player::setPosition(const sf::Vector2f &newPosition) {
 void Player::moveShape(const sf::Vector2f distance) {
     shape.move(distance);
     position = shape.getPosition();
+}
+
+void Player::setGroundLevel(const float &groundLevel) {
+    physics.GROUND_LEVEL = groundLevel;
 }
 
 void Player::turn() {
@@ -76,18 +83,22 @@ void Player::brake() {
 }
 
 void Player::jump() {
-    if (position.y == physics.GROUND_LEVEL) {
+    if (position.y + size.y / 2.f >= physics.GROUND_LEVEL) {
         velocity.y = -physics.GRAVITY*maxSpeed.y/2500.f;  // Magic number is tweaked experimentally
     }
 }
 
 void Player::attack() {
+    for (const auto pPlayers = pWorld->findTypes<Player>(); const auto item : pPlayers) {
+        if (item != this) {
+        }
+    }
 }
 
 void Player::declareState() {
     const int desiredState = input.update(*this);
     if (state == JUMPING) {
-        if (position.y == physics.GROUND_LEVEL) {
+        if (position.y  + size.y / 2.f >= physics.GROUND_LEVEL) {
             state = IDLE;
         }
     }

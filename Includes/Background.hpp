@@ -5,40 +5,24 @@
 #ifndef BONK_GAME_BACKGROUND_HPP
 #define BONK_GAME_BACKGROUND_HPP
 #include <SFML/Graphics.hpp>
-#include "../Includes/Camera.hpp"
 
-namespace scenery {
-    class Ground {
-    public:
-        sf::Vector2f size{};
-        sf::IntRect body_texture_chunk{};
-        sf::IntRect top_texture_chunk{};
-        sf::Texture* pTexture{};
-        sf::Texture* pTextureTop{};
-        sf::RectangleShape body{};
-        sf::RectangleShape top{};
+#include "Entity.hpp"
+#include "Camera.hpp"
 
-        Ground();
+class Background final : public Entity {
+public:
+    sf::Vector2u size{};
+    sf::Texture* pTexture{};
+    sf::RectangleShape shape{};
 
-        Ground(sf::Texture &groundTextureRef, sf::Texture &topGroundTextureRef, const sf::RectangleShape &backgroundShape);
+    Background();
 
-        void loop(const tools::Camera &camera);
-    };
+    explicit Background(sf::Texture &backgroundTextureRef, const sf::Vector2u &window);
 
-    class Background {
-    public:
-        sf::Vector2u size{};
-        sf::IntRect texture_chunk{};
-        sf::Texture* pTexture{};
-        sf::RectangleShape shape{};
-        Ground floor{};
+    void loop(const tools::Camera &camera);
 
-        Background();
+    void update(const float &dt) override;
+};
 
-        explicit Background(sf::Texture &backgroundTextureRef, sf::Texture &groundTextureRef, sf::Texture &topGroundTextureRef,
-                            const sf::Vector2u &size);
-        void loop(const tools::Camera &camera);
-    };
-}
 
 #endif //BONK_GAME_BACKGROUND_HPP

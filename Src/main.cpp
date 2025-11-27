@@ -1,7 +1,9 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+#include "../Includes/World.hpp"
 #include "../Includes/Player.hpp"
 #include "../Includes/Background.hpp"
+#include "../Includes/Ground.hpp"
 #include "../Includes/Camera.hpp"
 #include <iostream>
 
@@ -31,28 +33,24 @@ int main() {
 
 #pragma region background
     sf::Texture backgroundTexture(RESOURCES_PATH "Custom/background.jpg");
+    Background background(backgroundTexture, {window.getSize().x*3,window.getSize().y});
     sf::Texture groundTexture(RESOURCES_PATH "kenney_new-platformer-pack-1.0/Sprites/Tiles/Double/terrain_dirt_block_center.png");
     sf::Texture topGroundTexture(RESOURCES_PATH "kenney_new-platformer-pack-1.0/Sprites/Tiles/Double/terrain_dirt_block_top.png");
-    scenery::Background background_1(backgroundTexture, groundTexture, topGroundTexture,
-        {
-        window.getSize().x*3,
-        window.getSize().y
-    });
-
+    float groundLevel = window.getSize().y - window.getSize().y/5.f;
+    Ground ground(groundTexture, topGroundTexture, {window.getSize().x*3, window.getSize().y}, groundLevel);
 #pragma endregion
 
 #pragma region player
     auto playerTexture(sf::Texture(RESOURCES_PATH "Custom/AnimationSheet_Character.png"));
     Player player_1(playerTexture, {
-    sf::Keyboard::Scancode::A,
-    sf::Keyboard::Scancode::D,
-    sf::Keyboard::Scancode::W,
-    sf::Keyboard::Scancode::LShift,
-    sf::Keyboard::Scancode::F
-});
-    player_1.setPosition({background_1.shape.getGeometricCenter().x-200,
-        background_1.floor.top.getPosition().y-player_1.size.y/2.f});
-    player_1.physics.GROUND_LEVEL = player_1.position.y;
+        sf::Keyboard::Scancode::A,
+        sf::Keyboard::Scancode::D,
+        sf::Keyboard::Scancode::W,
+        sf::Keyboard::Scancode::LShift,
+        sf::Keyboard::Scancode::F
+    });
+    player_1.setGroundLevel(groundLevel);
+    player_1.setPosition({-250.f, player_1.physics.GROUND_LEVEL-player_1.size.y});
     Player player_2(playerTexture, {
         sf::Keyboard::Scancode::Left,
         sf::Keyboard::Scancode::Right,
@@ -61,10 +59,18 @@ int main() {
         sf::Keyboard::Scancode::Numpad0
     });
     player_2.shape.setFillColor(sf::Color({10,100,250}));
-    player_2.setPosition({background_1.shape.getGeometricCenter().x+200,
-        background_1.floor.top.getPosition().y-player_2.size.y/2.f});
-    player_2.physics.GROUND_LEVEL = player_2.position.y;
+    player_2.setGroundLevel(groundLevel);
+    player_2.setPosition({250.f, player_2.physics.GROUND_LEVEL-player_2.size.y});
 
+#pragma endregion
+
+#pragma region world
+    World world{};
+    world.add(background);
+    world.add(ground);
+    world.add(player_2);
+    world.add(player_1);
+    player_1.pWorld = &world;
 #pragma endregion
 
 #pragma region window events
@@ -106,15 +112,7 @@ int main() {
 
 #pragma endregion
 
-#pragma region update
-
-    auto update = [&player_1, &player_2](const float &dt) {
-        player_1.update(dt);
-        // player_2.update(dt);
-    };
-
-#pragma endregion
-
+#pragma region tools
     sf::Clock clock;
     tools::Camera camera(window);
 
@@ -123,6 +121,7 @@ int main() {
     music.setLooping(true);
     music.setLoopPoints({sf::milliseconds(0), sf::seconds(3*60)});
     // music.play();
+#pragma endregion
 
 #pragma region window loop
     while (window.isOpen()) {
@@ -131,8 +130,9 @@ int main() {
         window.handleEvents(onClose, onKeyPressed);
 
         // Update data
-        update(dt);
-        background_1.loop(camera);
+        world.update(dt);
+        background.loop(camera);
+        ground.loop(camera);
 
         // Camera
         camera.follow_point(player_1.shape.getPosition());
@@ -142,11 +142,7 @@ int main() {
 
         // Clear and draw
         window.clear();
-        window.draw(background_1.shape);
-        window.draw(background_1.floor.body);
-        window.draw(background_1.floor.top);
-        window.draw(player_1.shape);
-        window.draw(player_2.shape);
+        world.draw(window);
         window.display();
     }
 #pragma endregion

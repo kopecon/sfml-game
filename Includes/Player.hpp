@@ -8,12 +8,16 @@
 
 #include <functional>
 #include <SFML/Graphics.hpp>
-#include "../Includes/AnimationComponent.hpp"
-#include "../Includes/PhysicsComponent.hpp"
-#include "../Includes/InputComponent.hpp"
+
+#include "AnimationComponent.hpp"
+#include "PhysicsComponent.hpp"
+#include "InputComponent.hpp"
+#include "Entity.hpp"
 
 
-class Player {
+class World;
+
+class Player final : public Entity {
 public:
     enum PlayerStates {
         IDLE,
@@ -53,20 +57,22 @@ public:
     InputComponent input{};
     AnimationComponent animation{};
     PhysicsComponent physics{};
+    // WORLD AWARENESS
+    World *pWorld{};
     // RENDERING
     sf::Texture *pTexture{};
     sf::RectangleShape shape = sf::RectangleShape(size);
+
     // UTILITY
     void setPosition(const sf::Vector2f &newPosition);
     void moveShape(sf::Vector2f distance);
+    void setGroundLevel(const float &groundLevel);
     // MOVEMENT
     void turn();
     std::function<void()> walk;
     void walkLeft();
     void walkRight();
-
     void brake();
-
     void jump();
     // COMBAT
     void attack();
@@ -74,12 +80,9 @@ public:
     void take_damage(const float &damage);
     // UPDATE
     void declareState();
-
     void takeAction();
-
     void selectAnimation();
-
-    void update(const float &dt);
+    void update(const float &dt) override;
 };
 
 #endif //BONK_GAME_PLAYER_HPP

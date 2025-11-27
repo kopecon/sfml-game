@@ -44,6 +44,8 @@ add_executable("${CMAKE_PROJECT_NAME}" src/main.cpp
         Includes/World.hpp
         Src/Entity.cpp
         Includes/Entity.hpp
+        Src/Ground.cpp
+        Includes/Ground.hpp
 )
 
 if (PRODUCTION_BUILD)
