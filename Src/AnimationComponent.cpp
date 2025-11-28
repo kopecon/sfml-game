@@ -41,7 +41,7 @@ AnimationComponent::AnimationComponent(const AnimationSheet &animationSheet, sf:
 animationSheet(animationSheet),
 target(&target) {}
 
-sf::IntRect AnimationComponent::getFrame() const {
+sf::IntRect AnimationComponent::currentFrame() const {
     auto frameCoord = sf::Vector2i(
         pCurrentAnimation->frameIndex.x*animationSheet.frameSize.x,
         pCurrentAnimation->frameIndex.y*animationSheet.frameSize.y
@@ -74,13 +74,24 @@ void AnimationComponent::add(const AnimationEntry &animation) {
 }
 
 void AnimationComponent::onEnd(const int &animationID, const std::function<void()> &function) {
-    if (animationSet[animationID].state == AnimationEntry::FINISHED) {
+    if (animationSet[animationID].state == AnimationEntry::END) {
         function();
     }
 }
 
-void AnimationComponent::update(const float &dt) {
-    target->setTextureRect(getFrame());
+bool AnimationComponent::completed(const int &animationID) {
+    if (animationSet[animationID].state == AnimationEntry::COMPLETED) {
+        return true;
+    }
+    return false;
+}
+
+void AnimationComponent::update(const float &dt) const {
+    if (pCurrentAnimation->state == AnimationEntry::END) {
+        pCurrentAnimation->state = AnimationEntry::COMPLETED;
+        return;
+    }
+    target->setTextureRect(currentFrame());
     pCurrentAnimation->state = AnimationEntry::PLAYING;
     pCurrentAnimation->timer += dt;
     // When it is the time to move to the next frame
@@ -94,8 +105,8 @@ void AnimationComponent::update(const float &dt) {
         if (pCurrentAnimation->looping) pCurrentAnimation->frameIndex.x = 0;
         // DONT LOOP
         else {
-            pCurrentAnimation->state = AnimationEntry::FINISHED;
-            pCurrentAnimation = pPreviousAnimation;  // Continue previous animation such as "Idle" etc...
+            pCurrentAnimation->state = AnimationEntry::END;
+            pCurrentAnimation->frameIndex.x = pCurrentAnimation->framesPerRow-1;
         }
     }
 }

@@ -20,7 +20,7 @@ struct AnimationSheet {
 class AnimationEntry {
 public:
     enum AnimationState {
-        READY, PLAYING, FINISHED
+        READY, PLAYING, END, COMPLETED
     };
 #pragma region constructors
     AnimationEntry();
@@ -60,7 +60,7 @@ public:
     std::unordered_map<int, AnimationEntry> animationSet;
     sf::Shape *target{};
 
-    [[nodiscard]] sf::IntRect getFrame() const;
+    [[nodiscard]] sf::IntRect currentFrame() const;
 
     void set(const int &animationID);
 
@@ -68,7 +68,9 @@ public:
 
     void onEnd(const int &animationID, const std::function<void()> &function);
 
-    void update(const float &dt);
+    bool completed(const int &animationID);
+
+    void update(const float &dt) const;
 };
 
 #endif //BONK_GAME_ANIMATED_HPP
