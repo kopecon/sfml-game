@@ -22,6 +22,7 @@ class World {
 public:
     void add(Entity &entity) {
         entities.emplace(entities.end(), &entity);
+        entity.pWorld = this;
     }
 
     template<typename T>
@@ -35,11 +36,10 @@ public:
         return listOfTypes;
     }
 
-    void remove(const Entity &entity) {
+    void remove(const Entity *entity) {
         // If the element is found, erase it
-        if (const auto it = std::ranges::find(entities, &entity); it != entities.end()) {
-            entities.erase(it);
-        }
+        // Removes all occurrences
+        std::erase(entities, entity);
     }
 
     void draw(sf::RenderWindow &window) const {
@@ -53,9 +53,13 @@ public:
         }
     }
 
-    void update(const float &dt) const {
+    void update(const float &dt) {
         for (auto *entity : entities) {
             entity->update(dt);
+            // Clear removed entities
+            if (entity->markedForRemoval) {
+                remove(entity);
+            }
         }
     }
 };

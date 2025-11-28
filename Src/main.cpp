@@ -70,7 +70,6 @@ int main() {
     world.add(ground);
     world.add(player_2);
     world.add(player_1);
-    player_1.pWorld = &world;
 #pragma endregion
 
 #pragma region window events

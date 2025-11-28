@@ -7,12 +7,16 @@
 
 #include <SFML/Graphics/Shape.hpp>
 
+class World;
+
 class Entity {
 public:
     virtual ~Entity() = default;
 
     sf::Shape *pShape{nullptr};
     std::vector<sf::Shape*> pShapes{};
+    World *pWorld{};
+    bool markedForRemoval = false;
 
     virtual void update(const float &dt) = 0;
 
