@@ -57,8 +57,6 @@ public:
     InputComponent input{};
     AnimationComponent animation{};
     PhysicsComponent physics{};
-    // WORLD AWARENESS
-    World *pWorld{};
     // RENDERING
     sf::Texture *pTexture{};
     sf::RectangleShape shape = sf::RectangleShape(size);
@@ -75,9 +73,10 @@ public:
     void brake();
     void jump();
     // COMBAT
+    float attackRange{size.x/2.f};
     void attack();
+    void takeDamage(const float &damage);
     void die();
-    void take_damage(const float &damage);
     // UPDATE
     void declareState();
     void takeAction();

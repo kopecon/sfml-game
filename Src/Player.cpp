@@ -28,7 +28,7 @@ Player::Player(sf::Texture &texture, const Controls &controls) : input(controls)
     animation.add(AnimationEntry(DYING,        8, false));
     animation.add(AnimationEntry(DISAPPEARING, 4, false));
     animation.add(AnimationEntry(ATTACKING,    8, false));
-    this->shape.setTextureRect(animation.getFrame());
+    this->shape.setTextureRect(animation.currentFrame());
     this->pShape = &shape;  // Give reference to the shape to the entity parent class
 }
 #pragma endregion
@@ -89,23 +89,38 @@ void Player::jump() {
 }
 
 void Player::attack() {
-    for (const auto pPlayers = pWorld->findTypes<Player>(); const auto item : pPlayers) {
-        if (item != this) {
+    auto pPlayers = pWorld->findTypes<Player>();
+    std::erase(pPlayers, this);
+    for (Player *player : pPlayers) {
+        if (std::fabs(player->position.x - position.x) <= attackRange) {
+            animation.onEnd(ATTACKING, [&player, this]{player->takeDamage(this->attackDamage);});
         }
     }
 }
 
+void Player::takeDamage(const float &damage) {
+    health -= damage;
+}
+
+void Player::die() {
+    animation.onEnd(DYING, [this]{this->markedForRemoval=true;});
+}
+
 void Player::declareState() {
     const int desiredState = input.update(*this);
+    if (health <= 0) {
+        state = DYING;
+        return;
+    }
     if (state == JUMPING) {
         if (position.y  + size.y / 2.f >= physics.GROUND_LEVEL) {
             state = IDLE;
         }
     }
     else if (state == ATTACKING) {
-        animation.onEnd(ATTACKING, [this] {
+        if (animation.completed(ATTACKING)) {
             this->state=IDLE;
-        });
+        }
     }
     else {  // ACTIONS NEED TO BE SORTED BY PRIORITY
         if (desiredState == JUMPING) {
@@ -161,6 +176,7 @@ void Player::takeAction() {
             break;
         }
         case DYING: {
+            die();
             break;
         }
         case ATTACKING: {
@@ -200,6 +216,11 @@ void Player::selectAnimation() {
         case ATTACKING : {
             animation.set(ATTACKING);
             animation.pCurrentAnimation->fps = static_cast<float>(animation.pCurrentAnimation->framesPerRow) * 3.f;
+            break;
+        }
+        case DYING : {
+            animation.set(DYING);
+            // animation.pCurrentAnimation->fps = static_cast<float>(animation.pCurrentAnimation->framesPerRow) * 3.f;
             break;
         }
         default: {
