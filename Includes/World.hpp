@@ -20,48 +20,27 @@ class Entity;
 class World {
     std::vector<Entity*> entities{};
 public:
-    void add(Entity &entity) {
-        entities.emplace(entities.end(), &entity);
-        entity.pWorld = this;
-    }
+    void add(Entity &entity);
 
     template<typename T>
-    std::vector<T*> findTypes() {
-        std::vector<T*> listOfTypes{};
-        for (auto *entity : entities) {
-            if (auto it = dynamic_cast<T*>(entity)) {
-                listOfTypes.emplace(listOfTypes.end(), it);
-            }
-        }
-        return listOfTypes;
-    }
+    std::vector<T*> findTypes();
 
-    void remove(const Entity *entity) {
-        // If the element is found, erase it
-        // Removes all occurrences
-        std::erase(entities, entity);
-    }
+    void remove(const Entity *entity);
 
-    void draw(sf::RenderWindow &window) const {
-        for (const auto *entity : entities) {
-            if (!entity->pShapes.empty()) {
-                for (const auto *shape : entity->pShapes) {
-                    window.draw(*shape);
-                }
-            }
-            else window.draw(*entity->pShape);
-        }
-    }
+    void draw(sf::RenderWindow &window) const;
 
-    void update(const float &dt) {
-        for (auto *entity : entities) {
-            entity->update(dt);
-            // Clear removed entities
-            if (entity->markedForRemoval) {
-                remove(entity);
-            }
-        }
-    }
+    void update(const float &dt);
 };
+
+template<typename T>
+std::vector<T *> World::findTypes() {
+    std::vector<T*> listOfTypes{};
+    for (auto *entity : entities) {
+        if (auto it = dynamic_cast<T*>(entity)) {
+            listOfTypes.emplace(listOfTypes.end(), it);
+        }
+    }
+    return listOfTypes;
+}
 
 #endif //BONK_GAME_WORLD_HPP
