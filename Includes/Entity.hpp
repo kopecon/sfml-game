@@ -14,7 +14,7 @@ public:
     virtual ~Entity();
 
     sf::Shape *pShape{nullptr};
-    std::vector<sf::Shape*> pShapes{nullptr};
+    std::vector<sf::Shape*> pShapes{};
     World *pWorld{nullptr};
     bool markedForRemoval = false;
 
