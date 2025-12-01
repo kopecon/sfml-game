@@ -6,14 +6,26 @@
 #define BONK_GAME_GAME_HPP
 
 #include "../Includes/VideoComponent.hpp"
+#include "../Includes/AudioComponent.hpp"
+#include "../Includes/Camera.hpp"
 
 
 class Game {
 public:
-    Game() : videoComponent(VideoComponent(title)){};
-    const std::string title{"Bonk Game"};
-    VideoComponent videoComponent;
-};
+    Game();
+    explicit Game(const char* &title) :
+    title(title),
+    videoComponent(VideoComponent(title)),
+    camera(Camera(videoComponent.window))
+    {}
 
+    float dt{};
+    const char* title{};
+    VideoComponent videoComponent;
+    AudioComponent audioComponent;
+
+    sf::Clock clock;
+    Camera camera;
+};
 
 #endif //BONK_GAME_GAME_HPP

@@ -29,7 +29,7 @@ Ground::Ground(sf::Texture &groundTextureRef, sf::Texture &topGroundTextureRef, 
     this->pShapes.emplace(pShapes.end(), &top);
 }
 
-void Ground::loop(const tools::Camera &camera) {
+void Ground::loop(const Camera &camera) {
     const auto camera_center = camera.view.getCenter();
     const auto camera_right_border = camera_center.x + camera.view.getSize().x / 2.f;
     const auto camera_left_border = camera_center.x - camera.view.getSize().x / 2.f;

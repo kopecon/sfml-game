@@ -22,7 +22,7 @@ public:
 
     Ground(sf::Texture &groundTextureRef, sf::Texture &topGroundTextureRef, const sf::Vector2u &window, const float &groundLevel);
 
-    void loop(const tools::Camera &camera);
+    void loop(const Camera &camera);
 
     void update(const float &dt) override;
 };

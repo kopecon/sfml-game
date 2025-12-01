@@ -50,6 +50,8 @@ add_executable("${CMAKE_PROJECT_NAME}" src/main.cpp
         Includes/Game.hpp
         Src/VideoComponent.cpp
         Includes/VideoComponent.hpp
+        Src/AudioComponent.cpp
+        Includes/AudioComponent.hpp
 )
 
 if (PRODUCTION_BUILD)

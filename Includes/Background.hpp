@@ -19,7 +19,7 @@ public:
 
     explicit Background(sf::Texture &backgroundTextureRef, const sf::Vector2u &window);
 
-    void loop(const tools::Camera &camera);
+    void loop(const Camera &camera);
 
     void update(const float &dt) override;
 };

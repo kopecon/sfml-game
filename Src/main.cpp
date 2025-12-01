@@ -10,9 +10,9 @@
 
 
 int main() {
-#pragma region window settup
-
-    Game game{};
+#pragma region game settup
+    const auto* title = "Bonk Game";
+    Game game(title);
 
     // Reference the window
     sf::RenderWindow &window = game.videoComponent.window;
@@ -97,33 +97,22 @@ int main() {
 
 #pragma endregion
 
-#pragma region tools
-    sf::Clock clock;
-    tools::Camera camera(window);
-
-    sf::Music music(RESOURCES_PATH "Audio/Midnight Forest.mp3");
-    music.setVolume(1);
-    music.setLooping(true);
-    music.setLoopPoints({sf::milliseconds(0), sf::seconds(3*60)});
-    // music.play();
-#pragma endregion
-
 #pragma region window loop
     while (window.isOpen()) {
-        const float dt = clock.restart().asSeconds(); // seconds since last frame
+        game.dt = game.clock.restart().asSeconds(); // seconds since last frame
 
         window.handleEvents(onClose, onKeyPressed);
 
         // Update data
-        world.update(dt);
-        background.loop(camera);
-        ground.loop(camera);
+        world.update(game.dt);
+        background.loop(game.camera);
+        ground.loop(game.camera);
 
         // Camera
-        camera.follow_point(player_1.shape.getPosition());
+        game.camera.follow_point(player_1.shape.getPosition());
 
         // Update the view to follow player
-        window.setView(camera.view);
+        window.setView(game.camera.view);
 
         // Clear and draw
         window.clear();

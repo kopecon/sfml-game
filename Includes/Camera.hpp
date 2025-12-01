@@ -8,15 +8,13 @@
 #include <SFML/Graphics.hpp>
 
 
-namespace tools {
-    class Camera {
-    public:
-        explicit Camera(const sf::Window &window);
-        const sf::Window &window{};
-        sf::View view{};
+class Camera {
+public:
+    explicit Camera(const sf::Window &window);
+    const sf::Window &window{};
+    sf::View view{};
 
-        void follow_point(const sf::Vector2f &point);
-    };
-} // tools
+    void follow_point(const sf::Vector2f &point);
+};
 
 #endif //BONK_GAME_CAMERA_HPP
