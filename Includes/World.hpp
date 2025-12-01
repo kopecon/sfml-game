@@ -7,19 +7,18 @@
 #include <iostream>
 #include <vector>
 #include "Entity.hpp"
-#include "Player.hpp"
+#include "Game.hpp"
 #include "SFML/Graphics/RenderWindow.hpp"
 
 
-namespace sf {
-    class RectangleShape;
-}
-
+class Game;
 class Entity;
 
 class World {
     std::vector<Entity*> entities{};
 public:
+    Game *pGame{nullptr};
+
     void add(Entity &entity);
 
     template<typename T>
@@ -27,9 +26,9 @@ public:
 
     void remove(const Entity *entity);
 
-    void draw(sf::RenderWindow &window) const;
+    void draw() const;
 
-    void update(const float &dt);
+    void update();
 };
 
 template<typename T>

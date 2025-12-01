@@ -6,6 +6,7 @@
 #define BONK_GAME_CAMERA_HPP
 
 #include <SFML/Graphics.hpp>
+#include "Entity.hpp"
 
 
 class Camera {
@@ -13,8 +14,9 @@ public:
     explicit Camera(const sf::Window &window);
     const sf::Window &window{};
     sf::View view{};
+    Entity *pTarget{};
 
-    void follow_point(const sf::Vector2f &point);
+    void followTarget();
 };
 
 #endif //BONK_GAME_CAMERA_HPP

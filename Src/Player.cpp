@@ -229,13 +229,13 @@ void Player::selectAnimation() {
     }
 }
 
-void Player::update(const float &dt) {
+void Player::update() {
     acceleration = {0.f, physics.GRAVITY};  // Reset acceleration
 
     declareState();
     selectAnimation();
     takeAction();
 
-    physics.update(*this, dt);
-    animation.update(dt);
+    physics.update(*this, pWorld->pGame->dt);
+    animation.update(pWorld->pGame->dt);
 }

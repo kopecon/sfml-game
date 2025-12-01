@@ -7,6 +7,7 @@
 
 #include "../Includes/Entity.hpp"
 #include "../Includes/Camera.hpp"
+#include "../Includes/World.hpp"
 
 
 class Ground final : public Entity {
@@ -17,6 +18,7 @@ public:
     sf::Texture *pTextureTop{};
     sf::RectangleShape body{};
     sf::RectangleShape top{};
+    bool looping{true};
 
     Ground();
 
@@ -24,7 +26,7 @@ public:
 
     void loop(const Camera &camera);
 
-    void update(const float &dt) override;
+    void update() override;
 };
 
 

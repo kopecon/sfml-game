@@ -6,7 +6,7 @@
 
 Entity::~Entity() = default;
 
-void Entity::update(const float &dt) {
+void Entity::update() {
 }
 
 bool Entity::operator==(const Entity &other) const {

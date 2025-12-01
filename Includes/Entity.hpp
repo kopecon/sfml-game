@@ -18,7 +18,7 @@ public:
     World *pWorld{nullptr};
     bool markedForRemoval = false;
 
-    virtual void update(const float &dt);
+    virtual void update();
 
     bool operator==(const Entity &other) const;
 

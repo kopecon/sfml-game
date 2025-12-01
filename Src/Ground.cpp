@@ -45,5 +45,8 @@ void Ground::loop(const Camera &camera) {
     }
 }
 
-void Ground::update(const float &dt) {
+void Ground::update() {
+    if (looping) {
+        loop(pWorld->pGame->videoComponent.camera);
+    }
 }

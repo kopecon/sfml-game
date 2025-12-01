@@ -39,7 +39,7 @@ public:
     // CHARACTERISTICS
     float health {100.f};
     float attackDamage{20.f};
-    sf::Vector2f size = {250, 250};
+    sf::Vector2f size = {250/2.f, 250/2.f};
     sf::Vector2f maxWalkingSpeed{size.x*2, size.x*1.5f};
     sf::Vector2f maxRunningSpeed{maxWalkingSpeed.x*2.f, maxWalkingSpeed.y*1.25f};
     sf::Vector2f maxSpeed{maxWalkingSpeed};
@@ -81,7 +81,7 @@ public:
     void declareState();
     void takeAction();
     void selectAnimation();
-    void update(const float &dt) override;
+    void update() override;
 };
 
 #endif //BONK_GAME_PLAYER_HPP

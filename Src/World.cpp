@@ -15,20 +15,20 @@ void World::remove(const Entity *entity) {
     std::erase(entities, entity);
 }
 
-void World::draw(sf::RenderWindow &window) const {
+void World::draw() const {
     for (const auto *entity : entities) {
         if (!entity->pShapes.empty()) {
             for (const auto *shape : entity->pShapes) {
-                window.draw(*shape);
+                pGame->videoComponent.window.draw(*shape);
             }
         }
-        else window.draw(*entity->pShape);
+        else pGame->videoComponent.window.draw(*entity->pShape);
     }
 }
 
-void World::update(const float &dt) {
+void World::update() {
     for (auto *entity : entities) {
-        entity->update(dt);
+        entity->update();
         // Clear removed entities
         if (entity->markedForRemoval) {
             remove(entity);

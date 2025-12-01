@@ -4,6 +4,8 @@
 
 #include "../Includes/Camera.hpp"
 
+#include <iostream>
+
 
 Camera::Camera(const sf::Window &window): window(window) {
     view.setCenter(static_cast<sf::Vector2f>(window.getSize())/2.f);
@@ -11,6 +13,6 @@ Camera::Camera(const sf::Window &window): window(window) {
     view.zoom(0.75);
 }
 
-void Camera::follow_point(const sf::Vector2f &point) {
-    view.setCenter({point.x, point.y-200});
+void Camera::followTarget() {
+    view.setCenter({pTarget->pShape->getPosition().x, pTarget->pShape->getPosition().y-static_cast<float>(window.getSize().y)/5.f});
 }

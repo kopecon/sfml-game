@@ -4,8 +4,6 @@
 
 #include "../Includes/Background.hpp"
 
-#include <iostream>
-
 
 Background::Background() = default;
 
@@ -33,5 +31,8 @@ void Background::loop(const Camera &camera) {
     }
 }
 
-void Background::update(const float &dt) {
+void Background::update() {
+    if (looping) {
+        loop(pWorld->pGame->videoComponent.camera);
+    }
 }
