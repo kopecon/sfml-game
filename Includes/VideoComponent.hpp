@@ -14,18 +14,21 @@ class VideoComponent {
 public:
     VideoComponent();
     explicit VideoComponent(const std::string &title);
-
     // METADATA
     std::string title{};
-
+    // HARDWARE PARAMETERS
+    sf::Vector2u screenSize = sf::VideoMode::getDesktopMode().size;
     // VIDEO SETTINGS
     sf::ContextSettings settings;
-    sf::Vector2u screenSize = sf::VideoMode::getDesktopMode().size;
-    const sf::Vector2u initScreenSize{static_cast<unsigned>(screenSize.x/2.f), static_cast<unsigned>(screenSize.y/2.f)};
+    float windowSizeRatio = 2.f;  // Screen size / window size
     unsigned int fps{144};
+    // WINDOW
     sf::State windowState = sf::State::Windowed;  // Initial state when game starts
-
+    sf::Vector2u windowSize = {
+        static_cast<unsigned>(static_cast<float>(screenSize.x)/windowSizeRatio),
+        static_cast<unsigned>(static_cast<float>(screenSize.y)/windowSizeRatio)};
     sf::RenderWindow window{};
+    // COMPONENTS
     Camera camera{};
 
     void recreate();

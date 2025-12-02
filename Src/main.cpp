@@ -11,23 +11,23 @@ int main() {
     const auto* title = "Bonk Game";
     Game game(title);
 
-    // Reference the window
+    // Reference the game window
     sf::RenderWindow &window = game.video.window;
 #pragma endregion
 
 #pragma region textures
     sf::Texture backgroundTexture(RESOURCES_PATH "Custom/background.jpg");
-    sf::Texture groundTexture(RESOURCES_PATH "kenney_new-platformer-pack-1.0/Sprites/Tiles/Double/terrain_dirt_block_center.png");
+    sf::Texture bodyGroundTexture(RESOURCES_PATH "kenney_new-platformer-pack-1.0/Sprites/Tiles/Double/terrain_dirt_block_center.png");
     sf::Texture topGroundTexture(RESOURCES_PATH "kenney_new-platformer-pack-1.0/Sprites/Tiles/Double/terrain_dirt_block_top.png");
+    auto playerTexture(sf::Texture(RESOURCES_PATH "Custom/AnimationSheet_Character.png"));
 #pragma endregion
 
 #pragma region background
     Background background(backgroundTexture, window.getSize());
-    Ground ground(groundTexture, topGroundTexture, window.getSize());
+    Ground ground(bodyGroundTexture, topGroundTexture, window.getSize());
 #pragma endregion
 
 #pragma region player
-    auto playerTexture(sf::Texture(RESOURCES_PATH "Custom/AnimationSheet_Character.png"));
     Player player1(playerTexture, {
         sf::Keyboard::Scancode::A,
         sf::Keyboard::Scancode::D,

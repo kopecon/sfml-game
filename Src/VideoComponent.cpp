@@ -11,14 +11,14 @@ VideoComponent::VideoComponent() = default;
 VideoComponent::VideoComponent(const std::string &title)
     : title(title),
     settings(24, 8, 4, 3, 0),   // depth, stencil, antiAlias, major, minor
-    window(sf::VideoMode(initScreenSize), title, sf::Style::Default, windowState, settings),
+    window(sf::VideoMode(windowSize), title, sf::Style::Default, windowState, settings),
     camera(window)
 {
     window.setFramerateLimit(fps);
 }
 
 void VideoComponent::recreate() {
-    window.create(sf::VideoMode::getDesktopMode(), title, sf::Style::Default, windowState, settings);
+    window.create(sf::VideoMode(windowSize), title, sf::Style::Default, windowState, settings);
 }
 
 void VideoComponent::onClose(const sf::Event::Closed &) {
@@ -33,9 +33,14 @@ void VideoComponent::onKeyPressed(const sf::Event::KeyPressed &keyPressed) {
         case sf::Keyboard::Scancode::U :
         {
             if (windowState == sf::State::Windowed) {
+                windowSize = screenSize;
                 windowState = sf::State::Fullscreen;
             }
             else if (windowState == sf::State::Fullscreen) {
+                windowSize = {
+                    static_cast<unsigned>(static_cast<float>(screenSize.x)/windowSizeRatio),
+                    static_cast<unsigned>(static_cast<float>(screenSize.y)/windowSizeRatio),
+                };
                 windowState = sf::State::Windowed;
             }
             // Recreate the window

@@ -19,9 +19,8 @@ public:
 #pragma endregion
     // META DATA
     const char* title{};
-
     // COMPONENTS
-    VideoComponent video{};  // <- error C3646: 'video': unknown override specifier
+    VideoComponent video{};
     AudioComponent audio{};
     sf::Clock clock{};
     float dt{};
