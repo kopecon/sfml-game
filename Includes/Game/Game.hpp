@@ -7,6 +7,7 @@
 
 #include "VideoComponent.hpp"
 #include "AudioComponent.hpp"
+#include "TextureComponent.hpp"
 #include "TimeComponent.hpp"
 
 
@@ -26,6 +27,7 @@ public:
     VideoComponent video{};
     AudioComponent audio{};
     TimeComponent time{};
+    TextureComponent textures{};
 
 
     World* createWorld(const std::string &name);

@@ -26,36 +26,38 @@ FetchContent_Declare(SFML
 FetchContent_MakeAvailable(SFML)
 
 add_executable("${CMAKE_PROJECT_NAME}" src/main.cpp
-        Src/Entity/Player.cpp
-        Includes/Entity/Player.hpp
-        Src/Scenery/Background.cpp
-        Includes/Scenery/Background.hpp
+        Src/Entity/Player/Player.cpp
+        Includes/Entity/Player/Player.hpp
+        Src/Entity/Scenery/Background.cpp
+        Includes/Entity/Scenery/Background.hpp
         Src/Game/Camera.cpp
         Includes/Game/Camera.hpp
         Src/Entity/AnimationComponent.cpp
         Includes/Entity/AnimationComponent.hpp
-        Src/Entity/PhysicsComponent.cpp
-        Includes/Entity/PhysicsComponent.hpp
-        Src/Entity/InputComponent.cpp
-        Includes/Entity/InputComponent.hpp
+        Src/Entity/Player/PhysicsComponent.cpp
+        Includes/Entity/Player/PhysicsComponent.hpp
+        Src/Entity/Player/InputComponent.cpp
+        Includes/Entity/Player/InputComponent.hpp
         utils/utils.cpp
         Utils/utils.hpp
         Src/World/World.cpp
         Includes/World/World.hpp
         Src/Entity/Entity.cpp
         Includes/Entity/Entity.hpp
-        Src/Scenery/Ground.cpp
-        Includes/Scenery/Ground.hpp
+        Src/Entity/Scenery/Ground.cpp
+        Includes/Entity/Scenery/Ground.hpp
         Src/Game/Game.cpp
         Includes/Game/Game.hpp
         Src/Game/VideoComponent.cpp
         Includes/Game/VideoComponent.hpp
         Src/Game/AudioComponent.cpp
         Includes/Game/AudioComponent.hpp
-        Src/Scenery/Scenery.cpp
-        Includes/Scenery/Scenery.hpp
+        Src/Entity/Scenery/Scenery.cpp
+        Includes/Entity/Scenery/Scenery.hpp
         Src/Game/TimeComponent.cpp
         Includes/Game/TimeComponent.hpp
+        Src/Game/TextureComponent.cpp
+        Includes/Game/TextureComponent.hpp
 )
 
 if (PRODUCTION_BUILD)

@@ -9,7 +9,6 @@
 
 #include "../../Utils/utils.hpp"
 #include "../../Includes/World/World.hpp"
-#include "SFML/Graphics/Texture.hpp"
 
 
 Entity::~Entity() = default;
@@ -20,9 +19,13 @@ Entity::Entity(std::string name) {
 }
 
 void Entity::init() {
-    std::cout << "Base Init: " << this->name << " ...Start" << "\n";
-    this->pShape->setOrigin(pShape->getGeometricCenter());
-    std::cout << "Base Init: " << this->name << " ...Finish" << "\n";
+    std::cout << "Base Init: " << name << " ...Start" << "\n";
+    pShape = getShape();
+    pTexture = getTexture();
+    initShapeSize();
+    pShape->setOrigin(pShape->getGeometricCenter());
+    pShape->setTexture(pTexture);
+    std::cout << "Base Init: " << name << " ...Finish" << "\n\n";
 }
 
 void Entity::update() {}

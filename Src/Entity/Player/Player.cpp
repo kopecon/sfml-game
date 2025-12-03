@@ -2,17 +2,17 @@
 // Created by Andrew on 13/11/2025.
 //
 
-#include "../../Includes/Entity/Player.hpp"
-#include "../../Utils/utils.hpp"
+#include "../../../Includes/Entity/Player/Player.hpp"
+#include "../../../Utils/utils.hpp"
 #include <iostream>
 
-#include "../../Includes/World/World.hpp"
+#include "../../../Includes/World/World.hpp"
 
 
 #pragma region constructors
-Player::Player(const char* name) : Entity(name){}
+Player::Player(std::string name) : Entity(std::move(name)){}
 
-Player::Player(const char* name, const Controls &controls, sf::Texture &texture) : Entity(name), input(controls) {
+Player::Player(std::string name, const Controls &controls) : Entity(std::move(name)), input(controls) {
     this->animation.animationSheet = {pTexture, {32, 32}};
     this->animation.target = &shape;
     animation.add(AnimationEntry(IDLE,         2, true));
@@ -37,15 +37,18 @@ void Player::moveShape(const sf::Vector2f distance) {
     position = shape.getPosition();
 }
 
+void Player::calculateSpeed() {
+    maxWalkingSpeed = {
+        shape.getGlobalBounds().size.x*2.f,
+        shape.getGlobalBounds().size.y*2.f,
+    };
+    maxRunningSpeed = {maxWalkingSpeed.x*2.f, maxWalkingSpeed.y*1.25f};
+}
+
 void Player::turn() {
     brake();
     if (areClose(velocity.x, 0.f, 10.f)) {
-        if (facingRight) {
-            shape.setScale({-1,1});
-        }
-        else {
-            shape.setScale({1, 1});
-        }
+        shape.setScale({-shape.getScale().x, shape.getScale().y});
         facingRight = !facingRight;
     }
 }
@@ -73,7 +76,7 @@ void Player::brake() {
 }
 
 void Player::jump() {
-    if (position.y + size.y / 2.f >= pWorld->groundLevel) {
+    if (position.y + shape.getGlobalBounds().size.y / 2.f >= pWorld->groundLevel) {
         velocity.y = -physics.GRAVITY*maxSpeed.y/2500.f;  // Magic number is tweaked experimentally
     }
 }
@@ -103,7 +106,7 @@ void Player::declareState() {
         return;
     }
     if (state == JUMPING) {
-        if (position.y  + size.y / 2.f >= pWorld->groundLevel) {
+        if (position.y  + shape.getGlobalBounds().size.y / 2.f >= pWorld->groundLevel) {
             state = IDLE;
         }
     }
@@ -219,8 +222,24 @@ void Player::selectAnimation() {
     }
 }
 
+void Player::initShapeSize() {
+    shape.setSize(static_cast<sf::Vector2f>(pTexture->getSize()));
+    const sf::Vector2f sizeRatio = {
+        static_cast<float>(pWorld->pGame->video.windowSize.x) / static_cast<float>(pTexture->getSize().x) / 5.f,
+        static_cast<float>(pWorld->pGame->video.windowSize.y) / static_cast<float>(pTexture->getSize().y) / 5.f,
+    };
+    pShape->setScale(sizeRatio);
+}
+
+sf::Shape * Player::getShape() {
+    return &shape;
+}
+
+sf::Texture * Player::getTexture() {
+    return &pWorld->pGame->textures.player;
+}
+
 void Player::init() {
-    pShape = &shape;
     Entity::init();
 }
 

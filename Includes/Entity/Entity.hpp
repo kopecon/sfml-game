@@ -18,12 +18,19 @@ public:
     explicit Entity(std::string name);
 
     std::string name{};
+    sf::Vector2f *pSize{nullptr};
     sf::Shape *pShape{nullptr};
     sf::Texture *pTexture{nullptr};
     std::vector<sf::Shape*> pShapes{};
     std::vector<sf::Texture*> pTextures{};
     World *pWorld{nullptr};
     bool markedForRemoval = false;
+
+    virtual void initShapeSize() = 0;
+
+    virtual sf::Shape* getShape() {return pShape;}
+
+    virtual sf::Texture* getTexture() {return pTexture;}
 
     virtual void init();
 

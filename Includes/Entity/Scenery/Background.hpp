@@ -14,7 +14,13 @@ public:
 
     explicit Background(const char* name);
 
-    explicit Background(const char* name, const sf::Vector2u &windowSize, sf::Texture &texture);
+    void initShapeSize() override;
+
+    sf::Shape* getShape() override;
+
+    sf::Texture* getTexture() override;
+
+    void init() override;
 };
 
 #endif //BONK_GAME_BACKGROUND_HPP

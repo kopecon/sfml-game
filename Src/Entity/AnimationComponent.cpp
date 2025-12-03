@@ -6,7 +6,7 @@
 
 #include <iostream>
 
-#include "../../Includes/Entity/Player.hpp"
+#include "../../Includes/Entity/Player/Player.hpp"
 
 
 [[nodiscard]] sf::Vector2i AnimationSheet::getFrameSize(const int &framesPerRow, const int &framesPerColumn) const {

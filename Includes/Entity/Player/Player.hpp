@@ -9,11 +9,10 @@
 #include <functional>
 #include <SFML/Graphics.hpp>
 
-#include "AnimationComponent.hpp"
+#include "../AnimationComponent.hpp"
 #include "PhysicsComponent.hpp"
 #include "InputComponent.hpp"
-#include "Entity.hpp"
-#include "../World/World.hpp"
+#include "../Entity.hpp"
 
 
 class World;
@@ -34,38 +33,36 @@ public:
         STOPPING,
     };
 #pragma region constructors
-    explicit Player(const char* name);
-    explicit Player(const char* name, const Controls &controls, sf::Texture &texture);
+    explicit Player(std::string name);
+    explicit Player(std::string name, const Controls &controls);
 #pragma endregion
     // CHARACTERISTICS
     float health {100.f};
     float attackDamage{20.f};
-    float height{250};
-    float width{height};
-    sf::Vector2f size{height, width};
-    sf::Vector2f maxWalkingSpeed{size.x*2, size.x*1.5f};
-    sf::Vector2f maxRunningSpeed{maxWalkingSpeed.x*2.f, maxWalkingSpeed.y*1.25f};
-    sf::Vector2f maxSpeed{maxWalkingSpeed};
-    float movementResponse{20.f};  // How aggressively player changes speed
+    sf::Vector2f maxWalkingSpeed{};
+    sf::Vector2f maxRunningSpeed{};
+    sf::Vector2f maxSpeed{};
+    float movementResponse{0.05};  // How aggressively player changes speed
     // PHYSICS
-    sf::Vector2f position{0, 0};
-    sf::Vector2f velocity{0, 0};
-    sf::Vector2f acceleration{0, physics.GRAVITY};
+    sf::Vector2f position{};
+    sf::Vector2f velocity{};
+    sf::Vector2f acceleration{};
     // STATES
     PlayerStates state{IDLE};
     // CONDITIONS
     bool facingRight{true};
-    float eyeDryness{0};
+    float eyeDryness{};
     // COMPONENTS
     InputComponent input{};
     AnimationComponent animation{};
     PhysicsComponent physics{};
     // RENDERING
-    sf::RectangleShape shape = sf::RectangleShape(size);
+    sf::RectangleShape shape{};
     // UTILITY
     void setPosition(const sf::Vector2f &newPosition);
     void moveShape(sf::Vector2f distance);
     // MOVEMENT
+    void calculateSpeed();
     void turn();
     std::function<void()> walk;
     void walkLeft();
@@ -73,7 +70,7 @@ public:
     void brake();
     void jump();
     // COMBAT
-    float attackRange{size.x/2.f};
+    float attackRange{};
     void attack();
     void takeDamage(const float &damage);
     void die();
@@ -81,6 +78,9 @@ public:
     void declareState();
     void takeAction();
     void selectAnimation();
+    void initShapeSize() override;
+    sf::Shape* getShape() override;
+    sf::Texture* getTexture() override;
     void init() override;
     void update() override;
 };

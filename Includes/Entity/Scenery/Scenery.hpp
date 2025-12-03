@@ -4,9 +4,9 @@
 
 #ifndef BONK_GAME_SCENERY_HPP
 #define BONK_GAME_SCENERY_HPP
-#include "../Game/Camera.hpp"
-#include "../Entity/Entity.hpp"
-#include "../World/World.hpp"
+
+#include "../../Game/Camera.hpp"
+#include "../../Entity/Entity.hpp"
 
 
 class Scenery : public Entity {

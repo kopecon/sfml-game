@@ -2,7 +2,9 @@
 // Created by Andrew on 01/12/2025.
 //
 
-#include "../../Includes/Scenery/Scenery.hpp"
+#include "../../../Includes/Entity/Scenery/Scenery.hpp"
+#include "../../../Includes/World/World.hpp"
+
 
 Scenery::Scenery(std::string name): Entity(std::move(name)) {}
 
