@@ -4,16 +4,13 @@
 
 #include <utility>
 #include "../Includes/World.hpp"
-
-#include <iostream>
-
 #include "../Includes/utils.hpp"
 
 
 World::World() = default;
 
 World::World(std::string name) {
-    string::up(name);
+    text::up(name);
     this->name = std::move(name);
 }
 

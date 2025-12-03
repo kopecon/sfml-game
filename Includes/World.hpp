@@ -29,17 +29,14 @@ public:
     T* createEntity(Args&&... args) {
         auto pEntity = std::make_unique<T>(std::forward<Args>(args)...);
         pEntity->pWorld = this;
-
         const std::string entityName = pEntity->name;
-
         entities.emplace(entityName, std::move(pEntity));
-
         return getEntity<T>(entityName);
     }
 
     template<typename T>
     T* getEntity(std::string entityName) {
-        string::up(entityName);
+        text::up(entityName);
         const auto it = entities.find(entityName);
         if (it == entities.end()) return nullptr;
         return dynamic_cast<T*>(it->second.get());

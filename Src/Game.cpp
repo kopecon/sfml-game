@@ -6,8 +6,6 @@
 #include "../Includes/World.hpp"
 #include <unordered_map>
 
-#include "../Includes/utils.hpp"
-
 
 Game::Game() = default;
 
@@ -23,7 +21,7 @@ World* Game::createWorld(const std::string &name) {
 }
 
 World* Game::getWorld(std::string name) {
-    string::up(name);
+    text::up(name);
     const auto it = worlds.find(name);
     if (it != worlds.end())
         return it->second.get();

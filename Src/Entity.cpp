@@ -11,7 +11,7 @@
 Entity::~Entity() = default;
 
 Entity::Entity(std::string name) {
-    string::up(name);
+    text::up(name);
     this->name = std::move(name);
 }
 
