@@ -8,16 +8,21 @@
 
 
 int main() {
-#pragma region game settup
+    #pragma region game settup
     Game game("Bonk Game");
     const sf::RenderWindow &window = game.video.window;  // Reference the game window
-#pragma endregion
+    #pragma endregion
 
-#pragma region world
+    #pragma region world
     const auto worldForest = game.createWorld("Forest");
-    (void) worldForest->createEntity<Background>("bForest");
-    (void) worldForest->createEntity<Ground>("gForest");
+    #pragma endregion
 
+    #pragma region background
+    (void) worldForest->createEntity<Background>("bForest");
+    (void) worldForest->createEntity<Ground>({0.f, 0.f}, "gForest");
+    #pragma endregion
+
+    #pragma region player
     Controls p1controls;
     p1controls.left   = sf::Keyboard::Scancode::A;
     p1controls.right  = sf::Keyboard::Scancode::D;
@@ -32,23 +37,15 @@ int main() {
     p2controls.run    = sf::Keyboard::Scancode::RShift;
     p2controls.attack = sf::Keyboard::Scancode::Numpad0;
 
-    const auto player1 = worldForest->createEntity<Player>("player1", p1controls);
-    const auto player2 = worldForest->createEntity<Player>("player2", p2controls);
-    player2->shape.setFillColor(sf::Color({40,30,100}));
+    const auto player1 = worldForest->createEntity<Player>({-100.f, 10.f}, "player1", p1controls);
+    const auto player2 = worldForest->createEntity<Player>({ 100.f, 10.f}, "player2", p2controls);
     game.video.camera.pTarget = player1;
-#pragma endregion
+    player2->shape.setFillColor(sf::Color({40,30,100}));
+    #pragma endregion
 
-#pragma region background
-#pragma endregion
-
-#pragma region player
-#pragma endregion
-
-#pragma region window loop
-    // game.video.camera.pTarget = &player1;
-
+    #pragma region window loop
     while (window.isOpen()) {
         game.update();
     }
-#pragma endregion
+    #pragma endregion
 }

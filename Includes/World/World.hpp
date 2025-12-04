@@ -5,6 +5,7 @@
 #ifndef BONK_GAME_WORLD_HPP
 #define BONK_GAME_WORLD_HPP
 #include <ranges>
+#include <iostream>
 #include <vector>
 #include "../Entity/Entity.hpp"
 #include "../Game/Game.hpp"
@@ -23,13 +24,24 @@ public:
 
     std::string name{};
     Game *pGame{nullptr};
-    float groundLevel{0};
+    float groundLevel{};
 
     template<typename T, typename ... Args>
     T* createEntity(Args&&... args) {
         auto pEntity = std::make_unique<T>(std::forward<Args>(args)...);
         pEntity->pWorld = this;
         pEntity->init();
+        const std::string entityName = pEntity->name;
+        entities.emplace(entityName, std::move(pEntity));
+        return getEntity<T>(entityName);
+    }
+
+    template<typename T, typename ... Args>
+    T* createEntity(sf::Vector2f position, Args&&... args) {
+        auto pEntity = std::make_unique<T>(std::forward<Args>(args)...);
+        pEntity->pWorld = this;
+        pEntity->init();
+        pEntity->shape.setPosition(position);
         const std::string entityName = pEntity->name;
         entities.emplace(entityName, std::move(pEntity));
         return getEntity<T>(entityName);

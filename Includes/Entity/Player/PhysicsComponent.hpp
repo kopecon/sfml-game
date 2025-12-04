@@ -27,11 +27,12 @@ public:
     const float GRAVITY = 10000;
     const float AIR_RESISTANCE = 0.f;
     const float GROUND_FRICTION = 1.f;
-    void update(Player &player,const float &dt) const;
 
     void updateAcceleration(Player &player, const sf::Vector2f &desiredVelocity, const float &snap) const;
 
     static void printPhysics(const Player &player);
+
+    void update(Player &player,const float &dt) const;
 };
 
 #endif //BONK_GAME_PHYSICSENGINE_HPP
