@@ -40,14 +40,6 @@ public:
     float health {100.f};
     float attackDamage{20.f};
     float height{0.2f};  // As a factor of the window height. (from 0 to 1)
-    sf::Vector2f maxWalkingSpeed{};
-    sf::Vector2f maxRunningSpeed{};
-    sf::Vector2f maxSpeed{};
-    float movementResponse{0.05};  // How aggressively player changes speed
-    // PHYSICS
-    sf::Vector2f position{};
-    sf::Vector2f velocity{};
-    sf::Vector2f acceleration{};
     // STATES
     PlayerStates state{IDLE};
     // CONDITIONS
@@ -55,15 +47,16 @@ public:
     float eyeDryness{};
     // COMPONENTS
     InputComponent input{};
+    PhysicsComponent physics{*this};
     AnimationComponent animation{};
-    PhysicsComponent physics{};
     // RENDERING
     sf::RectangleShape shape{};
-    // UTILITY
-    void setPosition(const sf::Vector2f &newPosition);
-    void moveShape(sf::Vector2f distance);
+    // GETTERS
+    sf::Vector2f getSize() const;
+    sf::Vector2f getPosition() const;
+    // SETTERS
+    void setPosition(const sf::Vector2f &position);
     // MOVEMENT
-    void calculateSpeed();
     void turn();
     std::function<void()> walk;
     void walkLeft();

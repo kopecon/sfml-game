@@ -27,66 +27,54 @@ Player::Player(std::string name, const Controls &controls) : Entity(std::move(na
 }
 #pragma endregion
 
-void Player::setPosition(const sf::Vector2f &newPosition) {
-    shape.setPosition(newPosition);
-    position = shape.getPosition();
+sf::Vector2f Player::getSize() const {
+    return shape.getGlobalBounds().size;
 }
 
-void Player::moveShape(const sf::Vector2f distance) {
-    shape.move(distance);
-    position = shape.getPosition();
+sf::Vector2f Player::getPosition() const {
+    return shape.getPosition();
 }
 
-void Player::calculateSpeed() {
-    maxWalkingSpeed = {
-        shape.getGlobalBounds().size.x*2.f,
-        shape.getGlobalBounds().size.y*2.f,
-    };
-    maxRunningSpeed = {maxWalkingSpeed.x*2.f, maxWalkingSpeed.y*1.25f};
+void Player::setPosition(const sf::Vector2f &position) {
+    shape.setPosition(position);
+    physics.position = getPosition();
 }
 
 void Player::turn() {
     brake();
-    if (areClose(velocity.x, 0.f, 10.f)) {
+    if (areClose(physics.velocity.x, 0.f, 10.f)) {
         shape.setScale({-shape.getScale().x, shape.getScale().y});
         facingRight = !facingRight;
     }
 }
 
 void Player::walkLeft() {
-    if (facingRight) {
-        turn();
-    }
-    else {
-        physics.updateAcceleration(*this, -maxSpeed, movementResponse);
-    }
+    if (facingRight) turn();
+    else physics.accelerate(-physics.speed);
 }
 
 void Player::walkRight() {
-    if (!facingRight) {
-        turn();
-    }
-    else {
-        physics.updateAcceleration(*this, maxSpeed, movementResponse);
-    }
+    if (!facingRight) turn();
+    else physics.accelerate(physics.speed);
 }
 
 void Player::brake() {
-    physics.updateAcceleration(*this, {0.f, velocity.y}, movementResponse);
+    physics.accelerate({0.f, physics.velocity.y});
 }
 
 void Player::jump() {
-    if (position.y + shape.getGlobalBounds().size.y / 2.f >= pWorld->groundLevel) {
-        velocity.y = -physics.GRAVITY*maxSpeed.y/2500.f;  // Magic number is tweaked experimentally
+    if (physics.position.y + getSize().y / 2.f >= pWorld->groundLevel) {
+        physics.velocity.y = -physics.gravity*physics.speed.y/2500.f;  // Magic number is tweaked experimentally
     }
 }
 
 void Player::attack() {
     auto pPlayers = pWorld->findEntities<Player>();
     std::erase(pPlayers, this);
-    for (Player *player : pPlayers) {
-        if (std::fabs(player->position.x - position.x) <= attackRange) {
-            animation.onEnd(ATTACKING, [&player, this]{player->takeDamage(this->attackDamage);});
+    for (Player *opponent : pPlayers) {
+        if (hd::abs(opponent->physics.position - physics.position).x <= attackRange &&
+            hd::abs(opponent->physics.position - physics.position).y <= attackRange) {
+            animation.onEnd(ATTACKING, [&opponent, this]{opponent->takeDamage(this->attackDamage);});
         }
     }
 }
@@ -106,7 +94,7 @@ void Player::declareState() {
         return;
     }
     if (state == JUMPING) {
-        if (position.y  + shape.getGlobalBounds().size.y / 2.f >= pWorld->groundLevel) {
+        if (physics.position.y  + getSize().y / 2.f >= pWorld->groundLevel) {
             state = IDLE;
         }
     }
@@ -132,7 +120,7 @@ void Player::declareState() {
             state = STOPPING;
         }
         else if (desiredState == IDLE) {
-            if (std::fabs(velocity.x) > 0) {
+            if (std::fabs(physics.velocity.x) > 0) {
                 state = BRAKING;
             }
             else state = IDLE;
@@ -149,12 +137,12 @@ void Player::takeAction() {
             break;
         }
         case WALKING: {
-            maxSpeed = maxWalkingSpeed;
+            physics.speed = physics.walkingSpeed;
             walk();
             break;
         }
         case RUNNING: {
-            maxSpeed = maxRunningSpeed;
+            physics.speed = physics.runningSpeed;
             walk();
             break;
         }
@@ -193,17 +181,17 @@ void Player::selectAnimation() {
     switch (state) {
         case JUMPING : {
             animation.set(JUMPING);
-            animation.animationSet[JUMPING].fps = std::fabs(maxWalkingSpeed.y / maxSpeed.y)*24.f;
+            animation.animationSet[JUMPING].fps = std::fabs(physics.walkingSpeed.y / physics.speed.y)*24.f;
             break;
         }
         case WALKING : {
             animation.set(WALKING);
-            animation.pCurrentAnimation->fps = std::fabs(velocity.x / maxWalkingSpeed.x) * static_cast<float>(animation.pCurrentAnimation->framesPerRow) * 2.f;
+            animation.pCurrentAnimation->fps = std::fabs(physics.velocity.x / physics.walkingSpeed.x) * static_cast<float>(animation.pCurrentAnimation->framesPerRow) * 2.f;
             break;
         }
         case RUNNING : {
             animation.set(RUNNING);
-            animation.pCurrentAnimation->fps = std::fabs(velocity.x / maxRunningSpeed.x) * static_cast<float>(animation.pCurrentAnimation->framesPerRow) * 2.f;
+            animation.pCurrentAnimation->fps = std::fabs(physics.velocity.x / physics.runningSpeed.x) * static_cast<float>(animation.pCurrentAnimation->framesPerRow) * 2.f;
             break;
         }
         case ATTACKING : {
@@ -226,11 +214,11 @@ void Player::initShapeSize() {
     shape.setSize(static_cast<sf::Vector2f>(pTexture->getSize()));
 }
 
-sf::Shape * Player::getShape() {
+sf::Shape *Player::getShape() {
     return &shape;
 }
 
-sf::Texture * Player::getTexture() {
+sf::Texture *Player::getTexture() {
     return &pWorld->pGame->textures.player;
 }
 
@@ -241,12 +229,10 @@ void Player::init() {
 }
 
 void Player::update() {
-    acceleration = {0.f, physics.GRAVITY};  // Reset acceleration
-
+    physics.acceleration = {0.f, physics.gravity};  // Reset acceleration
     declareState();
     selectAnimation();
     takeAction();
-
-    physics.update(*this, pWorld->pGame->time.dt);
+    physics.update();
     animation.update(pWorld->pGame->time.dt);
 }

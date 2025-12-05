@@ -12,8 +12,8 @@
 class Player;
 
 namespace kinematics {
-    inline void motionEquation (const sf::Vector2f &acceleration, sf::Vector2f &velocity,
-                                sf::Vector2f &position, const float &dt, const float &friction) {
+    inline void motionEquation (const float &dt, const sf::Vector2f &acceleration, sf::Vector2f &velocity,
+                                sf::Vector2f &position, const float &friction) {
         const auto totalAcceleration = acceleration - velocity*friction;
         velocity += totalAcceleration*dt;
         position += velocity*dt + totalAcceleration*dt*dt/2.f;
@@ -23,16 +23,33 @@ namespace kinematics {
 class PhysicsComponent {
 public:
     PhysicsComponent ();
+    explicit PhysicsComponent (Player &player);
+    Player *pPlayer{nullptr};
+    // CURRENT STATE
+    sf::Vector2f position{};
+    sf::Vector2f velocity{};
+    sf::Vector2f acceleration{};
+    // LIMITS
+    sf::Vector2f walkingSpeed{};
+    sf::Vector2f runningSpeed{};
+    sf::Vector2f speed{};
+    sf::Vector2f snap{0.05f, 0.05f};  // How aggressively player changes speed
 
-    const float GRAVITY = 10000;
-    const float AIR_RESISTANCE = 0.f;
-    const float GROUND_FRICTION = 1.f;
+    const float gravity = 10000;
+    const float airFriction = 0.f;
+    const float groundFriction = 1.f;
 
-    void updateAcceleration(Player &player, const sf::Vector2f &desiredVelocity, const float &snap) const;
+    void updateWalkingSpeed();
 
-    static void printPhysics(const Player &player);
+    void updateRunningSpeed();
 
-    void update(Player &player,const float &dt) const;
+    void updateSpeed();
+
+    void accelerate(const sf::Vector2f &targetVelocity);
+
+    void printPhysics() const;
+
+    void update();
 };
 
 #endif //BONK_GAME_PHYSICSENGINE_HPP

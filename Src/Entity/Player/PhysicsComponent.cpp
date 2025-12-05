@@ -9,30 +9,45 @@
 
 
 #pragma region constructors
-
 PhysicsComponent::PhysicsComponent() = default;
-
+PhysicsComponent::PhysicsComponent(Player &player) : pPlayer(&player) {}
 #pragma endregion
 
-void PhysicsComponent::updateAcceleration(Player &player, const sf::Vector2f &desiredVelocity, const float &snap) const {
-    player.acceleration.x = player.maxWalkingSpeed.x*player.movementResponse*(desiredVelocity.x - player.velocity.x) * GROUND_FRICTION;
+void PhysicsComponent::updateWalkingSpeed() {
+    walkingSpeed = hd::multiply<float>(pPlayer->getSize(), sf::Vector2f{2.f, 2.f});
 }
 
-void PhysicsComponent::printPhysics(const Player &player) {
-    std::cout << "Px: " << player.position.x << " Vx: " << player.velocity.x << " Ax: " << player.acceleration.x << "\n";
-    std::cout << "Py: " << player.position.y << " Vy: " << player.velocity.y << " Ay: " << player.acceleration.y << "\n";
+void PhysicsComponent::updateRunningSpeed() {
+    runningSpeed = hd::multiply<float>(pPlayer->getSize(), sf::Vector2f{4.f, 2.f*1.25f});
 }
 
-void PhysicsComponent::update(Player &player, const float &dt) const {
-    player.calculateSpeed();
-    kinematics::motionEquation(player.acceleration, player.velocity, player.position,
-                               dt, AIR_RESISTANCE);
-    player.setPosition(player.position);  // Update position
+void PhysicsComponent::updateSpeed() {
+    updateWalkingSpeed();
+    updateRunningSpeed();
+}
 
-    if (player.position.y + player.shape.getGlobalBounds().size.y / 2.f > player.pWorld->groundLevel) {
-        player.setPosition({player.position.x, player.pWorld->groundLevel - player.shape.getGlobalBounds().size.y / 2.f});
-        player.acceleration.y = 0;
-        player.velocity.y = 0;
+void PhysicsComponent::accelerate(const sf::Vector2f &targetVelocity) {
+    const sf::Vector2f velDiff = targetVelocity - velocity;
+    const sf::Vector2f environment{groundFriction, airFriction};
+    acceleration = hd::multiply<float>(walkingSpeed, snap, velDiff, environment);
+}
+
+void PhysicsComponent::printPhysics() const {
+    std::cout << "Px: " << position.x << " Vx: " << velocity.x << " Ax: " << acceleration.x << "\n";
+    std::cout << "Py: " << position.y << " Vy: " << velocity.y << " Ay: " << acceleration.y << "\n";
+}
+
+void PhysicsComponent::update() {
+    const float &dt = pPlayer->pWorld->pGame->time.dt;
+    const float &groundLevel = pPlayer->pWorld->pGame->time.dt;
+    updateSpeed();
+    kinematics::motionEquation(dt, acceleration, velocity, position, airFriction);
+    pPlayer->setPosition(position);  // Update position
+
+    if (position.y + pPlayer->getSize().y / 2.f > groundLevel) {
+        pPlayer->setPosition({position.x, groundLevel - pPlayer->getSize().y / 2.f});
+        acceleration.y = 0;
+        velocity.y = 0;
     }
-    // printPhysics(player);
+    // printPhysics();
 }
