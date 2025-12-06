@@ -10,6 +10,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "AnimationComponent.hpp"
+#include "CombatComponent.hpp"
 #include "PhysicsComponent.hpp"
 #include "InputComponent.hpp"
 #include "MovementComponent.hpp"
@@ -52,6 +53,7 @@ public:
     PhysicsComponent physics{};
     AnimationComponent animation{};
     MovementComponent movement{};
+    CombatComponent combat{};
     // RENDERING
     sf::RectangleShape shape{};
     // GETTERS
@@ -60,10 +62,7 @@ public:
     // SETTERS
     void setPosition(const sf::Vector2f &position);
     // COMBAT
-    float attackRange{};
-    void attack();
-    void takeDamage(const float &damage);
-    void die();
+
     // UPDATE
     void declareState();
     void takeAction();

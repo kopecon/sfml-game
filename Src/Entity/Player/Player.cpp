@@ -13,7 +13,7 @@
 Player::Player(std::string name) : Entity(std::move(name)){}
 
 Player::Player(std::string name, const Controls &controls) :
-Entity(std::move(name)), input(*this, controls), physics(*this), animation(*this), movement(*this) {
+Entity(std::move(name)), input(*this, controls), physics(*this), animation(*this), movement(*this), combat(*this) {
     this->animation.animationSheet = {pTexture, {32, 32}};
     this->animation.target = &shape;
     animation.add(AnimationEntry(IDLE,         2, true));
@@ -39,25 +39,6 @@ sf::Vector2f Player::getPosition() const {
 void Player::setPosition(const sf::Vector2f &position) {
     shape.setPosition(position);
     physics.position = getPosition();
-}
-
-void Player::attack() {
-    auto pPlayers = pWorld->findEntities<Player>();
-    std::erase(pPlayers, this);
-    for (Player *opponent : pPlayers) {
-        if (hd::abs(opponent->physics.position - physics.position).x <= attackRange &&
-            hd::abs(opponent->physics.position - physics.position).y <= attackRange) {
-            animation.onEnd(ATTACKING, [&opponent, this]{opponent->takeDamage(this->attackDamage);});
-        }
-    }
-}
-
-void Player::takeDamage(const float &damage) {
-    health -= damage;
-}
-
-void Player::die() {
-    animation.onEnd(DYING, [this]{this->markedForRemoval=true;});
 }
 
 void Player::declareState() {
@@ -130,11 +111,11 @@ void Player::takeAction() {
             break;
         }
         case DYING: {
-            die();
+            combat.die();
             break;
         }
         case ATTACKING: {
-            attack();
+            combat.attack();
             break;
         }
         case BRAKING: {
