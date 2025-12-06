@@ -2,7 +2,7 @@
 // Created by Andrew on 17/11/2025.
 //
 
-#include "../../Includes/Entity/AnimationComponent.hpp"
+#include "../../Includes/Entity/Animations.hpp"
 
 #include <iostream>
 
@@ -35,13 +35,13 @@ size_t AnimationEntry::Hash::operator()(const AnimationEntry &anim) const noexce
     return std::hash<int>()(anim.id);
 }
 
-AnimationComponent::AnimationComponent() = default;
+Animations::Animations() = default;
 
-AnimationComponent::AnimationComponent(const AnimationSheet &animationSheet, sf::Shape &target) :
+Animations::Animations(const AnimationSheet &animationSheet, sf::Shape &target) :
 animationSheet(animationSheet),
 target(&target) {}
 
-sf::IntRect AnimationComponent::currentFrame() const {
+sf::IntRect Animations::currentFrame() const {
     auto frameCoord = sf::Vector2i(
         pCurrentAnimation->frameIndex.x*animationSheet.frameSize.x,
         pCurrentAnimation->frameIndex.y*animationSheet.frameSize.y
@@ -49,7 +49,7 @@ sf::IntRect AnimationComponent::currentFrame() const {
     return {frameCoord, animationSheet.frameSize};
 }
 
-void AnimationComponent::set(const int &animationID) {
+void Animations::set(const int &animationID) {
     auto *pNewAnimation = &animationSet[animationID];
     if (pCurrentAnimation == nullptr) {
         pCurrentAnimation = pNewAnimation;
@@ -65,7 +65,7 @@ void AnimationComponent::set(const int &animationID) {
     }
 }
 
-void AnimationComponent::add(const AnimationEntry &animation) {
+void Animations::add(const AnimationEntry &animation) {
     animationSet.emplace(animation.id, animation);
 
     if (pCurrentAnimation == nullptr) {
@@ -73,20 +73,20 @@ void AnimationComponent::add(const AnimationEntry &animation) {
     }
 }
 
-void AnimationComponent::onEnd(const int &animationID, const std::function<void()> &function) {
+void Animations::onEnd(const int &animationID, const std::function<void()> &function) {
     if (animationSet[animationID].state == AnimationEntry::END) {
         function();
     }
 }
 
-bool AnimationComponent::completed(const int &animationID) {
+bool Animations::completed(const int &animationID) {
     if (animationSet[animationID].state == AnimationEntry::COMPLETED) {
         return true;
     }
     return false;
 }
 
-void AnimationComponent::update(const float &dt) const {
+void Animations::update(const float &dt) const {
     if (pCurrentAnimation->state == AnimationEntry::END) {
         pCurrentAnimation->state = AnimationEntry::COMPLETED;
         return;

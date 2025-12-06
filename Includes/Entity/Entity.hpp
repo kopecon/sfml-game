@@ -28,7 +28,7 @@ public:
 
     virtual sf::Shape* getShape() = 0;
 
-    virtual sf::Vector2f getWindowToShapeSizeRatio() const;
+    [[nodiscard]] virtual sf::Vector2f getWindowToShapeSizeRatio() const;
 
     virtual sf::Texture* getTexture() {return pTexture;}
 

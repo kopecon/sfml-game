@@ -178,39 +178,6 @@ void Player::takeAction() {
     }
 }
 
-void Player::selectAnimation() {
-    switch (state) {
-        case JUMPING : {
-            animation.set(JUMPING);
-            animation.animationSet[JUMPING].fps = std::fabs(physics.walkingSpeed.y / physics.speed.y)*24.f;
-            break;
-        }
-        case WALKING : {
-            animation.set(WALKING);
-            animation.pCurrentAnimation->fps = std::fabs(physics.velocity.x / physics.walkingSpeed.x) * static_cast<float>(animation.pCurrentAnimation->framesPerRow) * 2.f;
-            break;
-        }
-        case RUNNING : {
-            animation.set(RUNNING);
-            animation.pCurrentAnimation->fps = std::fabs(physics.velocity.x / physics.runningSpeed.x) * static_cast<float>(animation.pCurrentAnimation->framesPerRow) * 2.f;
-            break;
-        }
-        case ATTACKING : {
-            animation.set(ATTACKING);
-            animation.pCurrentAnimation->fps = static_cast<float>(animation.pCurrentAnimation->framesPerRow) * 3.f;
-            break;
-        }
-        case DYING : {
-            animation.set(DYING);
-            // animation.pCurrentAnimation->fps = static_cast<float>(animation.pCurrentAnimation->framesPerRow) * 3.f;
-            break;
-        }
-        default: {
-            animation.set(IDLE);
-        }
-    }
-}
-
 void Player::initShapeSize() {
     shape.setSize(static_cast<sf::Vector2f>(pTexture->getSize()));
 }
@@ -232,7 +199,7 @@ void Player::init() {
 void Player::update() {
     physics.acceleration = {0.f, pWorld->gravity};  // Reset acceleration
     declareState();
-    selectAnimation();
+    animation.selectAnimation();
     takeAction();
     physics.update();
     animation.update(pWorld->pGame->time.dt);

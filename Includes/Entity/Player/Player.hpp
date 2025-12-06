@@ -9,7 +9,7 @@
 #include <functional>
 #include <SFML/Graphics.hpp>
 
-#include "../AnimationComponent.hpp"
+#include "AnimationComponent.hpp"
 #include "PhysicsComponent.hpp"
 #include "InputComponent.hpp"
 #include "../Entity.hpp"
@@ -20,7 +20,7 @@ class World;
 
 class Player final : public Entity {
 public:
-    enum PlayerStates {
+    enum States {
         IDLE,
         WINKING,
         WALKING,
@@ -42,7 +42,7 @@ public:
     float attackDamage{20.f};
     float height{0.2f};  // As a factor of the window height. (from 0 to 1)
     // STATES
-    PlayerStates state{IDLE};
+    States state{IDLE};
     // CONDITIONS
     bool facingRight{true};
     float eyeDryness{};
@@ -72,7 +72,7 @@ public:
     // UPDATE
     void declareState();
     void takeAction();
-    void selectAnimation();
+    // OVERRIDES
     void initShapeSize() override;
     sf::Shape* getShape() override;
     sf::Texture* getTexture() override;

@@ -21,7 +21,7 @@ int InputComponent::update() const {
     const bool run = sf::Keyboard::isKeyPressed(controls.run);
     const bool attack = sf::Keyboard::isKeyPressed(controls.attack);
 
-    using enum Player::PlayerStates;
+    using enum Player::States;
 
     // ACTIONS NEED TO BE SORTED BY PRIORITY
     if (jump) return JUMPING;

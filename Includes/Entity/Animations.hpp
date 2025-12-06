@@ -2,8 +2,8 @@
 // Created by Andrew on 17/11/2025.
 //
 
-#ifndef BONK_GAME_ANIMATED_HPP
-#define BONK_GAME_ANIMATED_HPP
+#ifndef BONK_GAME_ANIMATIONS_HPP
+#define BONK_GAME_ANIMATIONS_HPP
 
 #include <functional>
 #include <SFML/Graphics.hpp>
@@ -46,11 +46,11 @@ public:
     struct Hash {size_t operator()(const AnimationEntry& anim) const noexcept;};
 };
 
-class AnimationComponent {
+class Animations {
 public:
 #pragma region constructors
-    AnimationComponent();
-    explicit AnimationComponent(const AnimationSheet &animationSheet, sf::Shape &target);
+    Animations();
+    explicit Animations(const AnimationSheet &animationSheet, sf::Shape &target);
 #pragma endregion
 
     AnimationSheet animationSheet{};
@@ -72,4 +72,4 @@ public:
     void update(const float &dt) const;
 };
 
-#endif //BONK_GAME_ANIMATED_HPP
+#endif //BONK_GAME_ANIMATIONS_HPP
