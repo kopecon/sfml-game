@@ -13,7 +13,7 @@
 Player::Player(std::string name) : Entity(std::move(name)){}
 
 Player::Player(std::string name, const Controls &controls) :
-Entity(std::move(name)), input(*this, controls), physics(*this), animation(*this) {
+Entity(std::move(name)), input(*this, controls), physics(*this), animation(*this), movement(*this) {
     this->animation.animationSheet = {pTexture, {32, 32}};
     this->animation.target = &shape;
     animation.add(AnimationEntry(IDLE,         2, true));
@@ -39,34 +39,6 @@ sf::Vector2f Player::getPosition() const {
 void Player::setPosition(const sf::Vector2f &position) {
     shape.setPosition(position);
     physics.position = getPosition();
-}
-
-void Player::turn() {
-    brake();
-    if (areClose(physics.velocity.x, 0.f, 10.f)) {
-        shape.setScale({-shape.getScale().x, shape.getScale().y});
-        facingRight = !facingRight;
-    }
-}
-
-void Player::walkLeft() {
-    if (facingRight) turn();
-    else physics.accelerate(-physics.speed);
-}
-
-void Player::walkRight() {
-    if (!facingRight) turn();
-    else physics.accelerate(physics.speed);
-}
-
-void Player::brake() {
-    physics.accelerate({0.f, physics.velocity.y});
-}
-
-void Player::jump() {
-    if (physics.position.y + getSize().y / 2.f >= pWorld->groundLevel) {
-        physics.velocity.y = -pWorld->gravity*physics.speed.y/2500.f;  // Magic number is tweaked experimentally
-    }
 }
 
 void Player::attack() {
@@ -139,19 +111,19 @@ void Player::takeAction() {
         }
         case WALKING: {
             physics.speed = physics.walkingSpeed;
-            walk();
+            movement.walk();
             break;
         }
         case RUNNING: {
             physics.speed = physics.runningSpeed;
-            walk();
+            movement.walk();
             break;
         }
         case CROUCHING: {
             break;
         }
         case JUMPING: {
-            jump();
+            movement.jump();
             break;
         }
         case DISAPPEARING: {
@@ -166,11 +138,11 @@ void Player::takeAction() {
             break;
         }
         case BRAKING: {
-            brake();
+            movement.brake();
             break;
         }
         case STOPPING: {
-            brake();
+            movement.brake();
             break;
         }
         default: {
