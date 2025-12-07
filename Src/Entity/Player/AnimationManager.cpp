@@ -2,17 +2,17 @@
 // Created by Andrew on 06/12/2025.
 //
 
-#include "../../../Includes/Entity/Player/AnimationComponent.hpp"
+#include "../../../Includes/Entity/Player/AnimationManager.hpp"
 #include "../../../Includes/Entity/Player/Player.hpp"
 
 
-AnimationComponent::AnimationComponent() = default;
+AnimationManager::AnimationManager() = default;
 
-AnimationComponent::AnimationComponent(Player &player): pPlayer(&player) {}
+AnimationManager::AnimationManager(Player &player): pPlayer(&player) {}
 
-void AnimationComponent::selectAnimation() const {
-    using enum ActionsComponent::States;
-    switch (pPlayer->actions.state) {
+void AnimationManager::selectAnimation() const {
+    using enum StateManager::States;
+    switch (pPlayer->state.state) {
         case JUMPING : {
             pPlayer->animation.set(JUMPING);
             pPlayer->animation.animationSet[JUMPING].fps = std::fabs(pPlayer->physics.walkingSpeed.y / pPlayer->physics.speed.y)*24.f;

@@ -3,18 +3,15 @@
 //
 
 #include "../../../Includes/Entity/Player/Player.hpp"
-#include "../../../Utils/utils.hpp"
-#include <iostream>
-
 #include "../../../Includes/World/World.hpp"
 
-using enum ActionsComponent::States;
+
+using enum StateManager::States;
 
 #pragma region constructors
 Player::Player(std::string name) : Entity(std::move(name)){}
-
 Player::Player(std::string name, const Controls &controls) :
-Entity(std::move(name)), input(*this, controls), physics(*this), animation(*this), actions(*this) {
+Entity(std::move(name)), input(*this, controls), physics(*this), movement(*this), combat(*this), animation(*this), state(*this) {
     this->animation.animationSheet = {pTexture, {32, 32}};
     this->animation.target = &shape;
     animation.add(AnimationEntry(IDLE,         2, true));
@@ -42,96 +39,6 @@ void Player::setPosition(const sf::Vector2f &position) {
     physics.position = getPosition();
 }
 
-void Player::declareState() {
-    const ActionsComponent::States desiredState = input.update();
-    if (health <= 0) {
-        actions.state = DYING;
-        return;
-    }
-    if (actions.state == JUMPING) {
-        if (physics.position.y  + getSize().y / 2.f >= pWorld->groundLevel) {
-            actions.state = IDLE;
-        }
-    }
-    else if (actions.state == ATTACKING) {
-        if (animation.completed(ATTACKING)) {
-            this->actions.state=IDLE;
-        }
-    }
-    else {  // ACTIONS NEED TO BE SORTED BY PRIORITY
-        if (desiredState == JUMPING) {
-            actions.state = JUMPING;
-        }
-        else if (desiredState == ATTACKING) {
-            actions.state = ATTACKING;
-        }
-        else if (desiredState == WALKING) {
-            actions.state = WALKING;
-        }
-        else if (desiredState == RUNNING) {
-            actions.state = RUNNING;
-        }
-        else if (desiredState == STOPPING) {
-            actions.state = STOPPING;
-        }
-        else if (desiredState == IDLE) {
-            if (std::fabs(physics.velocity.x) > 0) {
-                actions.state = BRAKING;
-            }
-            else actions.state = IDLE;
-        }
-    }
-}
-
-void Player::takeAction() {
-    switch (actions.state) {
-        case IDLE: {
-            break;
-        }
-        case WINKING: {
-            break;
-        }
-        case WALKING: {
-            physics.speed = physics.walkingSpeed;
-            actions.movement.walk();
-            break;
-        }
-        case RUNNING: {
-            physics.speed = physics.runningSpeed;
-            actions.movement.walk();
-            break;
-        }
-        case CROUCHING: {
-            break;
-        }
-        case JUMPING: {
-            actions.movement.jump();
-            break;
-        }
-        case DISAPPEARING: {
-            break;
-        }
-        case DYING: {
-            actions.combat.die();
-            break;
-        }
-        case ATTACKING: {
-            actions.combat.attack();
-            break;
-        }
-        case BRAKING: {
-            actions.movement.brake();
-            break;
-        }
-        case STOPPING: {
-            actions.movement.brake();
-            break;
-        }
-        default: {
-        }
-    }
-}
-
 void Player::initShapeSize() {
     shape.setSize(static_cast<sf::Vector2f>(pTexture->getSize()));
 }
@@ -152,9 +59,9 @@ void Player::init() {
 
 void Player::update() {
     physics.acceleration = {0.f, pWorld->gravity};  // Reset acceleration
-    declareState();
+    state.declareState();
     animation.selectAnimation();
-    takeAction();
+    state.act();
     physics.update();
     animation.update(pWorld->pGame->time.dt);
 }
