@@ -11,6 +11,7 @@
 #include "PhysicsComponent.hpp"
 #include "InputComponent.hpp"
 #include "MovementComponent.hpp"
+#include "CombatComponent.hpp"
 #include "../Entity.hpp"
 
 

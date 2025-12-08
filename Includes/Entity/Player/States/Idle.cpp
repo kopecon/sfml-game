@@ -3,9 +3,29 @@
 //
 
 #include "Idle.hpp"
+#include "Walking.hpp"
+#include <iostream>
+
+#include "../Player.hpp"
+#include "../StateManager.hpp"
 
 Idle::Idle(): State("IDLE") {}
 
-Idle::Idle(Player &player): State(player, "IDLE") {}
+Idle::Idle(StateManager *stateManager): State(stateManager, "IDLE") {}
 
-void Idle::act() {}
+void Idle::enter() {
+    State::enter();
+    pStateManager->pState = std::make_unique<Idle>(pStateManager);
+}
+
+void Idle::act() {
+    pStateManager->state = States::IDLE;
+    pStateManager->pPlayer->movement.brake();
+}
+
+void Idle::exit(const States &conditions) {
+    if (conditions == States::WALKING) {
+        State::exit(conditions);
+        std::make_unique<Walking>(pStateManager)->enter();
+    }
+}

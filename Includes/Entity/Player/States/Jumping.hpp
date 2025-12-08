@@ -13,7 +13,9 @@ public:
 
     explicit Jumping(Player &player);
 
-    void act() override;;
+    void act() override;
+
+    void exit(const States &desiredState) override;;
 };
 
 

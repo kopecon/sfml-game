@@ -6,7 +6,7 @@
 #include "../../../Includes/World/World.hpp"
 
 
-using enum StateManager::States;
+using enum State::States;
 
 #pragma region constructors
 Player::Player(std::string name) : Entity(std::move(name)){}
@@ -59,7 +59,7 @@ void Player::init() {
 
 void Player::update() {
     physics.acceleration = {0.f, pWorld->gravity};  // Reset acceleration
-    stateManager.changeState();
+    stateManager.update();
     animationManager.selectAnimation();
     stateManager.act();
     physics.update();

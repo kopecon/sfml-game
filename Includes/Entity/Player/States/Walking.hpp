@@ -9,9 +9,14 @@
 
 class Walking final : public State {
 public:
-    Walking();
-    explicit Walking(Player &player);
+    explicit Walking() : State("WALKING") {}
+    explicit Walking(StateManager *stateManager) : State(stateManager, "WALKING") {}
+
+    void enter() override;
+
     void act() override;
+
+    void exit(const States &conditions) override;
 };
 
 

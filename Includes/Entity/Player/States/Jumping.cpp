@@ -3,13 +3,3 @@
 //
 
 #include "Jumping.hpp"
-#include "../Player.hpp"
-
-
-Jumping::Jumping(): State("JUMPING") {}
-
-Jumping::Jumping(Player &player): State(player, "JUMPING") {}
-
-void Jumping::act() {
-    pPlayer->movement.jump();
-}

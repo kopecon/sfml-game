@@ -3,14 +3,25 @@
 //
 
 #include "Walking.hpp"
+#include "Idle.hpp"
+
 #include "../Player.hpp"
+#include "../StateManager.hpp"
 
-
-Walking::Walking() : State("WALKING") {}
-
-Walking::Walking(Player &player) : State(player, "WALKING") {}
+void Walking::enter() {
+    State::enter();
+    pStateManager->pState = std::make_unique<Walking>(pStateManager);
+}
 
 void Walking::act() {
-    pPlayer->physics.speed = pPlayer->physics.walkingSpeed;
-    pPlayer->movement.walk();
+    pStateManager->pPlayer->physics.speed = pStateManager->pPlayer->physics.walkingSpeed;
+    pStateManager->pPlayer->movement.walk();
+    pStateManager->pPlayer->stateManager.state = States::WALKING;
+}
+
+void Walking::exit(const States &conditions) {
+    if (conditions == States::IDLE) {
+        State::exit(conditions);
+        std::make_unique<Idle>(pStateManager)->enter();
+    }
 }

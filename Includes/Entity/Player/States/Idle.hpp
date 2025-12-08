@@ -4,15 +4,21 @@
 
 #ifndef BONK_GAME_IDLE_HPP
 #define BONK_GAME_IDLE_HPP
+
 #include "State.hpp"
 
 
 class Idle final : public State {
 public:
-    Idle();
+    explicit Idle();
 
-    explicit Idle(Player &player);
+    explicit Idle(StateManager *stateManager);
+
+    void enter() override;
+
     void act() override;
+
+    void exit(const States &conditions) override;
 };
 
 #endif //BONK_GAME_IDLE_HPP
