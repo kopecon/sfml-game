@@ -10,7 +10,7 @@
 class Player;
 
 
-class AnimationManager : public Animations {
+class AnimationManager final : public Animations {
 public:
     AnimationManager();
 
@@ -18,7 +18,9 @@ public:
 
     Player *pPlayer{nullptr};
 
-    void selectAnimation() const;;
+    void selectAnimation() const;
+
+    void update() const;
 };
 
 

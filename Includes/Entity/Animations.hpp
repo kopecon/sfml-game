@@ -51,6 +51,7 @@ public:
 class Animations {
 public:
 #pragma region constructors
+    virtual ~Animations() = default;
     Animations();
     explicit Animations(const AnimationSheet &animationSheet, sf::Shape &target);
 #pragma endregion
@@ -71,7 +72,7 @@ public:
 
     bool completed(const StateManager::States &animationID);
 
-    void update(const float &dt) const;
+    virtual void update(const float &dt) const;
 };
 
 #endif //BONK_GAME_ANIMATIONS_HPP

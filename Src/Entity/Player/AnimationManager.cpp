@@ -4,6 +4,7 @@
 
 #include "../../../Includes/Entity/Player/AnimationManager.hpp"
 #include "../../../Includes/Entity/Player/Player.hpp"
+#include "../../../Includes/World/World.hpp"
 
 
 AnimationManager::AnimationManager() = default;
@@ -42,4 +43,9 @@ void AnimationManager::selectAnimation() const {
             pPlayer->animationManager.set(IDLE);
         }
     }
+}
+
+void AnimationManager::update() const {
+    selectAnimation();
+    Animations::update(pPlayer->pWorld->pGame->time.dt);
 }
