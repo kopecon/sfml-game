@@ -19,18 +19,18 @@ void Idle::act() {
 void Idle::exit(const StateManager::States &condition) {
     if (condition == StateManager::States::WALKING) {
         State::exit(condition);
-        std::make_unique<Walking>(pStateManager)->enter<Walking>();
+        enter<Walking>();
     }
     else if (condition == StateManager::States::JUMPING) {
         State::exit(condition);
-        std::make_unique<Jumping>(pStateManager)->enter<Jumping>();
+        enter<Jumping>();
     }
     else if (condition == StateManager::States::RUNNING) {
         State::exit(condition);
-        std::make_unique<Running>(pStateManager)->enter<Running>();
+        enter<Running>();
     }
     else if (condition == StateManager::States::STOPPING) {
         State::exit(condition);
-        std::make_unique<Stopping>(pStateManager)->enter<Stopping>();
+        enter<Stopping>();
     }
 }

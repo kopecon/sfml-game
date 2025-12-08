@@ -6,13 +6,13 @@
 #define BONK_GAME_PLAYER_HPP
 
 #include <SFML/Graphics.hpp>
+#include "../Entity.hpp"
 #include "States/StateManager.hpp"
 #include "AnimationManager.hpp"
 #include "PhysicsComponent.hpp"
 #include "InputComponent.hpp"
 #include "MovementComponent.hpp"
 #include "CombatComponent.hpp"
-#include "../Entity.hpp"
 
 
 class World;

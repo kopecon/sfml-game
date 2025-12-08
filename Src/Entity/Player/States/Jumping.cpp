@@ -27,10 +27,10 @@ void Jumping::exit(const StateManager::States &condition) {
         State::exit(condition);
         inAir = false;
         if (condition == StateManager::States::IDLE)
-            std::make_unique<Idle>(pStateManager)->enter<Idle>();
+            enter<Idle>();
         else if (condition == StateManager::States::WALKING)
-            std::make_unique<Walking>(pStateManager)->enter<Walking>();
+            enter<Walking>();
         else if (condition == StateManager::States::RUNNING)
-            std::make_unique<Running>(pStateManager)->enter<Running>();
+            enter<Running>();
     }
 }

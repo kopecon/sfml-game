@@ -6,8 +6,6 @@
 #define BONK_GAME_STATE_HPP
 #include <iostream>
 #include "StateManager.hpp"
-// #include "../Player.hpp"
-
 
 
 class State {
@@ -31,8 +29,9 @@ public:
 template<typename T>
 void State::enter() {
     // std::cout << pStateManager->pPlayer->name << " Entering State: " << typeid(*this).name() << "\n";
-    pStateManager->state = state;
-    pStateManager->pState = std::make_unique<T>(pStateManager);
+    std::unique_ptr<T> next = std::make_unique<T>(pStateManager);
+    pStateManager->state = next->state;
+    pStateManager->pState = std::move(next);
 }
 
 #endif //BONK_GAME_STATE_HPP

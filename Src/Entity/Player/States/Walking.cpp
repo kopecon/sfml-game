@@ -15,21 +15,21 @@ void Walking::act() {
     pStateManager->pPlayer->movement.walk();
 }
 
-void Walking::exit(const StateManager::States &conditions) {
-    if (conditions == StateManager::States::IDLE) {
-        State::exit(conditions);
-        std::make_unique<Idle>(pStateManager)->enter<Idle>();
+void Walking::exit(const StateManager::States &condition) {
+    if (condition == StateManager::States::IDLE) {
+        State::exit(condition);
+        enter<Idle>();
     }
-    else if (conditions == StateManager::States::RUNNING) {
-        State::exit(conditions);
-        std::make_unique<Running>(pStateManager)->enter<Running>();
+    else if (condition == StateManager::States::RUNNING) {
+        State::exit(condition);
+        enter<Running>();
     }
-    else if (conditions == StateManager::States::JUMPING) {
-        State::exit(conditions);
-        std::make_unique<Jumping>(pStateManager)->enter<Jumping>();
+    else if (condition == StateManager::States::JUMPING) {
+        State::exit(condition);
+        enter<Jumping>();
     }
-    else if (conditions == StateManager::States::STOPPING) {
-        State::exit(conditions);
-        std::make_unique<Stopping>(pStateManager)->enter<Stopping>();
+    else if (condition == StateManager::States::STOPPING) {
+        State::exit(condition);
+        enter<Stopping>();
     }
 }

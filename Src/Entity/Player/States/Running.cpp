@@ -22,18 +22,18 @@ void Running::act() {
 void Running::exit(const StateManager::States &condition) {
     if (condition == StateManager::States::IDLE) {
         State::exit(condition);
-        std::make_unique<Idle>(pStateManager)->enter<Idle>();
+        enter<Idle>();
     }
     else if (condition == StateManager::States::WALKING) {
         State::exit(condition);
-        std::make_unique<Walking>(pStateManager)->enter<Walking>();
+        enter<Walking>();
     }
     else if (condition == StateManager::States::JUMPING) {
         State::exit(condition);
-        std::make_unique<Jumping>(pStateManager)->enter<Jumping>();
+        enter<Jumping>();
     }
     else if (condition == StateManager::States::STOPPING) {
         State::exit(condition);
-        std::make_unique<Stopping>(pStateManager)->enter<Stopping>();
+        enter<Stopping>();
     }
 }
