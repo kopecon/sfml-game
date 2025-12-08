@@ -9,13 +9,10 @@
 
 class Jumping final : public State {
 public:
-    explicit Jumping();
 
     explicit Jumping(StateManager *stateManager);
 
     bool inAir{false};
-
-    void enter() override;
 
     void act() override;
 

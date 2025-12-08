@@ -10,11 +10,7 @@
 
 class Idle final : public State {
 public:
-    explicit Idle();
-
     explicit Idle(StateManager *stateManager);
-
-    void enter() override;
 
     void act() override;
 

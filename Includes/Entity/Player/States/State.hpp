@@ -4,10 +4,10 @@
 
 #ifndef BONK_GAME_STATE_HPP
 #define BONK_GAME_STATE_HPP
-#include <string>
+#include <iostream>
 #include "StateManager.hpp"
+// #include "../Player.hpp"
 
-class Player;
 
 
 class State {
@@ -15,16 +15,24 @@ protected:
     StateManager *pStateManager{nullptr};
 public:
     virtual ~State();
-    explicit State(const StateManager::States &state);
+
     explicit State(StateManager *stateManager, const StateManager::States &state);
 
     StateManager::States state{};
 
-    virtual void enter();
+    template<typename T>
+    void enter();
 
     virtual void act() = 0;
 
     virtual void exit(const StateManager::States &condition);
 };
+
+template<typename T>
+void State::enter() {
+    // std::cout << pStateManager->pPlayer->name << " Entering State: " << typeid(*this).name() << "\n";
+    pStateManager->state = state;
+    pStateManager->pState = std::make_unique<T>(pStateManager);
+}
 
 #endif //BONK_GAME_STATE_HPP

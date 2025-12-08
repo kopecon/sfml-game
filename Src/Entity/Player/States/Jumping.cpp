@@ -9,14 +9,8 @@
 #include "../../../../Includes/Entity/Player/States/Running.hpp"
 
 
-Jumping::Jumping(): State(StateManager::States::JUMPING) {}
-
 Jumping::Jumping(StateManager *stateManager): State(stateManager, StateManager::States::JUMPING) {}
 
-void Jumping::enter() {
-    State::enter();
-    pStateManager->pState = std::make_unique<Jumping>(pStateManager);
-}
 
 void Jumping::act() {
     if (!inAir) {
@@ -33,10 +27,10 @@ void Jumping::exit(const StateManager::States &condition) {
         State::exit(condition);
         inAir = false;
         if (condition == StateManager::States::IDLE)
-            std::make_unique<Idle>(pStateManager)->enter();
+            std::make_unique<Idle>(pStateManager)->enter<Idle>();
         else if (condition == StateManager::States::WALKING)
-            std::make_unique<Walking>(pStateManager)->enter();
+            std::make_unique<Walking>(pStateManager)->enter<Walking>();
         else if (condition == StateManager::States::RUNNING)
-            std::make_unique<Running>(pStateManager)->enter();
+            std::make_unique<Running>(pStateManager)->enter<Running>();
     }
 }

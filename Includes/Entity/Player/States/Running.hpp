@@ -9,11 +9,7 @@
 
 class Running final : public State{
 public:
-    explicit Running();
-
     explicit Running(StateManager *stateManager);
-
-    void enter() override;
 
     void act() override;
 

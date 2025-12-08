@@ -9,11 +9,7 @@
 
 class Stopping final : public State {
 public:
-    explicit Stopping();
-
     explicit Stopping(StateManager *stateManager);
-
-    void enter() override;
 
     void act() override;
 

@@ -8,11 +8,7 @@
 #include "../../../../Includes/Entity/Player/States/Jumping.hpp"
 #include "../../../../Includes/Entity/Player/States/Stopping.hpp"
 
-
-void Walking::enter() {
-    State::enter();
-    pStateManager->pState = std::make_unique<Walking>(pStateManager);
-}
+Walking::Walking(StateManager *stateManager): State(stateManager, StateManager::States::WALKING) {}
 
 void Walking::act() {
     pStateManager->pPlayer->movement.speed = pStateManager->pPlayer->movement.walkingSpeed;
@@ -22,18 +18,18 @@ void Walking::act() {
 void Walking::exit(const StateManager::States &conditions) {
     if (conditions == StateManager::States::IDLE) {
         State::exit(conditions);
-        std::make_unique<Idle>(pStateManager)->enter();
+        std::make_unique<Idle>(pStateManager)->enter<Idle>();
     }
     else if (conditions == StateManager::States::RUNNING) {
         State::exit(conditions);
-        std::make_unique<Running>(pStateManager)->enter();
+        std::make_unique<Running>(pStateManager)->enter<Running>();
     }
     else if (conditions == StateManager::States::JUMPING) {
         State::exit(conditions);
-        std::make_unique<Jumping>(pStateManager)->enter();
+        std::make_unique<Jumping>(pStateManager)->enter<Jumping>();
     }
     else if (conditions == StateManager::States::STOPPING) {
         State::exit(conditions);
-        std::make_unique<Stopping>(pStateManager)->enter();
+        std::make_unique<Stopping>(pStateManager)->enter<Stopping>();
     }
 }
