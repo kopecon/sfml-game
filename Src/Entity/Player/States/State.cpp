@@ -20,7 +20,7 @@ void State::enter() {
     pStateManager->state = state;
 }
 
-void State::exit(const StateManager::States &conditions) {
+void State::exit(const StateManager::States &condition) {
     std::cout << pStateManager->pPlayer->name << " Exiting State: " << static_cast<int>(this->state) << "\n";
 }
 

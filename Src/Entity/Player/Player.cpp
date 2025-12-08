@@ -58,10 +58,7 @@ void Player::init() {
 }
 
 void Player::update() {
-    physics.acceleration = {0.f, pWorld->gravity};  // Reset acceleration
-    stateManager.update();
-    animationManager.selectAnimation();
-    stateManager.act();
     physics.update();
-    animationManager.update(pWorld->pGame->time.dt);
+    stateManager.update();
+    animationManager.update();
 }

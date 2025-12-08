@@ -24,7 +24,7 @@ public:
 
     virtual void act() = 0;
 
-    virtual void exit(const StateManager::States &conditions);
+    virtual void exit(const StateManager::States &condition);
 };
 
 #endif //BONK_GAME_STATE_HPP

@@ -50,6 +50,8 @@ void PhysicsComponent::update() {
 
     updateSpeed();
 
+    acceleration.y = pPlayer->pWorld->gravity;  // Apply Gravity
+
     engine.motionEquation(dt, acceleration, velocity, position, airFriction);
     pPlayer->setPosition(position);  // Update position
 
@@ -58,5 +60,6 @@ void PhysicsComponent::update() {
         acceleration.y = 0;
         velocity.y = 0;
     }
+    acceleration = {0.f, 0.f};  // Reset acceleration
     // printPhysics();
 }
