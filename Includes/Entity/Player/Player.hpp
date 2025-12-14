@@ -32,10 +32,10 @@ public:
     bool facingRight{true};
     float eyeDryness{};
     // COMPONENTS
-    InputComponent input{};
-    PhysicsComponent physics{};
-    MovementComponent movement{};
-    CombatComponent combat{};
+    player::InputComponent input{};
+    player::PhysicsComponent physics{};
+    player::MovementComponent movement{};
+    player::CombatComponent combat{};
     // MANAGERS
     player::AnimationManager animationManager{};
     player::StateManager stateManager{};
