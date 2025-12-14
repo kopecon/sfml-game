@@ -25,7 +25,7 @@ FetchContent_Declare(SFML
     SYSTEM)
 FetchContent_MakeAvailable(SFML)
 
-add_executable("${CMAKE_PROJECT_NAME}" src/main.cpp
+add_executable("${CMAKE_PROJECT_NAME}" Src/main.cpp
         Src/Entity/Player/Player.cpp
         Includes/Entity/Player/Player.hpp
         Src/Entity/Scenery/Background.cpp
