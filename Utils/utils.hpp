@@ -49,8 +49,8 @@ namespace hadamard {
     template<typename T>
     sf::Vector2<T> abs(const sf::Vector2<T> &vector) {
         sf::Vector2<T> result{};
-        result.x = fabs(vector.x);
-        result.y = fabs(vector.y);
+        result.x = std::fabs(vector.x);
+        result.y = std::fabs(vector.y);
         return result;
     }
 }
