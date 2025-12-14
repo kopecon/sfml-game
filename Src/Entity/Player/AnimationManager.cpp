@@ -5,6 +5,7 @@
 #include "../../../Includes/Entity/Player/AnimationManager.hpp"
 #include "../../../Includes/Entity/Player/Player.hpp"
 #include "../../../Includes/World/World.hpp"
+#include <cmath>
 
 
 player::AnimationManager::AnimationManager() = default;
