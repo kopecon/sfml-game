@@ -11,18 +11,18 @@
 #include <unordered_map>
 
 
-template <typename Manager, typename StateSet>
+template <typename Manager>
 class State {
 protected:
     Manager *pManager{nullptr};
 public:
     virtual ~State();
-    State(Manager *pManager, const StateSet &stateID) :
+    State(Manager *pManager, const typename Manager::States &stateID) :
     pManager(pManager),
     stateID(stateID)
     {}
 
-    StateSet stateID{};
+    typename Manager::States stateID{};
     State *pPreviousState{nullptr};
 
     virtual void onEnter() {}
@@ -30,27 +30,27 @@ public:
 
     virtual void update() = 0;
 
-    virtual StateSet next(const std::vector<StateSet> &conditions) = 0;
+    virtual typename Manager::States next(const std::vector<typename Manager::States> &conditions) = 0;
 };
 
 
-template<typename Manager, typename StateSet>
-State<Manager, StateSet>::~State() = default;
+template<typename Manager>
+State<Manager>::~State() = default;
 
 
-template<typename Manager, typename StateSet>
+template<typename Manager>
 class StateMachineEngine {
 public:
     StateMachineEngine() = default;
-    State<Manager, StateSet> *pCurrentState{nullptr};
-    StateSet targetState{};  // Usually triggered by the user's input
-    std::vector<StateSet> conditions{};
+    State<Manager> *pCurrentState{nullptr};
+    typename Manager::States targetState{};  // Usually triggered by the user's input
+    std::vector<typename Manager::States> conditions{};
     // List of available states
-    std::unordered_map<StateSet, std::unique_ptr<State<Manager, StateSet>>> states{};
+    std::unordered_map<typename Manager::States, std::unique_ptr<State<Manager>>> states{};
 
     template<typename T>
     void addState(std::unique_ptr<T> state)
-    requires std::is_base_of_v<State<Manager, StateSet>, T> {
+    requires std::is_base_of_v<State<Manager>, T> {
         auto [it, inserted] = states.emplace(state->stateID, std::move(state));
 
         if (!pCurrentState && inserted) {
@@ -59,7 +59,7 @@ public:
     }
 
     void act() const;
-    void transition(const StateSet &stateID) {
+    void transition(const typename Manager::States &stateID) {
         auto pNextState = states.at(stateID).get();
         pNextState->pPreviousState = pCurrentState;
         pCurrentState = pNextState;
@@ -68,18 +68,19 @@ public:
 };
 
 
-template<typename Manager, typename StateSet>
-void StateMachineEngine<Manager, StateSet>::act() const {
+template<typename Manager>
+void StateMachineEngine<Manager>::act() const {
     if (pCurrentState != nullptr) pCurrentState->update();
 }
 
 
-template<typename Manager, typename StateSet>
-void StateMachineEngine<Manager, StateSet>::update() {
+template<typename Manager>
+void StateMachineEngine<Manager>::update() {
     assert(pCurrentState != nullptr);
     pCurrentState->update();
+    conditions.clear();
     conditions.push_back(targetState);
-    StateSet newState = pCurrentState->next(conditions);
+    auto newState = pCurrentState->next(conditions);
     if (newState != pCurrentState->stateID) {
         transition(newState);
     }

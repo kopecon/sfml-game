@@ -55,7 +55,7 @@ public:
 
     struct Hash {
         size_t operator()(const AnimationEntry& anim) const noexcept {
-            return std::hash<player::States>()(anim.id);
+            return std::hash<player::StateManager::States>()(anim.id);
         }
     };
 };

@@ -14,9 +14,9 @@
 player::StateManager::StateManager() = default;
 
 player::StateManager::StateManager(Player &player) : pPlayer(&player) {
-        addState(std::make_unique<Idle>(this));
-        addState(std::make_unique<Jumping>(this));
-        addState(std::make_unique<Running>(this));
-        addState(std::make_unique<Stopping>(this));
-        addState(std::make_unique<Walking>(this));
+        engine.addState(std::make_unique<Idle>(this));
+        engine.addState(std::make_unique<Jumping>(this));
+        engine.addState(std::make_unique<Running>(this));
+        engine.addState(std::make_unique<Stopping>(this));
+        engine.addState(std::make_unique<Walking>(this));
 }

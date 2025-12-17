@@ -17,22 +17,22 @@ player::InputComponent::InputComponent(Player &player, const Controls &controls)
     const bool jump = sf::Keyboard::isKeyPressed(controls.jump);
     const bool run = sf::Keyboard::isKeyPressed(controls.run);
     const bool attack = sf::Keyboard::isKeyPressed(controls.attack);
-    using enum player::States;
+    using enum StateManager::States;
 
     // ACTIONS NEED TO BE SORTED BY PRIORITY
-    if (jump) pPlayer->stateManager.targetState = JUMPING;
-    else if (attack) pPlayer->stateManager.targetState = ATTACKING;
-    else if (left && right) pPlayer->stateManager.targetState = STOPPING;
+    if (jump) pPlayer->stateManager.engine.targetState = JUMPING;
+    else if (attack) pPlayer->stateManager.engine.targetState = ATTACKING;
+    else if (left && right) pPlayer->stateManager.engine.targetState = STOPPING;
     else if (left) {
         pPlayer->movement.walk = [&]{pPlayer->movement.walkLeft();};
-        if (run) pPlayer->stateManager.targetState = RUNNING;
-        else pPlayer->stateManager.targetState = WALKING;
+        if (run) pPlayer->stateManager.engine.targetState = RUNNING;
+        else pPlayer->stateManager.engine.targetState = WALKING;
         }
     else if (right) {
         pPlayer->movement.walk = [&]{pPlayer->movement.walkRight();};
-        if (run) pPlayer->stateManager.targetState = RUNNING;
-        else pPlayer->stateManager.targetState = WALKING;
+        if (run) pPlayer->stateManager.engine.targetState = RUNNING;
+        else pPlayer->stateManager.engine.targetState = WALKING;
         }
     else
-    pPlayer->stateManager.targetState = IDLE;
+    pPlayer->stateManager.engine.targetState = IDLE;
 }

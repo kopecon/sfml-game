@@ -10,13 +10,14 @@
 class Player;
 
 namespace player {
-    class AnimationManager final : public AnimationEngine<States> {
+    class AnimationManager final {
     public:
         AnimationManager();
 
         explicit AnimationManager(Player &player);
 
         Player *pPlayer{nullptr};
+        AnimationEngine<StateManager::States> engine{};
 
         void selectAnimation() const;
 

@@ -6,23 +6,23 @@
 #include "../../../Includes/World/World.hpp"
 
 
-using enum player::States;
+using enum player::StateManager::States;
 
 #pragma region constructors
 Player::Player(std::string name) : Entity(std::move(name)){}
 Player::Player(std::string name, const Controls &controls) :
 Entity(std::move(name)), input(*this, controls), physics(*this), movement(*this), combat(*this), animationManager(*this), stateManager(*this) {
-    this->animationManager.animationSheet = {pTexture, {32, 32}};
-    this->animationManager.target = &shape;
-    animationManager.add(AnimationEntry(IDLE,         2, true));
-    animationManager.add(AnimationEntry(WINKING,      2, true));
-    animationManager.add(AnimationEntry(WALKING,      4, true));
-    animationManager.add(AnimationEntry(RUNNING,      8, true));
-    animationManager.add(AnimationEntry(CROUCHING,    6, true));
-    animationManager.add(AnimationEntry(JUMPING,      8, false));
-    animationManager.add(AnimationEntry(DYING,        8, false));
-    animationManager.add(AnimationEntry(DISAPPEARING, 4, false));
-    animationManager.add(AnimationEntry(ATTACKING,    8, false));
+    this->animationManager.engine.animationSheet = {pTexture, {32, 32}};
+    this->animationManager.engine.target = &shape;
+    animationManager.engine.add(AnimationEntry(IDLE,         2, true));
+    animationManager.engine.add(AnimationEntry(WINKING,      2, true));
+    animationManager.engine.add(AnimationEntry(WALKING,      4, true));
+    animationManager.engine.add(AnimationEntry(RUNNING,      8, true));
+    animationManager.engine.add(AnimationEntry(CROUCHING,    6, true));
+    animationManager.engine.add(AnimationEntry(JUMPING,      8, false));
+    animationManager.engine.add(AnimationEntry(DYING,        8, false));
+    animationManager.engine.add(AnimationEntry(DISAPPEARING, 4, false));
+    animationManager.engine.add(AnimationEntry(ATTACKING,    8, false));
 }
 #pragma endregion
 

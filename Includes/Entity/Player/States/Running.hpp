@@ -7,13 +7,13 @@
 #include "../../../Game/Engines/StateMachineEngine.hpp"
 
 
-class Running final : public State<player::StateManager, player::States>{
+class Running final : public State<player::StateManager>{
 public:
     explicit Running(player::StateManager *stateManager);
 
     void update() override;
 
-    player::States next(const std::vector<player::States> &conditions) override;
+    player::StateManager::States next(const std::vector<player::StateManager::States> &conditions) override;
 };
 
 

@@ -10,28 +10,35 @@
 
 class Player;
 
-namespace player {
-    enum class States {
-        NONE = -1,
-        IDLE,
-        WINKING,
-        WALKING,
-        RUNNING,
-        CROUCHING,
-        JUMPING,
-        DISAPPEARING,
-        DYING,
-        ATTACKING,
-        BRAKING,
-        STOPPING,
-    };
 
-    class StateManager : public StateMachineEngine<StateManager, States> {
+namespace player {
+    class StateManager {
     public:
+        enum class States {
+            NONE = -1,
+            IDLE,
+            WINKING,
+            WALKING,
+            RUNNING,
+            CROUCHING,
+            JUMPING,
+            DISAPPEARING,
+            DYING,
+            ATTACKING,
+            BRAKING,
+            STOPPING,
+        };
+
         StateManager();
         explicit StateManager(Player &player);
 
         Player *pPlayer{nullptr};
+        StateMachineEngine<StateManager> engine{};
+
+        void update() {
+            engine.update();
+
+        }
     };
 }
 

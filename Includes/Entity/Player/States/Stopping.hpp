@@ -7,13 +7,14 @@
 #include "../../../Game/Engines/StateMachineEngine.hpp"
 
 
-class Stopping final : public State<player::StateManager, player::States> {
+class Stopping final : public State<player::StateManager> {
 public:
     explicit Stopping(player::StateManager *stateManager);
 
     void update() override;
 
-    player::States next(const std::vector<player::States> &conditions) override;
+    player::StateManager::States next(const std::vector<player::StateManager::States> &conditions) override;
+
 };
 
 

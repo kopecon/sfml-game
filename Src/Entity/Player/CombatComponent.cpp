@@ -6,7 +6,7 @@
 #include "../../../Includes/Entity/Player/Player.hpp"
 #include "../../../Includes/World/World.hpp"
 
-using enum player::States;
+using enum player::StateManager::States;
 
 player::CombatComponent::CombatComponent() = default;
 
@@ -18,7 +18,7 @@ void player::CombatComponent::attack() const {
     for (Player *opponent : pPlayers) {
         if (hd::abs(opponent->physics.position - pPlayer->physics.position).x <= attackRange &&
             hd::abs(opponent->physics.position - pPlayer->physics.position).y <= attackRange) {
-            pPlayer->animationManager.onEnd(ATTACKING, [&opponent, this]{opponent->combat.takeDamage(pPlayer->attackDamage);});
+            pPlayer->animationManager.engine.onEnd(ATTACKING, [&opponent, this]{opponent->combat.takeDamage(pPlayer->attackDamage);});
             }
     }
 }
@@ -28,5 +28,5 @@ void player::CombatComponent::takeDamage(const float &damage) const {
 }
 
 void player::CombatComponent::die() const {
-    pPlayer->animationManager.onEnd(DYING, [this]{pPlayer->markedForRemoval=true;});
+    pPlayer->animationManager.engine.onEnd(DYING, [this]{pPlayer->markedForRemoval=true;});
 }

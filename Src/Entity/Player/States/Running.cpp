@@ -8,7 +8,7 @@
 
 using namespace player;
 
-Running::Running(StateManager *stateManager): State(stateManager, States::RUNNING) {
+Running::Running(StateManager *stateManager): State(stateManager, StateManager::States::RUNNING) {
 }
 
 
@@ -17,18 +17,18 @@ void Running::update() {
     pManager->pPlayer->movement.walk();
 }
 
-States Running::next(const std::vector<States> &conditions) {
-    if (conditions.back() == States::IDLE) {
-        return States::IDLE;
+StateManager::States Running::next(const std::vector<StateManager::States> &conditions) {
+    if (conditions.back() == StateManager::States::IDLE) {
+        return StateManager::States::IDLE;
     }
-    if (conditions.back() == States::WALKING) {
-        return States::WALKING;
+    if (conditions.back() == StateManager::States::WALKING) {
+        return StateManager::States::WALKING;
     }
-    if (conditions.back() == States::JUMPING) {
-        return States::JUMPING;
+    if (conditions.back() == StateManager::States::JUMPING) {
+        return StateManager::States::JUMPING;
     }
-    if (conditions.back() == States::STOPPING) {
-        return States::STOPPING;
+    if (conditions.back() == StateManager::States::STOPPING) {
+        return StateManager::States::STOPPING;
     }
     return stateID;
 }

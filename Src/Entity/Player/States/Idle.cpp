@@ -8,24 +8,25 @@
 
 using namespace player;
 
-Idle::Idle(StateManager *stateManager) : State(stateManager, States::IDLE) {}
+Idle::Idle(StateManager *stateManager) :
+State(stateManager, StateManager::States::IDLE) {}
 
 void Idle::update() {
     pManager->pPlayer->movement.brake();
 }
 
-States Idle::next(const std::vector<States> &conditions) {
-    if (conditions.back() == States::WALKING) {
-        return States::WALKING;
+StateManager::States Idle::next(const std::vector<StateManager::States> &conditions) {
+    if (conditions.back() == StateManager::States::WALKING) {
+        return StateManager::States::WALKING;
     }
-    if (conditions.back() == States::JUMPING) {
-        return States::JUMPING;
+    if (conditions.back() == StateManager::States::JUMPING) {
+        return StateManager::States::JUMPING;
     }
-    if (conditions.back() == States::RUNNING) {
-        return States::RUNNING;
+    if (conditions.back() == StateManager::States::RUNNING) {
+        return StateManager::States::RUNNING;
     }
-    if (conditions.back() == States::STOPPING) {
-        return States::STOPPING;
+    if (conditions.back() == StateManager::States::STOPPING) {
+        return StateManager::States::STOPPING;
     }
     return stateID;
 }

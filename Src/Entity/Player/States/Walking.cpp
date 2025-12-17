@@ -9,25 +9,25 @@
 using namespace player;
 
 
-Walking::Walking(StateManager *stateManager): State(stateManager, States::WALKING) {}
+Walking::Walking(StateManager *stateManager): State(stateManager, StateManager::States::WALKING) {}
 
 void Walking::update() {
     pManager->pPlayer->movement.speed = pManager->pPlayer->movement.walkingSpeed;
     pManager->pPlayer->movement.walk();
 }
 
-States Walking::next(const std::vector<States> &conditions) {
-    if (conditions.back() == States::IDLE) {
-        return States::IDLE;
+StateManager::States Walking::next(const std::vector<StateManager::States> &conditions) {
+    if (conditions.back() == StateManager::States::IDLE) {
+        return StateManager::States::IDLE;
     }
-    if (conditions.back() == States::RUNNING) {
-        return States::RUNNING;
+    if (conditions.back() == StateManager::States::RUNNING) {
+        return StateManager::States::RUNNING;
     }
-    if (conditions.back() == States::JUMPING) {
-        return States::JUMPING;
+    if (conditions.back() == StateManager::States::JUMPING) {
+        return StateManager::States::JUMPING;
     }
-    if (conditions.back() == States::STOPPING) {
-        return States::STOPPING;
+    if (conditions.back() == StateManager::States::STOPPING) {
+        return StateManager::States::STOPPING;
     }
     return stateID;
 }
