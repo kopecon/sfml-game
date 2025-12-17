@@ -8,7 +8,7 @@
 
 using namespace player;
 
-Jumping::Jumping(StateManager *stateManager): State(stateManager, StateManager::States::JUMPING) {}
+Jumping::Jumping(StateManager *stateManager): StateBase(stateManager, StateManager::States::JUMPING) {}
 
 
 void Jumping::update() {

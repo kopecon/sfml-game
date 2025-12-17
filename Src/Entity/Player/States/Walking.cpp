@@ -9,7 +9,7 @@
 using namespace player;
 
 
-Walking::Walking(StateManager *stateManager): State(stateManager, StateManager::States::WALKING) {}
+Walking::Walking(StateManager *stateManager): StateBase(stateManager, StateManager::States::WALKING) {}
 
 void Walking::update() {
     pManager->pPlayer->movement.speed = pManager->pPlayer->movement.walkingSpeed;

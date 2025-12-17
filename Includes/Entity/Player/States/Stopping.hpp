@@ -7,7 +7,7 @@
 #include "../../../Game/Engines/StateMachine.hpp"
 
 namespace player {
-    class Stopping final : public State<StateManager> {
+    class Stopping final : public StateBase<StateManager> {
     public:
         explicit Stopping(StateManager *stateManager);
 

@@ -8,7 +8,7 @@
 
 using namespace player;
 
-Stopping::Stopping(StateManager *stateManager): State(stateManager, StateManager::States::STOPPING) {}
+Stopping::Stopping(StateManager *stateManager): StateBase(stateManager, StateManager::States::STOPPING) {}
 
 
 void Stopping::update() {

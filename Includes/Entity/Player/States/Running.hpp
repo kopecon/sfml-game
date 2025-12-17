@@ -7,7 +7,7 @@
 #include "../../../Game/Engines/StateMachine.hpp"
 
 namespace player {
-    class Running final : public State<StateManager>{
+    class Running final : public StateBase<StateManager>{
     public:
         explicit Running(StateManager *stateManager);
 

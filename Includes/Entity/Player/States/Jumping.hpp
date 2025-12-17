@@ -7,7 +7,7 @@
 #include "../../../Game/Engines/StateMachine.hpp"
 
 namespace player {
-    class Jumping final : public State<StateManager> {
+    class Jumping final : public StateBase<StateManager> {
     public:
 
         explicit Jumping(StateManager *stateManager);

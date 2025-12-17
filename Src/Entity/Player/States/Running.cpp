@@ -8,7 +8,7 @@
 
 using namespace player;
 
-Running::Running(StateManager *stateManager): State(stateManager, StateManager::States::RUNNING) {
+Running::Running(StateManager *stateManager): StateBase(stateManager, StateManager::States::RUNNING) {
 }
 
 

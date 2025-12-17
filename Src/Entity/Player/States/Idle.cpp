@@ -9,7 +9,7 @@
 using namespace player;
 
 Idle::Idle(StateManager *stateManager) :
-State(stateManager, StateManager::States::IDLE) {}
+StateBase(stateManager, StateManager::States::IDLE) {}
 
 void Idle::update() {
     pManager->pPlayer->movement.brake();

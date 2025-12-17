@@ -7,7 +7,7 @@
 #include "../../../Game/Engines/StateMachine.hpp"
 
 namespace player {
-    class Walking final : public State<StateManager> {
+    class Walking final : public StateBase<StateManager> {
     public:
         explicit Walking(StateManager *stateManager);
 

@@ -8,7 +8,7 @@
 #include "../../../Game/Engines/StateMachine.hpp"
 
 namespace player {
-    class Idle final : public State<StateManager> {
+    class Idle final : public StateBase<StateManager> {
     public:
         explicit Idle(StateManager *stateManager);
 
