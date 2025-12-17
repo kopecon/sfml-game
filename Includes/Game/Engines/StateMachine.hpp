@@ -39,9 +39,9 @@ State<Manager>::~State() = default;
 
 
 template<typename Manager>
-class StateMachineEngine {
+class StateMachine {
 public:
-    StateMachineEngine() = default;
+    StateMachine() = default;
     State<Manager> *pCurrentState{nullptr};
     typename Manager::States targetState{};  // Usually triggered by the user's input
     std::vector<typename Manager::States> conditions{};
@@ -69,13 +69,13 @@ public:
 
 
 template<typename Manager>
-void StateMachineEngine<Manager>::act() const {
+void StateMachine<Manager>::act() const {
     if (pCurrentState != nullptr) pCurrentState->update();
 }
 
 
 template<typename Manager>
-void StateMachineEngine<Manager>::update() {
+void StateMachine<Manager>::update() {
     assert(pCurrentState != nullptr);
     pCurrentState->update();
     conditions.clear();

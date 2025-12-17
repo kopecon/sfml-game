@@ -5,7 +5,7 @@
 #ifndef BONK_GAME_STATE_MANAGER_HPP
 #define BONK_GAME_STATE_MANAGER_HPP
 
-#include "../../Game/Engines/StateMachineEngine.hpp"
+#include "../../Game/Engines/StateMachine.hpp"
 
 
 class Player;
@@ -33,7 +33,7 @@ namespace player {
         explicit StateManager(Player &player);
 
         Player *pPlayer{nullptr};
-        StateMachineEngine<StateManager> engine{};
+        StateMachine<StateManager> engine{};
 
         void update() {
             engine.update();
