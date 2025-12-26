@@ -46,10 +46,10 @@ public:
     }
 
     virtual void onEnter() {
-        // std::cout << pManager->pPlayer->name << " Entered state: " << static_cast<int>(stateID) << "\n";
+        std::cout << " Entered state: " << static_cast<int>(stateID) << "\n";
     }
     virtual void onExit() {
-        // std::cout << pManager->pPlayer->name << " Exited state: " << static_cast<int>(stateID) << "\n";
+        // std::cout << " Exited state: " << static_cast<int>(stateID) << "\n";
     }
 
     typename Manager::States next() {
@@ -58,23 +58,17 @@ public:
         // 1. Choose edge
         for (const auto &edge : this->edges) {
             // 1.a Edge has a specific condition -> resolve defined condition first
-            if (edge->condition) {
-                if (edge->condition()) {
+            if (edge->condition && edge->condition()) {
                     if (pManager->targetStateID == edge->next) {
                         return edge->next;
                     }
-                }
-                else {
-                    return this->stateID;
-                }
             }
             // 1.b Edge has no specific condition
-            else  {
-                if (pManager->targetStateID == edge->next) {
+            if (pManager->targetStateID == edge->next) {
                     return edge->next;
                 }
             }
-        }
+        // 2. No edge conditions met. Staying in this state
         return this->stateID;
     }
 

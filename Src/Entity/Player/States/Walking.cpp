@@ -17,6 +17,5 @@ Walking::Walking(StateManager *stateManager): StateBase(stateManager, StateManag
 }
 
 void Walking::update() {
-    pManager->pPlayer->movement.speed = pManager->pPlayer->movement.walkingSpeed;
     pManager->pPlayer->movement.walk();
 }

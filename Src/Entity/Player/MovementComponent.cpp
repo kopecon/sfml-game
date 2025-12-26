@@ -23,6 +23,12 @@ void player::MovementComponent::updateRunningSpeed() {
 void player::MovementComponent::update() {
     updateWalkingSpeed();
     updateRunningSpeed();
+    if (pPlayer->getStateID() == StateManager::States::RUNNING) {
+        speed = runningSpeed;
+    }
+    else {
+        speed = walkingSpeed;
+    }
 }
 
 void player::MovementComponent::turn() const {
@@ -48,7 +54,5 @@ void player::MovementComponent::brake() const {
 }
 
 void player::MovementComponent::jump() const {
-    if (pPlayer->physics.position.y + pPlayer->getSize().y / 2.f >= pPlayer->pWorld->groundLevel) {
-        pPlayer->physics.velocity.y = -pPlayer->pWorld->gravity*pPlayer->movement.speed.y/2500.f;  // Magic number is tweaked experimentally
-    }
+    pPlayer->physics.velocity.y = -pPlayer->pWorld->gravity*pPlayer->movement.speed.y/2500.f;  // Magic number is tweaked experimentally
 }

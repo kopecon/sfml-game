@@ -9,25 +9,22 @@
 using namespace player;
 
 Jumping::Jumping(StateManager *pManager): StateBase(pManager, StateManager::States::JUMPING) {
-    addEdge(std::make_unique<Edge>([&](){return !inAir;}, StateManager::States::IDLE));
-    addEdge(std::make_unique<Edge>([&](){return !inAir;}, StateManager::States::WALKING));
-    addEdge(std::make_unique<Edge>([&](){return !inAir;}, StateManager::States::RUNNING));
-    addEdge(std::make_unique<Edge>([&](){return !inAir;}, StateManager::States::STOPPING));
-    addEdge(std::make_unique<Edge>([&](){return !inAir;}, StateManager::States::JUMPING));
+    addEdge(std::make_unique<Edge>([this](){return this->pManager->pPlayer->physics.isGrounded();}, StateManager::States::IDLE));
+    addEdge(std::make_unique<Edge>([this](){return this->pManager->pPlayer->physics.isGrounded();}, StateManager::States::WALKING));
+    addEdge(std::make_unique<Edge>([this](){return this->pManager->pPlayer->physics.isGrounded();}, StateManager::States::RUNNING));
+    addEdge(std::make_unique<Edge>([this](){return this->pManager->pPlayer->physics.isGrounded();}, StateManager::States::STOPPING));
 }
 
 void Jumping::onEnter() {
     StateBase::onEnter();
+    pManager->pPlayer->physics.verbose = true;
+}
+
+void Jumping::onExit() {
+    StateBase::onExit();
+    pManager->pPlayer->physics.verbose = false;
 }
 
 void Jumping::update() {
-    if (!inAir) {
-        pManager->pPlayer->movement.jump();
-        inAir = true;
-    }
-    else {
-        if (pManager->pPlayer->physics.velocity.y == 0) {
-            inAir = false;
-        }
-    }
+    pManager->pPlayer->movement.jump();
 }

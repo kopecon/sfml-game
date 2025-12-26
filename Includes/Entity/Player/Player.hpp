@@ -19,11 +19,11 @@ class World;
 
 
 class Player final : public Entity {
-public:
-#pragma region constructors
+    public:
+    #pragma region constructors
     explicit Player(std::string name);
     explicit Player(std::string name, const Controls &controls);
-#pragma endregion
+    #pragma endregion
     // CHARACTERISTICS
     float health {100.f};
     float attackDamage{20.f};
@@ -44,14 +44,13 @@ public:
     // GETTERS
     sf::Vector2f getSize() const;
     sf::Vector2f getPosition() const;
-    // SETTERS
-    void setPosition(const sf::Vector2f &position);
-    // UPDATE
+    player::StateManager::States getStateID() const;
     // OVERRIDES
     void initShapeSize() override;
     sf::Shape* getShape() override;
     sf::Texture* getTexture() override;
     void init() override;
+    // UPDATE
     void update() override;
 };
 

@@ -12,9 +12,9 @@ namespace player {
 
         explicit Jumping(StateManager *pManager);
 
-        bool inAir{false};
-
         void onEnter() override;
+
+        void onExit() override;
 
         void update() override;
 

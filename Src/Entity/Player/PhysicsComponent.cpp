@@ -15,6 +15,21 @@ player::PhysicsComponent::PhysicsComponent(Player &player) : pPlayer(&player) {}
 #pragma endregion
 
 
+bool player::PhysicsComponent::isGrounded() const {
+    const float groundLevel = pPlayer->pWorld->groundLevel;
+    const float halfHeight = pPlayer->getSize().y * 0.5f;
+
+    return (position.y + halfHeight >= groundLevel)
+        && (velocity.y >= 0.f);
+}
+
+void player::PhysicsComponent::ground() {
+    const float &groundLevel = pPlayer->pWorld->groundLevel;
+    position = {position.x, groundLevel - pPlayer->getSize().y / 2.f};
+    acceleration.y = 0;
+    velocity.y = 0;
+}
+
 void player::PhysicsComponent::accelerate(const sf::Vector2f &targetVelocity) {
     const float &airFriction = pPlayer->pWorld->airFriction;
     const float &groundFriction = pPlayer->pWorld->groundFriction;
@@ -24,6 +39,10 @@ void player::PhysicsComponent::accelerate(const sf::Vector2f &targetVelocity) {
     acceleration = hd::multiply<float>(pPlayer->movement.speed, pPlayer->movement.snap, velDiff, environment);
 }
 
+void player::PhysicsComponent::syncRender() const {
+    pPlayer->shape.setPosition(position);
+}
+
 void player::PhysicsComponent::printPhysics() const {
     std::cout << "Px: " << position.x << " Vx: " << velocity.x << " Ax: " << acceleration.x << "\n";
     std::cout << "Py: " << position.y << " Vy: " << velocity.y << " Ay: " << acceleration.y << "\n";
@@ -31,7 +50,6 @@ void player::PhysicsComponent::printPhysics() const {
 
 void player::PhysicsComponent::update() {
     const float &dt = pPlayer->pWorld->pGame->time.dt;
-    const float &groundLevel = pPlayer->pWorld->groundLevel;
     const float &airFriction = pPlayer->pWorld->airFriction;
     // ReSharper disable once CppUseStructuredBinding
     const PhysicsEngine &engine = pPlayer->pWorld->pGame->engine;
@@ -41,13 +59,13 @@ void player::PhysicsComponent::update() {
     acceleration.y = pPlayer->pWorld->gravity;  // Apply Gravity
 
     engine.motionEquation(dt, acceleration, velocity, position, airFriction);
-    pPlayer->setPosition(position);  // Update position
 
-    if (position.y + pPlayer->getSize().y / 2.f > groundLevel) {
-        pPlayer->setPosition({position.x, groundLevel - pPlayer->getSize().y / 2.f});
-        acceleration.y = 0;
-        velocity.y = 0;
+    if (isGrounded()) {
+        ground();
     }
+
+    syncRender();  // Update player position
+
     acceleration = {0.f, 0.f};  // Reset acceleration
-    // printPhysics();
+    if (verbose) printPhysics();
 }

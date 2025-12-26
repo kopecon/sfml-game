@@ -21,9 +21,16 @@ namespace player {
         sf::Vector2f position{};
         sf::Vector2f velocity{};
         sf::Vector2f acceleration{};
+        // COMPONENT CONTROLS
+        bool verbose{false};
 
+        [[nodiscard]] bool isGrounded() const;
+
+        void ground();
 
         void accelerate(const sf::Vector2f &targetVelocity);
+
+        void syncRender() const;
 
         void printPhysics() const;
 

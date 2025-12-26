@@ -34,11 +34,6 @@ sf::Vector2f Player::getPosition() const {
     return shape.getPosition();
 }
 
-void Player::setPosition(const sf::Vector2f &position) {
-    shape.setPosition(position);
-    physics.position = getPosition();
-}
-
 void Player::initShapeSize() {
     shape.setSize(static_cast<sf::Vector2f>(pTexture->getSize()));
 }
@@ -62,4 +57,8 @@ void Player::update() {
     physics.update();
     stateManager.update();
     animationManager.update();
+}
+
+player::StateManager::States Player::getStateID() const {
+    return stateManager.engine.pCurrentState->stateID;
 }
