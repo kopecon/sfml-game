@@ -59,7 +59,6 @@ add_executable("${CMAKE_PROJECT_NAME}" Src/main.cpp
         Includes/Entity/Scenery/Scenery.hpp
         Src/Game/TimeComponent.cpp
         Includes/Game/TimeComponent.hpp
-        Src/Game/TextureComponent.cpp
         Includes/Game/TextureComponent.hpp
         Src/Game/Engines/PhysicsEngine.cpp
         Includes/Game/Engines/PhysicsEngine.hpp
@@ -81,11 +80,8 @@ add_executable("${CMAKE_PROJECT_NAME}" Src/main.cpp
         Includes/Entity/Player/States/Running.hpp
         Src/Entity/Player/States/Stopping.cpp
         Includes/Entity/Player/States/Stopping.hpp
-        Src/Game/Engines/StateMachine/StateMachine.cpp
         Includes/Game/Engines/StateMachine/StateMachine.hpp
-        Src/Game/Engines/StateMachine/StateBase.cpp
         Includes/Game/Engines/StateMachine/StateBase.hpp
-        Src/Game/Engines/StateMachine/State.cpp
         Includes/Game/Engines/StateMachine/State.hpp
 )
 
