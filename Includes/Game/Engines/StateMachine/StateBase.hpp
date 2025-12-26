@@ -10,9 +10,11 @@
 #include <vector>
 
 
+class Entity;
+
 // THIS IS JUST AN ABSTRACT CLASS
 template <typename States>
-class StateBase_new {
+class StateBase {
 public:
     struct Edge {
         #pragma region constructors
@@ -28,11 +30,12 @@ public:
     };
 
     #pragma region constructors
-    virtual ~StateBase_new() = default;
+    virtual ~StateBase() = default;
 
-    explicit StateBase_new(const States &stateID) : stateID(stateID) {}
+    explicit StateBase(const States &stateID) : stateID(stateID) {}
     #pragma endregion
 
+    // STATE IDENTITY
     States stateID{};  // Enum class representing possible states
     std::vector<std::unique_ptr<Edge>> edges{};  // Connections to other states
 
@@ -53,16 +56,19 @@ public:
         // 1. Choose edge
         for (const auto &edge : this->edges) {
             // 1.a Edge has a specific condition -> resolve defined condition first
-            if (edge->condition && edge->condition()) {
-                    if (nextStateID == edge->next) {
-                        return edge->next;
-                    }
-            }
-            // 1.b Edge has no specific condition
-            if (nextStateID == edge->next) {
+            if (edge->condition) {
+                if (edge->condition() && nextStateID == edge->next) {
                     return edge->next;
                 }
             }
+            // 1.b Edge has no specific condition
+            else {
+                if (nextStateID == edge->next) {
+                    return edge->next;
+                }
+            }
+        }
+
         // 2. No edge conditions met. Staying in this state
         return this->stateID;
     }

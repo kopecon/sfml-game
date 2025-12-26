@@ -27,6 +27,11 @@ void player::MovementComponent::update() {
     if (pPlayer->getStateID() == RUNNING) {
         speed = runningSpeed;
     }
+    // In case sprinting increases jump height we should include this. Else remove this.
+    else if (pPlayer->getStateID() == JUMPING
+        && pPlayer->stateMachine.pPreviousState->stateID == RUNNING) {
+        speed = runningSpeed;
+    }
     else {
         speed = walkingSpeed;
     }
@@ -55,5 +60,8 @@ void player::MovementComponent::brake() const {
 }
 
 void player::MovementComponent::jump() const {
-    pPlayer->physics.velocity.y = -pPlayer->pWorld->gravity*pPlayer->movement.speed.y/2500.f;  // Magic number is tweaked experimentally
+
+    if (pPlayer->physics.isGrounded()) {
+        pPlayer->physics.velocity.y = -pPlayer->pWorld->gravity*pPlayer->movement.speed.y/2500.f;  // Magic number is tweaked experimentally
+    }
 }

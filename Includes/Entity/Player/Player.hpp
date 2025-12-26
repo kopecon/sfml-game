@@ -13,7 +13,7 @@
 #include "InputComponent.hpp"
 #include "MovementComponent.hpp"
 #include "CombatComponent.hpp"
-#include "../../Game/Engines/StateMachine/StateMachine_new.hpp"
+#include "../../Game/Engines/StateMachine/StateMachine.hpp"
 
 
 class World;
@@ -39,7 +39,7 @@ class Player final : public Entity {
     player::CombatComponent combat{};
     // MANAGERS
     player::AnimationManager animationManager{};
-    StateMachine_new<player::States> stateMachine{};
+    StateMachine<player::States> stateMachine{};
     // RENDERING
     sf::RectangleShape shape{};
     // GETTERS

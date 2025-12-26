@@ -4,8 +4,12 @@
 
 #include "../../../Includes/Entity/Player/Player.hpp"
 #include "../../../Includes/Entity/Player/States/Idle.hpp"
+#include "../../../Includes/Entity/Player/States/Jumping.hpp"
+#include "../../../Includes/Entity/Player/States/Running.hpp"
 #include "../../../Includes/Entity/Player/States/States.hpp"
-#include "../../../Includes/Game/Engines/StateMachine/State_new.hpp"
+#include "../../../Includes/Entity/Player/States/Stopping.hpp"
+#include "../../../Includes/Entity/Player/States/Walking.hpp"
+#include "../../../Includes/Game/Engines/StateMachine/State.hpp"
 #include "../../../Includes/World/World.hpp"
 
 
@@ -14,11 +18,14 @@ using enum player::States;
 #pragma region constructors
 Player::Player(std::string name) : Entity(std::move(name)){}
 Player::Player(std::string name, const Controls &controls) :
-Entity(std::move(name)), input(*this, controls), physics(*this), movement(*this), combat(*this), animationManager(*this) {
+Entity(std::move(name)), input(*this, controls), physics(*this), movement(*this), combat(*this), animationManager(*this), stateMachine(this) {
     this->animationManager.engine.animationSheet = {pTexture, {32, 32}};
     this->animationManager.engine.target = &shape;
-    stateMachine.addState(std::make_unique<State_new<player::States>>(NONE));
-    // stateMachine.addState(std::make_unique<player::Idle>());
+    stateMachine.addState(std::make_unique<player::Idle>(this));
+    stateMachine.addState(std::make_unique<player::Jumping>(this));
+    stateMachine.addState(std::make_unique<player::Running>(this));
+    stateMachine.addState(std::make_unique<player::Walking>(this));
+    stateMachine.addState(std::make_unique<player::Stopping>(this));
     animationManager.engine.add(AnimationEntry(IDLE,         2, true));
     animationManager.engine.add(AnimationEntry(WINKING,      2, true));
     animationManager.engine.add(AnimationEntry(WALKING,      4, true));

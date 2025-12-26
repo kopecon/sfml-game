@@ -5,21 +5,31 @@
 #ifndef BONK_GAME_JUMPING_HPP
 #define BONK_GAME_JUMPING_HPP
 
-#include "../../../Game/Engines/StateMachine/StateBase_new.hpp"
+#include "../../../Game/Engines/StateMachine/StateBase.hpp"
+#include "../Player.hpp"
 #include "States.hpp"
 
 namespace player {
-    class Jumping final : public StateBase_new<States> {
+    class Jumping final : public StateBase<States> {
     public:
+        explicit Jumping(Player *pPlayer) : StateBase(States::JUMPING), pPlayer(pPlayer) {
+            auto grounded = [this] {
+                return this->pPlayer->physics.isGrounded();
+            };
 
-        explicit Jumping();
+            addEdge(std::make_unique<Edge>(grounded, States::IDLE));
+            addEdge(std::make_unique<Edge>(grounded, States::WALKING));
+            addEdge(std::make_unique<Edge>(grounded, States::STOPPING));
+            addEdge(std::make_unique<Edge>(grounded, States::RUNNING));
+        }
+        // HOST
+        Player *pPlayer{nullptr};
 
-        void onEnter() override;
+        void onEnter() override {
+            pPlayer->movement.jump();
+        };
 
-        void onExit() override;
-
-        void update() override;
-
+        void update() override {};
     };
 }
 
