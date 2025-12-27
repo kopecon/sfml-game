@@ -13,17 +13,17 @@ namespace player {
     class Jumping final : public State<StateSet> {
     public:
         explicit Jumping(Player *pPlayer) : State(StateSet::ID::JUMPING), pPlayer(pPlayer) {
+            using enum StateSet::ID;
             // Helpers
             // ReSharper disable once CppDFAUnreachableFunctionCall
             auto grounded = [this] {return this->pPlayer->physics.isGrounded();};
             // ReSharper disable once CppDFAUnreachableFunctionCall
             auto previous = [this] {
                 const auto* prev = this->pPlayer->stateMachine.pPreviousState;
-                return prev ? prev->stateID : StateSet::ID::NONE;
+                return prev ? prev->stateID : NONE;
             };
 
             // Conditions
-            using enum StateSet::ID;
             auto idle    = [grounded, previous] {return grounded() && previous() == IDLE;};
             auto walking = [grounded, previous] {return grounded() && previous() == WALKING;};
             auto running = [grounded, previous] {return grounded() && previous() == RUNNING;};
