@@ -5,14 +5,14 @@
 #ifndef BONK_GAME_JUMPING_HPP
 #define BONK_GAME_JUMPING_HPP
 
-#include "../../../Game/Engines/StateMachine/StateBase.hpp"
+#include "../../../Game/Engines/StateMachine/State.hpp"
 #include "../Player.hpp"
-#include "States.hpp"
+#include "StateSet.hpp"
 
 namespace player {
-    class Jumping final : public StateBase<States> {
+    class Jumping final : public State<States> {
     public:
-        explicit Jumping(Player *pPlayer) : StateBase(States::JUMPING), pPlayer(pPlayer) {
+        explicit Jumping(Player *pPlayer) : State(States::JUMPING), pPlayer(pPlayer) {
             auto grounded = [this] {
                 return this->pPlayer->physics.isGrounded();
             };
@@ -28,8 +28,6 @@ namespace player {
         void onEnter() override {
             pPlayer->movement.jump();
         };
-
-        void update() override {};
     };
 }
 

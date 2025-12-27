@@ -6,8 +6,7 @@
 #define BONK_GAME_ANIMATION_MANAGER_HPP
 
 #include "../../Game/Engines/AnimationEngine.hpp"
-#include "States/States.hpp"
-
+#include "States/StateSet.hpp"
 
 
 namespace player {

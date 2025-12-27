@@ -4,7 +4,7 @@
 
 #include "../../../Includes/Entity/Player/AnimationManager.hpp"
 #include "../../../Includes/Entity/Player/Player.hpp"
-#include "../../../Includes/Entity/Player/States/States.hpp"
+#include "../../../Includes/Entity/Player/States/StateSet.hpp"
 #include "../../../Includes/World/World.hpp"
 #include <cmath>
 

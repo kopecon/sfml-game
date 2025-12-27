@@ -5,26 +5,23 @@
 #ifndef BONK_GAME_IDLE_HPP
 #define BONK_GAME_IDLE_HPP
 
-#include "../../../Game/Engines/StateMachine/StateBase.hpp"
+#include "../../../Game/Engines/StateMachine/State.hpp"
 #include "../Player.hpp"
-#include "States.hpp"
+#include "StateSet.hpp"
 
 
 namespace player {
-    class Idle final : public StateBase<States> {
+    class Idle final : public State<States> {
     public:
-        explicit Idle(Player *pPlayer) : StateBase(States::IDLE), pPlayer(pPlayer) {
+        explicit Idle(Player *pPlayer) : State(States::IDLE), pPlayer(pPlayer) {
             addEdge(std::make_unique<Edge>(States::WALKING));
             addEdge(std::make_unique<Edge>(States::RUNNING));
             addEdge(std::make_unique<Edge>(States::STOPPING));
             addEdge(std::make_unique<Edge>(States::JUMPING));
+            addAction([pPlayer]{pPlayer->movement.brake();});
         }
         // HOST
         Player *pPlayer{nullptr};
-
-        void update() override {
-        pPlayer->movement.brake();
-        };
     };
 }
 

@@ -6,7 +6,7 @@
 #include "../../../Includes/Entity/Player/States/Idle.hpp"
 #include "../../../Includes/Entity/Player/States/Jumping.hpp"
 #include "../../../Includes/Entity/Player/States/Running.hpp"
-#include "../../../Includes/Entity/Player/States/States.hpp"
+#include "../../../Includes/Entity/Player/States/StateSet.hpp"
 #include "../../../Includes/Entity/Player/States/Stopping.hpp"
 #include "../../../Includes/Entity/Player/States/Walking.hpp"
 #include "../../../Includes/Game/Engines/StateMachine/State.hpp"
@@ -26,6 +26,7 @@ Entity(std::move(name)), input(*this, controls), physics(*this), movement(*this)
     stateMachine.addState(std::make_unique<Running>(this));
     stateMachine.addState(std::make_unique<Walking>(this));
     stateMachine.addState(std::make_unique<Stopping>(this));
+    stateMachine.addState(std::make_unique<State<States>>(ATTACKING));
     animationManager.engine.add(AnimationEntry(IDLE,         2, true));
     animationManager.engine.add(AnimationEntry(WINKING,      2, true));
     animationManager.engine.add(AnimationEntry(WALKING,      4, true));

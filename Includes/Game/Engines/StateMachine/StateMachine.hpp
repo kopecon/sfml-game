@@ -9,17 +9,16 @@
 #include <memory>
 #include <unordered_map>
 
-#include "StateBase.hpp"
-#include "../../../Entity/Player/Player.hpp"
+#include "State.hpp"
 
 
 template<typename States>
 class StateMachine {
-    void _enter(StateBase<States> *pState) {
+    void _enter(State<States> *pState) {
         pCurrentState = pState;
         pCurrentState->onEnter();
     }
-    void _exit(StateBase<States> *pState) {
+    void _exit(State<States> *pState) {
         pCurrentState->onExit();
         pPreviousState = pState;
     }
@@ -33,13 +32,13 @@ public:
     // HOST
     Entity *pEntity{nullptr};
     // STATE ACCESS
-    StateBase<States> *pCurrentState{nullptr};
-    StateBase<States> *pPreviousState{nullptr};
+    State<States> *pCurrentState{nullptr};
+    State<States> *pPreviousState{nullptr};
     States desiredStateID{};
     // LIST OF AVAILABLE STATES
-    std::unordered_map<States, std::unique_ptr<StateBase<States>>> states{};
+    std::unordered_map<States, std::unique_ptr<State<States>>> states{};
 
-    StateBase<States>* getState(States &stateID) {
+    State<States>* getState(States &stateID) {
         auto it = states.find(stateID);
         if (it == states.end()) {
             std::cout << "Desired state " << static_cast<int>(stateID) << " not implemented!\n";
@@ -50,7 +49,7 @@ public:
 
     template<typename T>
     void addState(std::unique_ptr<T> pState)
-    requires std::is_base_of_v<StateBase<States>, T> {
+    requires std::is_base_of_v<State<States>, T> {
 
         auto [it, inserted] = states.emplace(pState->stateID, std::move(pState));
 
