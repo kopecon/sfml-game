@@ -9,9 +9,9 @@
 #include "SFML/System/Vector2.hpp"
 
 
-class Player;
-
 namespace player {
+    class Player;
+
     class MovementComponent {
     public:
         MovementComponent();

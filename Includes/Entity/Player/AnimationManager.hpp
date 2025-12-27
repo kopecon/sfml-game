@@ -8,9 +8,11 @@
 #include "../../Game/Engines/AnimationEngine.hpp"
 #include "States/States.hpp"
 
-class Player;
+
 
 namespace player {
+    class Player;
+
     class AnimationManager final {
     public:
         AnimationManager();

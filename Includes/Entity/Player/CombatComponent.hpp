@@ -6,9 +6,11 @@
 #define BONK_GAME_COMBAT_COMPONENT_HPP
 
 
-class Player;
+
 
 namespace player {
+    class Player;
+
     class CombatComponent {
     public:
         CombatComponent();

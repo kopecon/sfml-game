@@ -18,41 +18,43 @@
 
 class World;
 
-
-class Player final : public Entity {
+namespace player {
+    class Player final : public Entity {
     public:
-    #pragma region constructors
-    explicit Player(std::string name);
-    explicit Player(std::string name, const Controls &controls);
-    #pragma endregion
-    // CHARACTERISTICS
-    float health {100.f};
-    float attackDamage{20.f};
-    float height{0.2f};  // As a factor of the window height. (from 0 to 1)
-    // CONDITIONS
-    bool facingRight{true};
-    float eyeDryness{};
-    // COMPONENTS
-    player::InputComponent input{};
-    player::PhysicsComponent physics{};
-    player::MovementComponent movement{};
-    player::CombatComponent combat{};
-    // MANAGERS
-    player::AnimationManager animationManager{};
-    StateMachine<player::States> stateMachine{};
-    // RENDERING
-    sf::RectangleShape shape{};
-    // GETTERS
-    sf::Vector2f getSize() const;
-    sf::Vector2f getPosition() const;
-    player::States getStateID() const;
-    // OVERRIDES
-    void initShapeSize() override;
-    sf::Shape* getShape() override;
-    sf::Texture* getTexture() override;
-    void init() override;
-    // UPDATE
-    void update() override;
-};
+#pragma region constructors
+        explicit Player(std::string name);
+        explicit Player(std::string name, const Controls &controls);
+#pragma endregion
+        // CHARACTERISTICS
+        float health {100.f};
+        float attackDamage{20.f};
+        float height{0.2f};  // As a factor of the window height. (from 0 to 1)
+        // CONDITIONS
+        bool facingRight{true};
+        float eyeDryness{};
+        // COMPONENTS
+        InputComponent input{};
+        PhysicsComponent physics{};
+        MovementComponent movement{};
+        CombatComponent combat{};
+        // MANAGERS
+        AnimationManager animationManager{};
+        StateMachine<States> stateMachine{};
+        // RENDERING
+        sf::RectangleShape shape{};
+        // GETTERS
+        sf::Vector2f getSize() const;
+        sf::Vector2f getPosition() const;
+        States getStateID() const;
+        // OVERRIDES
+        void initShapeSize() override;
+        sf::Shape* getShape() override;
+        sf::Texture* getTexture() override;
+        void init() override;
+        // UPDATE
+        void update() override;
+    };
+}
+
 
 #endif //BONK_GAME_PLAYER_HPP

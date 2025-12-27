@@ -16,16 +16,16 @@
 using enum player::States;
 
 #pragma region constructors
-Player::Player(std::string name) : Entity(std::move(name)){}
-Player::Player(std::string name, const Controls &controls) :
+player::Player::Player(std::string name) : Entity(std::move(name)){}
+player::Player::Player(std::string name, const Controls &controls) :
 Entity(std::move(name)), input(*this, controls), physics(*this), movement(*this), combat(*this), animationManager(*this), stateMachine(this) {
     this->animationManager.engine.animationSheet = {pTexture, {32, 32}};
     this->animationManager.engine.target = &shape;
-    stateMachine.addState(std::make_unique<player::Idle>(this));
-    stateMachine.addState(std::make_unique<player::Jumping>(this));
-    stateMachine.addState(std::make_unique<player::Running>(this));
-    stateMachine.addState(std::make_unique<player::Walking>(this));
-    stateMachine.addState(std::make_unique<player::Stopping>(this));
+    stateMachine.addState(std::make_unique<Idle>(this));
+    stateMachine.addState(std::make_unique<Jumping>(this));
+    stateMachine.addState(std::make_unique<Running>(this));
+    stateMachine.addState(std::make_unique<Walking>(this));
+    stateMachine.addState(std::make_unique<Stopping>(this));
     animationManager.engine.add(AnimationEntry(IDLE,         2, true));
     animationManager.engine.add(AnimationEntry(WINKING,      2, true));
     animationManager.engine.add(AnimationEntry(WALKING,      4, true));
@@ -38,40 +38,40 @@ Entity(std::move(name)), input(*this, controls), physics(*this), movement(*this)
 }
 #pragma endregion
 
-sf::Vector2f Player::getSize() const {
+sf::Vector2f player::Player::getSize() const {
     return shape.getGlobalBounds().size;
 }
 
-sf::Vector2f Player::getPosition() const {
+sf::Vector2f player::Player::getPosition() const {
     return shape.getPosition();
 }
 
-void Player::initShapeSize() {
+void player::Player::initShapeSize() {
     shape.setSize(static_cast<sf::Vector2f>(pTexture->getSize()));
 }
 
-sf::Shape *Player::getShape() {
+sf::Shape *player::Player::getShape() {
     return &shape;
 }
 
-sf::Texture *Player::getTexture() {
+sf::Texture *player::Player::getTexture() {
     return &pWorld->pGame->textures.player;
 }
 
-void Player::init() {
+void player::Player::init() {
     Entity::init();
     const sf::Vector2f sizeRatio = getWindowToShapeSizeRatio() * height;
     pShape->setScale(sizeRatio);
 }
 
-void Player::update() {
+void player::Player::update() {
     input.update();
     physics.update();
     stateMachine.update();
     animationManager.update();
 }
 
-player::States Player::getStateID() const {
+player::States player::Player::getStateID() const {
     if (stateMachine.pCurrentState)
         return stateMachine.pCurrentState->stateID;
     return NONE;

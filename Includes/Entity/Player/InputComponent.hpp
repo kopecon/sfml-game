@@ -7,8 +7,6 @@
 #include "SFML/Window/Keyboard.hpp"
 
 
-class Player;
-
 #pragma region controls
 struct Controls {
     sf::Keyboard::Scancode left{};
@@ -20,6 +18,8 @@ struct Controls {
 #pragma endregion
 
 namespace player {
+    class Player;
+
     class InputComponent {
     public:
         InputComponent();

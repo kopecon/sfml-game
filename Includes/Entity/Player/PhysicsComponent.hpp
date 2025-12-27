@@ -9,9 +9,11 @@
 #include "../../../Utils/utils.hpp"
 
 
-class Player;
+
 
 namespace player {
+    class Player;
+
     class PhysicsComponent {
     public:
         PhysicsComponent ();
