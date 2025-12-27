@@ -37,6 +37,18 @@ public:
     typename StateSet::ID desiredStateID{};
     // LIST OF AVAILABLE STATES
     std::unordered_map<typename StateSet::ID, std::unique_ptr<State<StateSet>>> states{};
+    // DEBUG SETTINGS
+
+    void setVerbose() {
+        for (const auto &it : states) {
+            it.second.get()->verbose = true;
+        }
+    }
+    void resetVerbose() {
+        for (const auto &it : states) {
+            it.second.get()->verbose = false;
+        }
+    }
 
     State<StateSet>* getState(typename StateSet::ID &stateID) {
         auto it = states.find(stateID);

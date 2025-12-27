@@ -40,6 +40,8 @@ public:
     // STATE IDENTITY
     typename StateSet::ID stateID{};  // Enum value representing the id of the state
     std::string_view name{};  // String value representing the name of the state
+    // DEBUG SETTINGS
+    bool verbose{false};
 
     void addEdge(std::unique_ptr<Edge> edge) {
         edges.push_back(std::move(edge));
@@ -49,17 +51,18 @@ public:
         // Actions are called in the order they were added in. FIFO.
         actions.push_back(std::move(action));
     }
-
-    virtual void onEnter() {
-        std::cout << " Entered state: " << static_cast<int>(stateID) << "\n";
+    void addEnterAction(std::function<void()> action) {
+        // Actions are called in the order they were added in. FIFO.
+        enterActions.push_back(std::move(action));
     }
-    virtual void onExit() {
-        // std::cout << " Exited state: " << static_cast<int>(stateID) << "\n";
+    void addExitAction(std::function<void()> action) {
+        // Actions are called in the order they were added in. FIFO.
+        exitActions.push_back(std::move(action));
     }
 
     typename StateSet::ID next(const typename StateSet::ID &nextStateID) {
         // 0. Warn that state has no edges
-        if (edges.empty()) std::cout << "State: " << static_cast<int>(stateID) << " has no edges!\n";
+        if (verbose && edges.empty()) std::cout << "State: " << name << " has no edges!\n";
         // 1. Choose edge
         for (const auto &edge : this->edges) {
             // 1.a Edge has a specific condition -> resolve defined condition first
@@ -80,9 +83,24 @@ public:
         return this->stateID;
     }
 
+    virtual void onEnter() {
+        if (verbose) std::cout << "Entered state: " << name << "\n";
+        if (verbose && enterActions.empty()) std::cout << "State: " << name << " has no enter actions!\n";
+        for (const auto &action : enterActions) {
+            action();
+        }
+    }
+    virtual void onExit() {
+        if (verbose) std::cout << "Exited state: " << name << "\n";
+        if (verbose && exitActions.empty()) std::cout << "State: " << name << " has no exit actions!\n";
+        for (const auto &action : exitActions) {
+            action();
+        }
+    }
+
     virtual void update() {
+        if (verbose && actions.empty()) std::cout << "State: " << name << " has no actions!\n";
         for (auto const &action : actions) {
-            if (actions.empty()) std::cout << "State: " << static_cast<int>(stateID) << " has no actions!\n";
             action();
         }
     };
@@ -90,6 +108,8 @@ public:
 private:
     std::vector<std::unique_ptr<Edge>> edges{};  // Connections to other states
     std::vector<std::function<void()>> actions{};  // Connections to other states
+    std::vector<std::function<void()>> enterActions{};  // Connections to other states
+    std::vector<std::function<void()>> exitActions{};  // Connections to other states
 };
 
 #endif //BONK_GAME_STATE_HPP

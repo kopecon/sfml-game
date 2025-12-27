@@ -16,18 +16,14 @@ namespace player {
             auto grounded = [this] {
                 return this->pPlayer->physics.isGrounded();
             };
-
             addEdge(std::make_unique<Edge>(grounded, StateSet::ID::IDLE));
             addEdge(std::make_unique<Edge>(grounded, StateSet::ID::WALKING));
             addEdge(std::make_unique<Edge>(grounded, StateSet::ID::STOPPING));
             addEdge(std::make_unique<Edge>(grounded, StateSet::ID::RUNNING));
+            addEnterAction([pPlayer]{pPlayer->movement.jump();});
         }
         // HOST
         Player *pPlayer{nullptr};
-
-        void onEnter() override {
-            pPlayer->movement.jump();
-        };
     };
 }
 
