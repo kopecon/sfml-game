@@ -8,6 +8,7 @@
 #include <functional>
 #include <iostream>
 #include <vector>
+#include <memory>
 
 #include "StateSetBase.hpp"
 
