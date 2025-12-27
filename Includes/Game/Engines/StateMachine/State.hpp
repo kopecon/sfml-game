@@ -14,7 +14,7 @@
 
 class Entity;
 
-// THIS IS JUST AN ABSTRACT CLASS
+
 template <StateSetConcept StateSet>
 class State {
 public:

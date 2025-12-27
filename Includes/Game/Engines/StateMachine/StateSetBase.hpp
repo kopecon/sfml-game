@@ -15,6 +15,10 @@ struct StateSetBase {
     static std::string_view name(const ID state) {
         return StateSetTraits<Derived>::name(state);
     }
+private:
+    // For safety make sure proper derivation took place
+    StateSetBase() = default;
+    friend Derived;
 };
 
 template<typename T>
