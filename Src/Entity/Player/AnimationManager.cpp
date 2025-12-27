@@ -13,45 +13,62 @@ player::AnimationManager::AnimationManager() = default;
 
 player::AnimationManager::AnimationManager(Player &player): pPlayer(&player) {}
 
-void player::AnimationManager::selectAnimation() const {
+void player::AnimationManager::selectAnimation() {
     using enum StateSet::ID;
 
     switch (pPlayer->getStateID()) {
         case JUMPING : {
-            pPlayer->animationManager.engine.set(JUMPING);
-            pPlayer->animationManager.engine.animationSet[JUMPING].fps =
+            engine.set(JUMPING);
+            engine.animationSet[JUMPING].fps =
                     std::fabs(pPlayer->movement.walkingSpeed.y / pPlayer->movement.speed.y) * 24.f;
             break;
         }
         case WALKING : {
-            pPlayer->animationManager.engine.set(WALKING);
-            pPlayer->animationManager.engine.pCurrentAnimation->fps =
+            engine.set(WALKING);
+            engine.pCurrentAnimation->fps =
                     std::fabs(pPlayer->physics.velocity.x / pPlayer->movement.walkingSpeed.x) * static_cast<float>(
-                        pPlayer->animationManager.engine.pCurrentAnimation->framesPerRow) * 2.f;
+                        engine.pCurrentAnimation->framesPerRow) * 2.f;
             break;
         }
         case RUNNING : {
-            pPlayer->animationManager.engine.set((RUNNING));
-            pPlayer->animationManager.engine.pCurrentAnimation->fps = std::fabs(pPlayer->physics.velocity.x / pPlayer->movement.runningSpeed.x) * static_cast<float>(pPlayer->animationManager.engine.pCurrentAnimation->framesPerRow) * 2.f;
+            engine.set((RUNNING));
+            engine.pCurrentAnimation->fps = std::fabs(pPlayer->physics.velocity.x / pPlayer->movement.runningSpeed.x) * static_cast<float>(engine.pCurrentAnimation->framesPerRow) * 2.f;
             break;
         }
         case ATTACKING : {
-            pPlayer->animationManager.engine.set((ATTACKING));
-            pPlayer->animationManager.engine.pCurrentAnimation->fps = static_cast<float>(pPlayer->animationManager.engine.pCurrentAnimation->framesPerRow) * 3.f;
+            engine.set((ATTACKING));
+            engine.pCurrentAnimation->fps = static_cast<float>(engine.pCurrentAnimation->framesPerRow) * 3.f;
             break;
         }
         case DYING : {
-            pPlayer->animationManager.engine.set((DYING));
+            engine.set((DYING));
             // animationManager.pCurrentAnimation->fps = static_cast<float>(animationManager.pCurrentAnimation->framesPerRow) * 3.f;
             break;
         }
-        default: {
-            pPlayer->animationManager.engine.set((IDLE));
-        }
+        case NONE:
+            break;
+        case IDLE:
+            engine.set((IDLE));
+            break;
+        case WINKING:
+            engine.set((WINKING));
+            break;
+        case CROUCHING:
+            engine.set((CROUCHING));
+            break;
+        case DISAPPEARING:
+            engine.set((DISAPPEARING));
+            break;
+        case BRAKING:
+            engine.set((BRAKING));
+            break;
+        case STOPPING:
+            engine.set((STOPPING));
+            break;
     }
 }
 
-void player::AnimationManager::update() const {
+void player::AnimationManager::update() {
     selectAnimation();
     engine.update(pPlayer->pWorld->pGame->time.dt);
 }

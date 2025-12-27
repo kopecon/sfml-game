@@ -7,7 +7,7 @@
 
 #include <SFML/Graphics.hpp>
 #include "../Entity.hpp"
-#include "../Player/States/StateSet.hpp"
+#include "States/StateSet.hpp"
 #include "AnimationManager.hpp"
 #include "PhysicsComponent.hpp"
 #include "InputComponent.hpp"

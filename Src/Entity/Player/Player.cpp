@@ -3,12 +3,15 @@
 //
 
 #include "../../../Includes/Entity/Player/Player.hpp"
+
+#include "../../../Includes/Entity/Player/States/Attacking.hpp"
 #include "../../../Includes/Entity/Player/States/Idle.hpp"
 #include "../../../Includes/Entity/Player/States/Jumping.hpp"
 #include "../../../Includes/Entity/Player/States/Running.hpp"
 #include "../../../Includes/Entity/Player/States/StateSet.hpp"
 #include "../../../Includes/Entity/Player/States/Stopping.hpp"
 #include "../../../Includes/Entity/Player/States/Walking.hpp"
+#include "../../../Includes/Entity/Player/States/Winking.hpp"
 #include "../../../Includes/Game/Engines/StateMachine/State.hpp"
 #include "../../../Includes/World/World.hpp"
 
@@ -21,15 +24,14 @@ player::Player::Player(std::string name, const Controls &controls) :
 Entity(std::move(name)), input(*this, controls), physics(*this), movement(*this), combat(*this), animationManager(*this), stateMachine(this) {
     this->animationManager.engine.animationSheet = {pTexture, {32, 32}};
     this->animationManager.engine.target = &shape;
-    stateMachine.addState(std::make_unique<Idle>(this));
-    stateMachine.addState(std::make_unique<Jumping>(this));
-    stateMachine.addState(std::make_unique<Running>(this));
-    stateMachine.addState(std::make_unique<Walking>(this));
-    stateMachine.addState(std::make_unique<Stopping>(this));
-    stateMachine.addState(std::make_unique<State<StateSet>>(ATTACKING));
+    stateMachine.addState(std::make_unique<Idle     >(this));
+    stateMachine.addState(std::make_unique<Jumping  >(this));
+    stateMachine.addState(std::make_unique<Running  >(this));
+    stateMachine.addState(std::make_unique<Walking  >(this));
+    stateMachine.addState(std::make_unique<Stopping >(this));
+    stateMachine.addState(std::make_unique<Attacking>(this));
+    stateMachine.addState(std::make_unique<Winking  >(this));
     stateMachine.setVerbose();
-    stateMachine.getState(IDLE)->addEdge(std::make_unique<State<StateSet>::Edge>(ATTACKING));
-    stateMachine.getState(RUNNING)->addEdge(std::make_unique<State<StateSet>::Edge>(ATTACKING));
     animationManager.engine.add(AnimationEntry(IDLE,         2, true));
     animationManager.engine.add(AnimationEntry(WINKING,      2, true));
     animationManager.engine.add(AnimationEntry(WALKING,      4, true));

@@ -21,9 +21,9 @@ namespace player {
         Player *pPlayer{nullptr};
         AnimationEngine<StateSet::ID> engine{};
 
-        void selectAnimation() const;
+        void selectAnimation();
 
-        void update() const;
+        void update();
     };
 }
 
