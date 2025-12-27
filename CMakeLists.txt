@@ -84,6 +84,8 @@ add_executable("${CMAKE_PROJECT_NAME}" Src/main.cpp
         Includes/Entity/Player/States/PlayerState.hpp
         Includes/Entity/Player/States/Attacking.hpp
         Includes/Entity/Player/States/Winking.hpp
+        Src/Entity/Player/States/Attacking.cpp
+        Src/Entity/Player/States/Winking.cpp
 )
 
 if (PRODUCTION_BUILD)

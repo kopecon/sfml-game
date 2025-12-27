@@ -50,7 +50,7 @@ struct StateSetTraits<player::StateSet> {
 };
 
 namespace player {
-    struct StateSet : StateSetBase<StateSet> {};  // This doesnt
+    struct StateSet : StateSetBase<StateSet> {};
 }
 
 

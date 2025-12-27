@@ -60,10 +60,10 @@ void player::AnimationManager::selectAnimation() {
             engine.set((DISAPPEARING));
             break;
         case BRAKING:
-            engine.set((BRAKING));
+            engine.set((IDLE));
             break;
         case STOPPING:
-            engine.set((STOPPING));
+            engine.set((IDLE));
             break;
     }
 }

@@ -9,15 +9,7 @@
 namespace player {
     class Attacking final : public PlayerState {
     public:
-        Attacking(Player *pPlayer)
-            : PlayerState(pPlayer, StateSet::ID::ATTACKING) {
-            addEdge(std::make_unique<Edge>(StateSet::ID::IDLE));
-            addEdge(std::make_unique<Edge>(StateSet::ID::RUNNING));
-            addEdge(std::make_unique<Edge>(StateSet::ID::WALKING));
-            addEdge(std::make_unique<Edge>(StateSet::ID::JUMPING));
-            addEdge(std::make_unique<Edge>(StateSet::ID::STOPPING));
-            addEnterAction([]{std::cout << "Swush!\n";});
-        }
+        explicit Attacking(Player *pPlayer);
     };
 }
 
