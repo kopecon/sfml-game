@@ -10,13 +10,13 @@
 #include "StateSet.hpp"
 
 namespace player {
-    class Stopping final : public State<States> {
+    class Stopping final : public State<StateSet> {
     public:
-        explicit Stopping(Player *pPlayer) : State(States::STOPPING), pPlayer(pPlayer) {
-            addEdge(std::make_unique<Edge>(States::IDLE));
-            addEdge(std::make_unique<Edge>(States::WALKING));
-            addEdge(std::make_unique<Edge>(States::JUMPING));
-            addEdge(std::make_unique<Edge>(States::RUNNING));
+        explicit Stopping(Player *pPlayer) : State(StateSet::ID::STOPPING), pPlayer(pPlayer) {
+            addEdge(std::make_unique<Edge>(StateSet::ID::IDLE));
+            addEdge(std::make_unique<Edge>(StateSet::ID::WALKING));
+            addEdge(std::make_unique<Edge>(StateSet::ID::JUMPING));
+            addEdge(std::make_unique<Edge>(StateSet::ID::RUNNING));
             addAction([pPlayer]{pPlayer->movement.brake();});
         };
 

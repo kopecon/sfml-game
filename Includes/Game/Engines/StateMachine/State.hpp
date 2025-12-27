@@ -9,34 +9,36 @@
 #include <iostream>
 #include <vector>
 
+#include "StateSetBase.hpp"
 
 class Entity;
 
 // THIS IS JUST AN ABSTRACT CLASS
-template <typename States>
+template <StateSetConcept StateSet>
 class State {
 public:
     struct Edge {
         #pragma region constructors
         Edge() = default;
-        explicit Edge(const States &next) : next(next) {}
-        Edge(std::function<bool()> condition, const States &next) : next(next) {
+        explicit Edge(const typename StateSet::ID &next) : next(next) {}
+        Edge(std::function<bool()> condition, const typename StateSet::ID &next) : next(next) {
             this->condition = std::move(condition);
         }
         #pragma endregion
 
         std::function<bool()> condition{};
-        States next{};
+        StateSet::ID next{};
     };
 
     #pragma region constructors
     virtual ~State() = default;
 
-    explicit State(const States &stateID) : stateID(stateID) {}
+    explicit State(const typename StateSet::ID &stateID) : stateID(stateID), name(StateSet::name(stateID)) {}
     #pragma endregion
 
     // STATE IDENTITY
-    States stateID{};  // Enum class representing possible states
+    typename StateSet::ID stateID{};  // Enum value representing the id of the state
+    std::string_view name{};  // String value representing the name of the state
 
     void addEdge(std::unique_ptr<Edge> edge) {
         edges.push_back(std::move(edge));
@@ -54,7 +56,7 @@ public:
         // std::cout << " Exited state: " << static_cast<int>(stateID) << "\n";
     }
 
-    States next(const States &nextStateID) {
+    typename StateSet::ID next(const typename StateSet::ID &nextStateID) {
         // 0. Warn that state has no edges
         if (edges.empty()) std::cout << "State: " << static_cast<int>(stateID) << " has no edges!\n";
         // 1. Choose edge

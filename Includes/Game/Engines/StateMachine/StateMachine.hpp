@@ -12,13 +12,13 @@
 #include "State.hpp"
 
 
-template<typename States>
+template<StateSetConcept StateSet>
 class StateMachine {
-    void _enter(State<States> *pState) {
+    void _enter(State<StateSet> *pState) {
         pCurrentState = pState;
         pCurrentState->onEnter();
     }
-    void _exit(State<States> *pState) {
+    void _exit(State<StateSet> *pState) {
         pCurrentState->onExit();
         pPreviousState = pState;
     }
@@ -32,13 +32,13 @@ public:
     // HOST
     Entity *pEntity{nullptr};
     // STATE ACCESS
-    State<States> *pCurrentState{nullptr};
-    State<States> *pPreviousState{nullptr};
-    States desiredStateID{};
+    State<StateSet> *pCurrentState{nullptr};
+    State<StateSet> *pPreviousState{nullptr};
+    typename StateSet::ID desiredStateID{};
     // LIST OF AVAILABLE STATES
-    std::unordered_map<States, std::unique_ptr<State<States>>> states{};
+    std::unordered_map<typename StateSet::ID, std::unique_ptr<State<StateSet>>> states{};
 
-    State<States>* getState(States &stateID) {
+    State<StateSet>* getState(typename StateSet::ID &stateID) {
         auto it = states.find(stateID);
         if (it == states.end()) {
             std::cout << "Desired state " << static_cast<int>(stateID) << " not implemented!\n";
@@ -49,7 +49,7 @@ public:
 
     template<typename T>
     void addState(std::unique_ptr<T> pState)
-    requires std::is_base_of_v<State<States>, T> {
+    requires std::is_base_of_v<State<StateSet>, T> {
 
         auto [it, inserted] = states.emplace(pState->stateID, std::move(pState));
 
@@ -71,9 +71,9 @@ public:
     void update() {
         // 1. Check if we are in a state
         assert(pCurrentState != nullptr);
-        // 2. Do state action
+        // // 2. Do state action
         pCurrentState->update();
-        // 3. Transition to the new state
+        // // 3. Transition to the new state
         transition();
     }
 };

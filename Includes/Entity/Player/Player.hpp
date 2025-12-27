@@ -39,13 +39,13 @@ namespace player {
         CombatComponent combat{};
         // MANAGERS
         AnimationManager animationManager{};
-        StateMachine<States> stateMachine{};
+        StateMachine<StateSet> stateMachine{};
         // RENDERING
         sf::RectangleShape shape{};
         // GETTERS
         sf::Vector2f getSize() const;
         sf::Vector2f getPosition() const;
-        States getStateID() const;
+        StateSet::ID getStateID() const;
         // OVERRIDES
         void initShapeSize() override;
         sf::Shape* getShape() override;

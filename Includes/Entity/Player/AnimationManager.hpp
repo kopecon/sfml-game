@@ -19,7 +19,7 @@ namespace player {
         explicit AnimationManager(Player &player);
 
         Player *pPlayer{nullptr};
-        AnimationEngine<States> engine{};
+        AnimationEngine<StateSet::ID> engine{};
 
         void selectAnimation() const;
 

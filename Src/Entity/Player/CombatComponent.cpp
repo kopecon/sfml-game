@@ -7,7 +7,7 @@
 #include "../../../Includes/Entity/Player/States/StateSet.hpp"
 #include "../../../Includes/World/World.hpp"
 
-using enum player::States;
+using enum player::StateSet::ID;
 
 player::CombatComponent::CombatComponent() = default;
 

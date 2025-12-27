@@ -19,7 +19,7 @@ player::InputComponent::InputComponent(Player &player, const Controls &controls)
     const bool run = sf::Keyboard::isKeyPressed(controls.run);
     const bool attack = sf::Keyboard::isKeyPressed(controls.attack);
 
-    using enum States;
+    using enum StateSet::ID;
 
     // ACTIONS NEED TO BE SORTED BY PRIORITY
     if (jump) pPlayer->stateMachine.desiredStateID = JUMPING;

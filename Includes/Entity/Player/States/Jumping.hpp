@@ -10,17 +10,17 @@
 #include "StateSet.hpp"
 
 namespace player {
-    class Jumping final : public State<States> {
+    class Jumping final : public State<StateSet> {
     public:
-        explicit Jumping(Player *pPlayer) : State(States::JUMPING), pPlayer(pPlayer) {
+        explicit Jumping(Player *pPlayer) : State(StateSet::ID::JUMPING), pPlayer(pPlayer) {
             auto grounded = [this] {
                 return this->pPlayer->physics.isGrounded();
             };
 
-            addEdge(std::make_unique<Edge>(grounded, States::IDLE));
-            addEdge(std::make_unique<Edge>(grounded, States::WALKING));
-            addEdge(std::make_unique<Edge>(grounded, States::STOPPING));
-            addEdge(std::make_unique<Edge>(grounded, States::RUNNING));
+            addEdge(std::make_unique<Edge>(grounded, StateSet::ID::IDLE));
+            addEdge(std::make_unique<Edge>(grounded, StateSet::ID::WALKING));
+            addEdge(std::make_unique<Edge>(grounded, StateSet::ID::STOPPING));
+            addEdge(std::make_unique<Edge>(grounded, StateSet::ID::RUNNING));
         }
         // HOST
         Player *pPlayer{nullptr};

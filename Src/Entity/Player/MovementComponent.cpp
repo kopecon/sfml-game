@@ -7,7 +7,7 @@
 #include "../../../Utils/utils.hpp"
 #include "../../../Includes/World/World.hpp"
 
-using enum player::States;
+using enum player::StateSet::ID;
 
 player::MovementComponent::MovementComponent() = default;
 

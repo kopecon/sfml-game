@@ -14,7 +14,7 @@ player::AnimationManager::AnimationManager() = default;
 player::AnimationManager::AnimationManager(Player &player): pPlayer(&player) {}
 
 void player::AnimationManager::selectAnimation() const {
-    using enum States;
+    using enum StateSet::ID;
 
     switch (pPlayer->getStateID()) {
         case JUMPING : {

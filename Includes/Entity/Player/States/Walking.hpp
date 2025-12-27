@@ -11,13 +11,13 @@
 
 
 namespace player {
-    class Walking final : public State<States> {
+    class Walking final : public State<StateSet> {
     public:
-        explicit Walking(Player *pPlayer) : State(States::WALKING), pPlayer(pPlayer) {
-            addEdge(std::make_unique<Edge>(States::IDLE));
-            addEdge(std::make_unique<Edge>(States::RUNNING));
-            addEdge(std::make_unique<Edge>(States::JUMPING));
-            addEdge(std::make_unique<Edge>(States::STOPPING));
+        explicit Walking(Player *pPlayer) : State(StateSet::ID::WALKING), pPlayer(pPlayer) {
+            addEdge(std::make_unique<Edge>(StateSet::ID::IDLE));
+            addEdge(std::make_unique<Edge>(StateSet::ID::RUNNING));
+            addEdge(std::make_unique<Edge>(StateSet::ID::JUMPING));
+            addEdge(std::make_unique<Edge>(StateSet::ID::STOPPING));
             addAction([pPlayer]{pPlayer->movement.walk();});
         };
 

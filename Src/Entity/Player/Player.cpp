@@ -13,7 +13,7 @@
 #include "../../../Includes/World/World.hpp"
 
 
-using enum player::States;
+using enum player::StateSet::ID;
 
 #pragma region constructors
 player::Player::Player(std::string name) : Entity(std::move(name)){}
@@ -26,7 +26,7 @@ Entity(std::move(name)), input(*this, controls), physics(*this), movement(*this)
     stateMachine.addState(std::make_unique<Running>(this));
     stateMachine.addState(std::make_unique<Walking>(this));
     stateMachine.addState(std::make_unique<Stopping>(this));
-    stateMachine.addState(std::make_unique<State<States>>(ATTACKING));
+    stateMachine.addState(std::make_unique<State<StateSet>>(ATTACKING));
     animationManager.engine.add(AnimationEntry(IDLE,         2, true));
     animationManager.engine.add(AnimationEntry(WINKING,      2, true));
     animationManager.engine.add(AnimationEntry(WALKING,      4, true));
@@ -72,7 +72,7 @@ void player::Player::update() {
     animationManager.update();
 }
 
-player::States player::Player::getStateID() const {
+player::StateSet::ID player::Player::getStateID() const {
     if (stateMachine.pCurrentState)
         return stateMachine.pCurrentState->stateID;
     return NONE;
