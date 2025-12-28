@@ -33,12 +33,12 @@ namespace player {
         bool facingRight{true};
         float eyeDryness{};
         // COMPONENTS
-        InputComponent input{};
+        InputComponent input;
         PhysicsComponent physics;
         MovementComponent movement;
-        CombatComponent combat{};
+        CombatComponent combat;
         // MANAGERS
-        AnimationManager animationManager{};
+        AnimationManager animationManager;
         StateMachine<StateSet> stateMachine{};
         // RENDERING
         sf::RectangleShape shape{};

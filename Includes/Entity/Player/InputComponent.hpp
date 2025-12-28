@@ -22,11 +22,11 @@ namespace player {
 
     class InputComponent {
     public:
-        InputComponent();
-
+        explicit InputComponent(Player &player);
         explicit InputComponent(Player &player, const Controls &controls);
-
-        Player *pPlayer{nullptr};
+        // REFERENCES
+        Player &player;
+        // CHARACTERISTICS
         Controls controls{};
 
         void update() const;

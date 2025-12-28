@@ -10,14 +10,12 @@
 #include <cmath>
 
 
-player::AnimationManager::AnimationManager() = default;
-
-player::AnimationManager::AnimationManager(Player &player): pPlayer(&player) {}
+player::AnimationManager::AnimationManager(Player &player): player(player) {}
 
 void player::AnimationManager::selectAnimation() {
     using enum StateSet::ID;
 
-    switch (pPlayer->getStateID()) {
+    switch (player.getStateID()) {
         case JUMPING : {
             engine.set(JUMPING);
             // engine.animationSet[JUMPING].fps = std::fabs(pPlayer->movement.walkingSpeed.y / pPlayer->movement.getSpeed().y) * 24.f;
@@ -82,14 +80,14 @@ void player::AnimationManager::updateFPS() const {
 
         case WALKING:{
             const float seedFactor = std::fabs(
-            pPlayer->movement.getSpeed().x / pPlayer->physics.velocity.x
+            player.movement.getSpeed().x / player.physics.velocity.x
             );
             currentAnim->spf = 1.f/currentAnim->fps * seedFactor;
             break;
         }
         case RUNNING:{
             const float seedFactor = std::fabs(
-            pPlayer->movement.getSpeed().x / pPlayer->physics.velocity.x
+            player.movement.getSpeed().x / player.physics.velocity.x
             );
             currentAnim->spf = 1.f/currentAnim->fps * seedFactor * 0.7f;
             break;
@@ -99,7 +97,7 @@ void player::AnimationManager::updateFPS() const {
         }
         case JUMPING:{
             const float seedFactor = std::fabs(
-            pPlayer->movement.getSpeed().y / pPlayer->physics.velocity.y
+            player.movement.getSpeed().y / player.physics.velocity.y
             );
             currentAnim->spf = 1.f/currentAnim->fps * seedFactor * 0.5f;
             break;
@@ -126,5 +124,5 @@ void player::AnimationManager::updateFPS() const {
 void player::AnimationManager::update() {
     selectAnimation();
     updateFPS();
-    engine.update(pPlayer->game.time.dt);
+    engine.update(player.game.time.dt);
 }

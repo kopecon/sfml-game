@@ -13,10 +13,9 @@ namespace player {
 
     class CombatComponent {
     public:
-        CombatComponent();
         explicit CombatComponent(Player &player);;
 
-        Player *pPlayer{nullptr};
+        Player &player;
 
         float attackRange{};
         void attack() const;

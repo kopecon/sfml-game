@@ -20,11 +20,15 @@
 using enum player::StateSet::ID;
 
 #pragma region constructors
-player::Player::Player(World &world, std::string name):
+player::Player::Player(World &world, std::string name) :
 Entity(world, std::move(name)),
+input(*this),
 physics(*this),
-movement(*this)
+movement(*this),
+combat(*this),
+animationManager(*this)
 {}
+
 player::Player::Player(World &world, std::string name, const Controls &controls):
 Entity(world, std::move(name)),
 input(*this, controls),
@@ -65,6 +69,7 @@ sf::Vector2f player::Player::getPosition() const {
 }
 
 void player::Player::initShapeSize() {
+
     shape.setSize(static_cast<sf::Vector2f>(pTexture->getSize()));
 }
 

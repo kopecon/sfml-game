@@ -14,11 +14,10 @@ namespace player {
 
     class AnimationManager final {
     public:
-        AnimationManager();
-
         explicit AnimationManager(Player &player);
-
-        Player *pPlayer{nullptr};
+        // REFERENCES
+        Player &player;
+        // CHARACTERISTICS
         AnimationEngine<StateSet::ID> engine{};
 
         void selectAnimation();

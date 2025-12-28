@@ -8,8 +8,13 @@
 
 
 #pragma region constructors
-player::InputComponent::InputComponent() = default;
-player::InputComponent::InputComponent(Player &player, const Controls &controls) : pPlayer(&player), controls(controls) {}
+player::InputComponent::InputComponent(Player &player) : player(player) {
+}
+
+player::InputComponent::InputComponent(Player &player, const Controls &controls):
+player(player),
+controls(controls)
+{}
 #pragma endregion
 
     void player::InputComponent::update() const {
@@ -22,19 +27,19 @@ player::InputComponent::InputComponent(Player &player, const Controls &controls)
     using enum StateSet::ID;
 
     // ACTIONS NEED TO BE SORTED BY PRIORITY
-    if (jump) pPlayer->stateMachine.desiredStateID = JUMPING;
-    else if (attack) pPlayer->stateMachine.desiredStateID = ATTACKING;
-    else if (left && right) pPlayer->stateMachine.desiredStateID = STOPPING;
+    if (jump) player.stateMachine.desiredStateID = JUMPING;
+    else if (attack) player.stateMachine.desiredStateID = ATTACKING;
+    else if (left && right) player.stateMachine.desiredStateID = STOPPING;
     else if (left) {
-        pPlayer->movement.walk = [&]{pPlayer->movement.walkLeft();};
-        if (run) pPlayer->stateMachine.desiredStateID = RUNNING;
-        else pPlayer->stateMachine.desiredStateID = WALKING;
+        player.movement.walk = [&]{player.movement.walkLeft();};
+        if (run) player.stateMachine.desiredStateID = RUNNING;
+        else player.stateMachine.desiredStateID = WALKING;
         }
     else if (right) {
-        pPlayer->movement.walk = [&]{pPlayer->movement.walkRight();};
-        if (run) pPlayer->stateMachine.desiredStateID = RUNNING;
-        else pPlayer->stateMachine.desiredStateID = WALKING;
+        player.movement.walk = [&]{player.movement.walkRight();};
+        if (run) player.stateMachine.desiredStateID = RUNNING;
+        else player.stateMachine.desiredStateID = WALKING;
         }
     else
-    pPlayer->stateMachine.desiredStateID = IDLE;
+    player.stateMachine.desiredStateID = IDLE;
 }

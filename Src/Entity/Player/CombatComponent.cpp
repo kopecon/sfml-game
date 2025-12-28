@@ -7,27 +7,26 @@
 #include "../../../Includes/Entity/Player/States/StateSet.hpp"
 #include "../../../Includes/World/World.hpp"
 
+
 using enum player::StateSet::ID;
 
-player::CombatComponent::CombatComponent() = default;
-
-player::CombatComponent::CombatComponent(Player &player): pPlayer(&player) {}
+player::CombatComponent::CombatComponent(Player &player): player(player) {}
 
 void player::CombatComponent::attack() const {
-    auto pPlayers = pPlayer->world.findEntities<Player>();
-    std::erase(pPlayers, pPlayer);
+    auto pPlayers = player.world.findEntities<Player>();
+    std::erase(pPlayers, &player);
     for (Player *opponent : pPlayers) {
-        if (hd::abs(opponent->physics.position - pPlayer->physics.position).x <= attackRange &&
-            hd::abs(opponent->physics.position - pPlayer->physics.position).y <= attackRange) {
-            pPlayer->animationManager.engine.onEnd(ATTACKING, [&opponent, this]{opponent->combat.takeDamage(pPlayer->attackDamage);});
+        if (hd::abs(opponent->physics.position - player.physics.position).x <= attackRange &&
+            hd::abs(opponent->physics.position - player.physics.position).y <= attackRange) {
+            player.animationManager.engine.onEnd(ATTACKING, [&opponent, this]{opponent->combat.takeDamage(player.attackDamage);});
             }
     }
 }
 
 void player::CombatComponent::takeDamage(const float &damage) const {
-    pPlayer->health -= damage;
+    player.health -= damage;
 }
 
 void player::CombatComponent::die() const {
-    pPlayer->animationManager.engine.onEnd(DYING, [this]{pPlayer->removalFlag=true;});
+    player.animationManager.engine.onEnd(DYING, [this]{player.removalFlag=true;});
 }
