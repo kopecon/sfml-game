@@ -9,7 +9,9 @@
 player::Winking::Winking(Player *pPlayer): PlayerState(pPlayer, StateSet::ID::WINKING) {
     auto wetEyes = [pPlayer]{return pPlayer->eyeDryness <= 0;};
     addEdge(std::make_unique<Edge>(wetEyes, StateSet::ID::IDLE));
-    addAction([pPlayer] {
-        pPlayer->eyeDryness -= 1;
-    });
+    addEdge(std::make_unique<Edge>(StateSet::ID::WALKING));
+    addEdge(std::make_unique<Edge>(StateSet::ID::RUNNING));
+    addEdge(std::make_unique<Edge>(StateSet::ID::JUMPING));
+    addEdge(std::make_unique<Edge>(StateSet::ID::STOPPING));
+    addAction([pPlayer] {pPlayer->eyeDryness -= 1;});
 }
