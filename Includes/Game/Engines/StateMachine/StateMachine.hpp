@@ -76,7 +76,7 @@ public:
     void addState(std::unique_ptr<T> pState)
     requires std::is_base_of_v<State<StateSet>, T> {
 
-        auto [it, inserted] = states.emplace(pState->stateID, std::move(pState));
+        auto [it, inserted] = states.try_emplace(pState->stateID, std::move(pState));
 
         if (!pCurrentState && inserted) {
             pCurrentState = it->second.get();
