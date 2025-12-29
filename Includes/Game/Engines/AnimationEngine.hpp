@@ -26,7 +26,7 @@ public:
     AnimationEntry() = default;
 
     AnimationEntry(const States &id, const int &framesPerRow, const bool &looping=true) :
-    id(id),
+    ID(id),
     framesPerRow(framesPerRow),
     fps(static_cast<float>(framesPerRow)),
     spf(1.f/fps),
@@ -34,8 +34,8 @@ public:
     {}
 
 #pragma endregion
-    States id{0};  // Represents row index starting from 0;
-    sf::Vector2i frameIndex = {0, static_cast<int>(id)};
+    States ID{0};  // Represents row index starting from 0;
+    sf::Vector2i frameIndex = {0, static_cast<int>(ID)};
     sf::Vector2i *pIndex = &frameIndex;
     int framesPerRow{};
     float timer{0.0f};  // tracks elapsed time
@@ -47,16 +47,16 @@ public:
     AnimationState state{READY};
 
     bool operator!=(const AnimationEntry &other) const {
-        return this->id != other.id;
+        return this->ID != other.ID;
     };
 
     bool operator==(const AnimationEntry &other) const {
-        return this->id == other.id;
+        return this->ID == other.ID;
     };
 
     struct Hash {
         size_t operator()(const AnimationEntry& anim) const noexcept {
-            return std::hash<States>()(anim.id);
+            return std::hash<States>()(anim.ID);
         }
     };
 };
@@ -103,10 +103,10 @@ public:
     }
 
     void add(const AnimationEntry<States> &animation) {
-        animationSet.emplace(animation.id, animation);
+        animationSet.emplace(animation.ID, animation);
 
         if (pCurrentAnimation == nullptr) {
-            set(animation.id);
+            set(animation.ID);
         }
     }
 
