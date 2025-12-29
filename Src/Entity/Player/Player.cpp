@@ -85,8 +85,6 @@ void player::Player::update() {
     animationManager.update();
 }
 
-player::StateSet::ID player::Player::getStateID() const {
-    if (stateManager.stateMachine.pCurrentState)
-        return stateManager.stateMachine.pCurrentState->ID;
-    return NONE;
+const State<player::StateSet>* player::Player::getState() const {
+    return stateManager.stateMachine.pCurrentState;
 }

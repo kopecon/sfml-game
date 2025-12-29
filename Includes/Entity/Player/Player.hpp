@@ -14,6 +14,7 @@
 #include "MovementComponent.hpp"
 #include "CombatComponent.hpp"
 #include "StateManager.hpp"
+#include "../../Game/Game.hpp"
 #include "../../Game/Engines/StateMachine/StateMachine.hpp"
 
 
@@ -30,7 +31,7 @@ namespace player {
 #pragma endregion
 
         // CHARACTERISTICS
-        float health {100.f};
+        float health{100.f};
         float attackDamage{20.f};
         float height{0.2f};  // As a factor of the window height. (from 0 to 1)
         // CONDITIONS
@@ -49,7 +50,7 @@ namespace player {
         // GETTERS
         sf::Vector2f getSize() const;
         sf::Vector2f getPosition() const;
-        StateSet::ID getStateID() const;
+        const State<StateSet>* getState() const;
         // OVERRIDES
         void initShapeSize() override;
         sf::Shape* getShape() override;

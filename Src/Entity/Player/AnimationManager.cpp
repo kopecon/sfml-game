@@ -28,7 +28,7 @@ player::AnimationManager::AnimationManager(Player &player) :
 void player::AnimationManager::selectAnimation() {
     using enum StateSet::ID;
 
-    switch (player.getStateID()) {
+    switch (player.getState()->ID) {
         case IDLE:
             engine.set(IDLE);
             break;
@@ -64,7 +64,7 @@ void player::AnimationManager::selectAnimation() {
 void player::AnimationManager::updateFPS() const {
     using enum StateSet::ID;
     const auto currentAnim = engine.pCurrentAnimation;
-    switch (currentAnim->id) {
+    switch (currentAnim->ID) {
         case NONE: {
             break;
         }
