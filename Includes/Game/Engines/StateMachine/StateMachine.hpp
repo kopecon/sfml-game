@@ -24,14 +24,14 @@ class StateMachine {
         pPreviousState = pState;
     }
     void _generateFallBackEdge(State<StateSet> *pState) {
-        pState->addEdge(std::make_unique<typename State<StateSet>::Edge>(pCurrentState->stateID));
-#ifndef NDEBUG
+        pState->addEdge(std::make_unique<typename State<StateSet>::Edge>(pCurrentState->ID));
+        #ifndef NDEBUG
         std::cerr << "\nWarning: State "
-                  << StateSet::name(pState->stateID)
+                  << StateSet::name(pState->ID)
                   << " has no edges. Auto-generated fallback to "
-                  << StateSet::name(pCurrentState->stateID)
+                  << StateSet::name(pCurrentState->ID)
                   << '\n';
-#endif
+        #endif
     }
 public:
     #pragma region constructors
@@ -63,7 +63,7 @@ public:
         }
     }
 
-    State<StateSet>* getState(typename StateSet::ID stateID) {
+    State<StateSet>* getState(typename StateSet::ID stateID) const {
         auto it = states.find(stateID);
         if (it == states.end()) {
             if (verbose) std::cout << "Desired state " << StateSet::name(stateID) << " is not implemented!\n";
@@ -76,16 +76,26 @@ public:
     void addState(std::unique_ptr<T> pState)
     requires std::is_base_of_v<State<StateSet>, T> {
 
-        auto [it, inserted] = states.try_emplace(pState->stateID, std::move(pState));
+        auto [it, inserted] = states.try_emplace(pState->ID, std::move(pState));
 
         if (!pCurrentState && inserted) {
             pCurrentState = it->second.get();
         }
     }
+    template<typename T, typename ... Args>
+    State<StateSet>* createState(Args&&... args)
+    requires std::is_base_of_v<State<StateSet>, T> {
+        auto newState = std::make_unique<T>(std::forward<Args>(args)...);
+        auto [it, inserted] = states.try_emplace(newState->ID, std::move(newState));
+        if (!pCurrentState && inserted) {
+            pCurrentState = it->second.get();
+        }
+        return it->second.get();
+    }
 
     void transition() {
         auto newStateID = pCurrentState->next(desiredStateID);
-        if (newStateID != pCurrentState->stateID) {
+        if (newStateID != pCurrentState->ID) {
             if (const auto newState = getState(newStateID)) {
                 if (!newState->hasEdges()) _generateFallBackEdge(newState);
                 _exit(pCurrentState);

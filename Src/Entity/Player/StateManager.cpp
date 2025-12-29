@@ -4,14 +4,15 @@
 
 #include "../../../Includes/Entity/Player/StateManager.hpp"
 
+#include "../../../Includes/Entity/Player/Player.hpp"
+
 player::StateManager::StateManager(Player &player) {
-    stateMachine.addState(std::make_unique<Idle     >(player));
-    stateMachine.addState(std::make_unique<Jumping  >(player));
-    stateMachine.addState(std::make_unique<Running  >(player));
-    stateMachine.addState(std::make_unique<Walking  >(player));
-    stateMachine.addState(std::make_unique<Stopping >(player));
-    stateMachine.addState(std::make_unique<Attacking>(player));
-    stateMachine.addState(std::make_unique<Winking  >(player));
+    stateMachine.createState<Idle>(player);
+    stateMachine.createState<Jumping>(player);
+    stateMachine.createState<Running>(player);
+    stateMachine.createState<Walking>(player);
+    stateMachine.createState<Stopping>(player);
+    stateMachine.createState<Winking>(player);
     stateMachine.setVerbose();
 }
 

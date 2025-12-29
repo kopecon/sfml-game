@@ -87,6 +87,6 @@ void player::Player::update() {
 
 player::StateSet::ID player::Player::getStateID() const {
     if (stateManager.stateMachine.pCurrentState)
-        return stateManager.stateMachine.pCurrentState->stateID;
+        return stateManager.stateMachine.pCurrentState->ID;
     return NONE;
 }

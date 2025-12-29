@@ -34,11 +34,11 @@ public:
     #pragma region constructors
     virtual ~State() = default;
 
-    explicit State(const typename StateSet::ID &stateID) : stateID(stateID), name(StateSet::name(stateID)) {}
+    explicit State(const typename StateSet::ID &stateID) : ID(stateID), name(StateSet::name(stateID)) {}
     #pragma endregion
 
     // STATE IDENTITY
-    typename StateSet::ID stateID{};  // Enum value representing the id of the state
+    typename StateSet::ID ID{};  // Enum value representing the id of the state
     std::string_view name{};  // String value representing the name of the state
     // DEBUG SETTINGS
     bool verbose{false};
@@ -49,6 +49,16 @@ public:
     }
 
     void addEdge(std::unique_ptr<Edge> edge) {
+        edges.push_back(std::move(edge));
+    }
+
+    void connect(const State &state) {
+        auto edge = std::make_unique<Edge>(state.ID);
+        edges.push_back(std::move(edge));
+    }
+
+    void connect(std::function<bool()> condition, const State &state) {
+        auto edge = std::make_unique<Edge>(std::move(condition), state.ID);
         edges.push_back(std::move(edge));
     }
 
@@ -87,7 +97,7 @@ public:
         }
 
         // 2. No edge conditions met. Staying in this state
-        return this->stateID;
+        return this->ID;
     }
 
     virtual void onEnter() {

@@ -10,7 +10,7 @@ player::Jumping::Jumping(Player &player): PlayerState(player, StateSet::ID::JUMP
     // ReSharper disable once CppDFAUnreachableFunctionCall
     auto previous = [this] {
         const auto* prev = this->player.stateManager.stateMachine.pPreviousState;
-        return prev ? prev->stateID : NONE;
+        return prev ? prev->ID : NONE;
     };
     // Conditions
     auto walking  = [grounded, previous] {return grounded() && previous() == WALKING;};
