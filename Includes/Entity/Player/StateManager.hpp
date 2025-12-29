@@ -18,21 +18,11 @@
 namespace player {
     class StateManager {
     public:
-        explicit StateManager(Player &player) {
-            stateMachine.addState(std::make_unique<Idle     >(player));
-            stateMachine.addState(std::make_unique<Jumping  >(player));
-            stateMachine.addState(std::make_unique<Running  >(player));
-            stateMachine.addState(std::make_unique<Walking  >(player));
-            stateMachine.addState(std::make_unique<Stopping >(player));
-            stateMachine.addState(std::make_unique<Attacking>(player));
-            stateMachine.addState(std::make_unique<Winking  >(player));
-            stateMachine.setVerbose();
-        }
+        explicit StateManager(Player &player);
+
         StateMachine<StateSet> stateMachine{};
 
-        void update() {
-            stateMachine.update();
-        }
+        void update();
     };
 }
 
