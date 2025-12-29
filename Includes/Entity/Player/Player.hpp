@@ -20,7 +20,7 @@
 class World;
 
 namespace player {
-    class Player final : public Entity {
+    class Player final : public entity::Entity {
     public:
 #pragma region constructors
         explicit Player(World &world, entityID ID);
