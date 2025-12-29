@@ -8,7 +8,6 @@
 #include <string>
 #include <SFML/Graphics/Shape.hpp>
 
-#include "../../Utils/utils.hpp"
 
 using entityID = std::uint64_t;
 

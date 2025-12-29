@@ -2,15 +2,15 @@
 // Created by Andrew on 29/12/2025.
 //
 
-#include "RenderComponent.hpp"
+#include "PlayerRenderComponent.hpp"
 #include "Player.hpp"
 
 
 namespace player {
-    RenderComponent::RenderComponent(Player &player):
+    PlayerRenderComponent::PlayerRenderComponent(Player &player):
         player(player) {}
 
-    void RenderComponent::initShapeSize() {
+    void PlayerRenderComponent::initShapeSize() {
         shape.setSize(static_cast<sf::Vector2f>(player.pTexture->getSize()));
     }
 } // player

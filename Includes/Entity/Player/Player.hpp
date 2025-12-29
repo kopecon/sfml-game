@@ -13,7 +13,7 @@
 #include "InputComponent.hpp"
 #include "MovementComponent.hpp"
 #include "CombatComponent.hpp"
-#include "RenderComponent.hpp"
+#include "PlayerRenderComponent.hpp"
 #include "StateManager.hpp"
 
 
@@ -41,7 +41,7 @@ namespace player {
         PhysicsComponent physics;
         MovementComponent movement;
         CombatComponent combat;
-        RenderComponent render;
+        PlayerRenderComponent render;
         // MANAGERS
         AnimationManager animationManager;
         StateManager stateManager;

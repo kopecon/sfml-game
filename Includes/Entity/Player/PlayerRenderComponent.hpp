@@ -2,17 +2,17 @@
 // Created by Andrew on 29/12/2025.
 //
 
-#ifndef BONK_GAME_RENDER_COMPONENT_HPP
-#define BONK_GAME_RENDER_COMPONENT_HPP
+#ifndef BONK_GAME_PLAYER_RENDER_COMPONENT_HPP
+#define BONK_GAME_PLAYER_RENDER_COMPONENT_HPP
 #include "SFML/Graphics/RectangleShape.hpp"
 
 
 namespace player {
     class Player;
 
-    class RenderComponent {
+    class PlayerRenderComponent {
     public:
-        explicit RenderComponent(Player &player);
+        explicit PlayerRenderComponent(Player &player);
 
         sf::RectangleShape shape{};
 
@@ -22,4 +22,4 @@ namespace player {
     };
 } // player
 
-#endif //BONK_GAME_RENDER_COMPONENT_HPP
+#endif //BONK_GAME_PLAYER_RENDER_COMPONENT_HPP
