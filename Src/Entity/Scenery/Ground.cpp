@@ -7,17 +7,23 @@
 #include "../../../Includes/World/World.hpp"
 
 
+#pragma region constructors
 Ground::Ground(World &world, const entityID ID) :
     Scenery(world, ID)
-    {
-        shape.setFillColor(color);
-    }
+{
+    shape.setFillColor(color);
+}
 
 Ground::Ground(World &world, const entityID ID, std::string name) :
     Scenery(world, ID, std::move(name))
-    {
-        shape.setFillColor(color);
-    }
+{
+    shape.setFillColor(color);
+}
+
+std::string Ground::className() const {
+    return "Ground";
+}
+#pragma endregion
 
 sf::Texture * Ground::getTexture() {
     return &game.textures.topGround;

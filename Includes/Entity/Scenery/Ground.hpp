@@ -10,8 +10,12 @@
 
 class Ground final : public Scenery {
 public:
+
+    #pragma region constructors
     explicit Ground(World &world, entityID ID);
     explicit Ground(World &world, entityID ID, std::string name);
+    [[nodiscard]] std::string className() const override;
+    #pragma endregion
 
     sf::Color color = sf::Color({40,30,100});
     sf::Texture* getTexture() override;

@@ -13,9 +13,8 @@
 #include "InputComponent.hpp"
 #include "MovementComponent.hpp"
 #include "CombatComponent.hpp"
+#include "RenderComponent.hpp"
 #include "StateManager.hpp"
-#include "../../Game/Game.hpp"
-#include "../../Game/Engines/StateMachine/StateMachine.hpp"
 
 
 class World;
@@ -42,22 +41,23 @@ namespace player {
         PhysicsComponent physics;
         MovementComponent movement;
         CombatComponent combat;
+        RenderComponent render;
         // MANAGERS
         AnimationManager animationManager;
         StateManager stateManager;
-        // RENDERING
-        sf::RectangleShape shape{};
         // GETTERS
         sf::Vector2f getSize() const;
+        sf::Shape *getShape() override;
+        sf::Texture *getTexture() override;
         sf::Vector2f getPosition() const;
         const State<StateSet>* getState() const;
-        // OVERRIDES
+        // INIT
         void initShapeSize() override;
-        sf::Shape* getShape() override;
-        sf::Texture* getTexture() override;
         void init() override;
         // UPDATE
         void update() override;
+
+        [[nodiscard]] std::string className() const override;
     };
 }
 

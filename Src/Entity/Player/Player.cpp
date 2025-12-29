@@ -1,90 +1,95 @@
-//
-// Created by Andrew on 13/11/2025.
-//
-
 #include "../../../Includes/Entity/Player/Player.hpp"
 #include "../../../Includes/Game/Game.hpp"
 #include "../../../Includes/World/World.hpp"
 
 
-using enum player::StateSet::ID;
+namespace player {
+    using enum StateSet::ID;
 
-#pragma region constructors
-player::Player::Player(World &world, const entityID ID) :
-    Entity(world, ID),
-    input(*this),
-    physics(*this),
-    movement(*this),
-    combat(*this),
-    animationManager(*this),
-    stateManager(*this)
-    {}
+    #pragma region constructors
+    Player::Player(World &world, const entityID ID) :
+        Entity(world, ID),
+        input(*this),
+        physics(*this),
+        movement(*this),
+        combat(*this),
+        render(*this),
+        animationManager(*this),
+        stateManager(*this)
+        {}
 
-player::Player::Player(World &world, const entityID ID, const Controls &controls) :
-    Entity(world, ID),
-    input(*this, controls),
-    physics(*this),
-    movement(*this),
-    combat(*this),
-    animationManager(*this),
-    stateManager(*this)
-    {}
+    Player::Player(World &world, const entityID ID, const Controls &controls) :
+        Entity(world, ID),
+        input(*this, controls),
+        physics(*this),
+        movement(*this),
+        combat(*this),
+        render(*this),
+        animationManager(*this),
+        stateManager(*this)
+        {}
 
-player::Player::Player(World &world, const entityID ID, std::string name) :
-Entity(world, ID, std::move(name)),
-    input(*this),
-    physics(*this),
-    movement(*this),
-    combat(*this),
-    animationManager(*this),
-    stateManager(*this)
-    {}
+    Player::Player(World &world, const entityID ID, std::string name) :
+        Entity(world, ID, std::move(name)),
+        input(*this),
+        physics(*this),
+        movement(*this),
+        combat(*this),
+        render(*this),
+        animationManager(*this),
+        stateManager(*this)
+        {}
 
-player::Player::Player(World &world, const entityID ID, std::string name, const Controls &controls):
-Entity(world, ID, std::move(name)),
-    input(*this, controls),
-    physics(*this),
-    movement(*this),
-    combat(*this),
-    animationManager(*this),
-    stateManager(*this)
-    {}
-#pragma endregion
+    Player::Player(World &world, const entityID ID, std::string name, const Controls &controls):
+        Entity(world, ID, std::move(name)),
+        input(*this, controls),
+        physics(*this),
+        movement(*this),
+        combat(*this),
+        render(*this),
+        animationManager(*this),
+        stateManager(*this)
+        {}
+    #pragma endregion
 
-sf::Vector2f player::Player::getSize() const {
-    return shape.getGlobalBounds().size;
-}
+    sf::Vector2f Player::getSize() const {
+        return render.shape.getGlobalBounds().size;
+    }
 
-sf::Vector2f player::Player::getPosition() const {
-    return shape.getPosition();
-}
+    sf::Shape *Player::getShape() {
+        return &render.shape;
+    }
 
-void player::Player::initShapeSize() {
+    sf::Texture *Player::getTexture() {
+        return &game.textures.player;
+    }
 
-    shape.setSize(static_cast<sf::Vector2f>(pTexture->getSize()));
-}
+    sf::Vector2f Player::getPosition() const {
+        return render.shape.getPosition();
+    }
 
-sf::Shape *player::Player::getShape() {
-    return &shape;
-}
+    const State<StateSet>* Player::getState() const {
+        return stateManager.stateMachine.pCurrentState;
+    }
 
-sf::Texture *player::Player::getTexture() {
-    return &game.textures.player;
-}
+    void Player::initShapeSize() {
+        render.initShapeSize();
+    }
 
-void player::Player::init() {
-    Entity::init();
-    const sf::Vector2f sizeRatio = getWindowToShapeSizeRatio() * height;
-    pShape->setScale(sizeRatio);
-}
+    void Player::init() {
+        Entity::init();
+        const sf::Vector2f sizeRatio = getWindowToShapeSizeRatio() * height;
+        pShape->setScale(sizeRatio);
+    }
 
-void player::Player::update() {
-    input.update();
-    physics.update();
-    stateManager.update();
-    animationManager.update();
-}
+    void Player::update() {
+        input.update();
+        physics.update();
+        stateManager.update();
+        animationManager.update();
+    }
 
-const State<player::StateSet>* player::Player::getState() const {
-    return stateManager.stateMachine.pCurrentState;
+    std::string Player::className() const {
+        return "Player";
+    }
 }

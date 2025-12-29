@@ -8,6 +8,8 @@
 #include <ranges>
 #include <unordered_map>
 #include <memory>
+#include <typeindex>
+
 #include "../../Utils/utils.hpp"
 #include "../Entity/Entity.hpp"
 
@@ -19,11 +21,14 @@ class World {
 protected:
     // ENTITIES
     std::unordered_map<entityID, std::unique_ptr<Entity>> entities{};
+    // COUNTER
+    std::unordered_map<std::type_index, std::size_t> entityCounter{};
 public:
     #pragma region constructors
     explicit World(Game &game, std::string name);
     #pragma endregion constructors
-    // REFERENCES  //TODO: Should reference be const?
+
+    // REFERENCES
     Game &game;
     // METADATA
     const std::string name{};
@@ -41,6 +46,8 @@ public:
         auto pEntity = std::make_unique<T>(*this, ++newEntityID, std::forward<Args>(args)...);
         // Init entity
         pEntity->init();
+        // Count entity
+        entityCounter[typeid(*pEntity)] += 1;
         // Store in the list of entities
         auto [it, inserted] = entities.emplace(pEntity->getID(), std::move(pEntity));
         return getEntity<T>(*it->second.get());
@@ -54,23 +61,12 @@ public:
         auto pEntity = std::make_unique<T>(*this, ++newEntityID, std::forward<Args>(args)...);
         // Init the entity
         pEntity->init();
-        pEntity->shape.setPosition(position);
-        // Get its name
+        pEntity->getShape()->setPosition(position);
+        // Count entity
+        entityCounter[typeid(*pEntity)] += 1;
         // Store in the list of entities
         auto [it, inserted] = entities.emplace(pEntity->getID(), std::move(pEntity));
         return getEntity<T>(*it->second.get());
-    }
-
-    template<typename T>
-    T* getEntity(const Entity &entity)
-    requires (std::is_base_of_v<Entity, T>) {
-        const auto it = entities.find(entity.getID());
-        if (it == entities.end()) return nullptr;
-        return dynamic_cast<T*>(it->second.get());
-    }
-
-    std::unordered_map<entityID, std::unique_ptr<Entity>>* getEntities() {
-        return &entities;
     }
 
     template<typename T>
@@ -95,6 +91,22 @@ public:
             std::cout << entity->getID() << " ";
         }
         std::cout << "\n";
+    }
+
+    template<typename T>
+    T* getEntity(const Entity &entity)
+    requires (std::is_base_of_v<Entity, T>) {
+        const auto it = entities.find(entity.getID());
+        if (it == entities.end()) return nullptr;
+        return dynamic_cast<T*>(it->second.get());
+    }
+
+    std::unordered_map<entityID, std::unique_ptr<Entity>>* getEntities() {
+        return &entities;
+    }
+
+    std::size_t getEntityCount(const Entity &entity) {
+        return entityCounter[typeid(entity)];
     }
 
     void update();

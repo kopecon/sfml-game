@@ -11,8 +11,12 @@
 
 class Scenery : public Entity {
 public:
+
+    #pragma region constructors
     explicit Scenery(World &world, entityID ID);
     explicit Scenery(World &world, entityID ID, std::string name);
+    #pragma endregion
+
     sf::RectangleShape shape{};
     float stretchFactor = 3.f;
     const Camera *pCamera{};

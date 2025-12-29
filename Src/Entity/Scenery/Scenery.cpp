@@ -6,7 +6,7 @@
 #include "../../../Includes/Game/Game.hpp"
 #include "../../../Includes/World/World.hpp"
 
-
+#pragma region constructors
 Scenery::Scenery(World &world, const entityID ID) :
     Entity(world, ID)
     {}
@@ -14,6 +14,7 @@ Scenery::Scenery(World &world, const entityID ID) :
 Scenery::Scenery(World &world, const entityID ID, std::string name) :
     Entity(world, ID, std::move(name))
     {}
+#pragma endregion
 
 void Scenery::setCamera() {
     pCamera = &game.video.camera;

@@ -9,6 +9,7 @@
 #include <iostream>
 
 
+#pragma region constructors
 Background::Background(World &world, const entityID ID) :
     Scenery(world, ID)
     {}
@@ -16,6 +17,11 @@ Background::Background(World &world, const entityID ID) :
 Background::Background(World &world, const entityID ID, std::string name) :
     Scenery(world, ID, std::move(name))
     {}
+
+std::string Background::className() const {
+    return "Background";
+}
+#pragma endregion
 
 sf::Texture * Background::getTexture() {
     return &game.textures.background;

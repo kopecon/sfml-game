@@ -8,6 +8,8 @@
 #include <string>
 #include <SFML/Graphics/Shape.hpp>
 
+#include "../../Utils/utils.hpp"
+
 using entityID = std::uint64_t;
 
 class World;
@@ -16,17 +18,21 @@ class Game;
 
 class Entity {
     const entityID ID;
+    std::string name{};
 public:
+    #pragma region constructors
     virtual ~Entity();
-
     Entity(World &world, entityID ID);
 
     Entity(World &world, entityID ID, std::string name);
+
+    [[nodiscard]] virtual std::string className() const;
+    #pragma endregion
+
     // REFERENCES
     World &world;
     Game  &game;
     // CHARACTERISTICS
-    const std::string name{};
     sf::Vector2f *pSize{nullptr};
     // RENDER
     sf::Shape *pShape{nullptr};
@@ -34,11 +40,19 @@ public:
     // FLAGS
     bool removalFlag = false;
 
+    void setName(std::string entityName) {
+        name = std::move(entityName);
+    }
+
+    std::string_view getName() {
+        return name;
+    }
+
     virtual void initShapeSize() = 0;
 
     [[nodiscard]] entityID getID() const {return ID;}
 
-    virtual sf::Shape* getShape() = 0;
+    [[nodiscard]] virtual sf::Shape* getShape() = 0;
 
     [[nodiscard]] virtual sf::Vector2f getWindowToShapeSizeRatio() const;
 
@@ -51,6 +65,9 @@ public:
     bool operator==(const Entity &other) const;
 
     bool operator!=(const Entity &other) const;
+
+protected:
+    [[nodiscard]] std::string generateName() const;
 };
 
 

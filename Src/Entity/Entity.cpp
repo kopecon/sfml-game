@@ -11,7 +11,7 @@
 #include "../../Includes/World/World.hpp"
 #include "../../Includes/Game/Game.hpp"
 
-
+#pragma region constructors
 Entity::~Entity() {
     std::cout << "Entity: " << name << " removed.\n";
 }
@@ -24,10 +24,15 @@ Entity::Entity(World &world, const entityID ID) :
 
 Entity::Entity(World &world, const entityID ID, std::string name):
     ID(ID),
+    name(std::move(name)),
     world(world),
-    game(world.game),
-    name(text::up(std::move(name)))
+    game(world.game)
     {}
+
+std::string Entity::className() const {
+    return "Entity";
+}
+#pragma endregion
 
 sf::Vector2f Entity::getWindowToShapeSizeRatio() const {
         const sf::Vector2f windowSize = static_cast<sf::Vector2f>(world.game.video.windowSize);
@@ -40,13 +45,14 @@ sf::Vector2f Entity::getWindowToShapeSizeRatio() const {
     }
 
 void Entity::init() {
-    std::cout << "Base Init: " << name << " ...Start" << "\n";
+    setName(generateName());
+    std::cout << "Base Init: " << name << " Started..." << "\n";
     pShape = getShape();
     pTexture = getTexture();
     initShapeSize();
     pShape->setOrigin(pShape->getGeometricCenter());
     pShape->setTexture(pTexture);
-    std::cout << "Base Init: " << name << " ...Finish" << "\n\n";
+    std::cout << "Base Init: " << name << " Finished." << "\n\n";
 }
 
 bool Entity::operator==(const Entity &other) const {
@@ -55,4 +61,9 @@ bool Entity::operator==(const Entity &other) const {
 
 bool Entity::operator!=(const Entity &other) const {
     return this != &other;
+}
+
+std::string Entity::generateName() const {
+    auto result = className() + std::to_string(world.getEntityCount(*this) + 1);
+    return result;
 }
