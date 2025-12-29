@@ -68,6 +68,12 @@ add_executable("${CMAKE_PROJECT_NAME}" Src/main.cpp
         Includes/Entity/Player/MovementComponent.hpp
         Src/Entity/Player/CombatComponent.cpp
         Includes/Entity/Player/CombatComponent.hpp
+        Includes/Game/Engines/StateMachine/State.hpp
+        Includes/Entity/Player/States/StateSet.hpp
+        Includes/Game/Engines/StateMachine/StateSetBase.hpp
+        Includes/Entity/Player/States/PlayerState.hpp
+        Src/Entity/Player/StateManager.cpp
+        Includes/Entity/Player/StateManager.hpp
         Src/Entity/Player/States/Idle.cpp
         Includes/Entity/Player/States/Idle.hpp
         Src/Entity/Player/States/Walking.cpp
@@ -78,14 +84,10 @@ add_executable("${CMAKE_PROJECT_NAME}" Src/main.cpp
         Includes/Entity/Player/States/Running.hpp
         Src/Entity/Player/States/Stopping.cpp
         Includes/Entity/Player/States/Stopping.hpp
-        Includes/Game/Engines/StateMachine/State.hpp
-        Includes/Entity/Player/States/StateSet.hpp
-        Includes/Game/Engines/StateMachine/StateSetBase.hpp
-        Includes/Entity/Player/States/PlayerState.hpp
-        Includes/Entity/Player/States/Attacking.hpp
-        Includes/Entity/Player/States/Winking.hpp
         Src/Entity/Player/States/Attacking.cpp
+        Includes/Entity/Player/States/Attacking.hpp
         Src/Entity/Player/States/Winking.cpp
+        Includes/Entity/Player/States/Winking.hpp
 )
 
 if (PRODUCTION_BUILD)
