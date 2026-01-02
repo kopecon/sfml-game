@@ -70,11 +70,7 @@ void VideoComponent::update(World *pWorld) {
 
     if (pWorld) {
         for (auto const &entity : *pWorld->getEntities() | std::views::values) {
-            // window.draw(*entity->pShape); // TODO: DEPRECATED
             window.draw(entity->render);
-            for (auto const &pShape : entity->render.getShapeComposites()) {
-                // window.draw(*pShape);
-            }
         }
     }
 

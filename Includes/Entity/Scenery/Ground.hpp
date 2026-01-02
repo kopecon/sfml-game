@@ -15,11 +15,10 @@ namespace scenery {
 #pragma region constructors
         explicit Ground(World &world, entityID ID);
         explicit Ground(World &world, entityID ID, std::string name);
-        [[nodiscard]] std::string className() const override;
+        [[nodiscard]] std::string getClassName() const override;
 #pragma endregion
 
         sf::Color color = sf::Color({40,30,100});
-        sf::Texture* getTexture() override;
 
         void buildRender();
     };

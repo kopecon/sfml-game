@@ -67,6 +67,8 @@ namespace entity {
 
         ShapeComposite& getShapeComposite(const ShapeComposite &composite);
 
+        [[nodiscard]] sf::Vector2f getWindowToShapeSizeRatio() const;
+
         void draw(sf::RenderTarget &target, sf::RenderStates states) const override {
             for (const auto &pComposite : composites) {
                 target.draw(*pComposite);

@@ -19,10 +19,6 @@ namespace scenery {
         pCamera = &game.video.camera;
     }
 
-    sf::Shape * Scenery::getShape() {
-        return &shape;
-    }
-
     void Scenery::loop() {
         // FIXME: There is sometimes space between border and ground edge when looping.
         if (pCamera == nullptr) setCamera();
@@ -48,14 +44,6 @@ namespace scenery {
                 }
             }
         }
-    }
-
-    void Scenery::initShapeSize() {
-        shape.setSize(static_cast<sf::Vector2f>(pTexture->getSize()));
-    }
-
-    void Scenery::init() {
-        Entity::init();
     }
 
     void Scenery::update() {

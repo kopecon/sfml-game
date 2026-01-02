@@ -53,44 +53,22 @@ namespace player {
     #pragma endregion
 
     sf::Vector2f Player::getSize() const {
-        return shape.getGlobalBounds().size;
-    }
-
-    sf::Shape *Player::getShape() {
-        return &shape;
-    }
-
-    sf::Texture *Player::getTexture() {
-        return &game.textures.player;
-    }
-
-    sf::Vector2f Player::getPosition() const {
-        return shape.getPosition();
+        return render.getShape().getGlobalBounds().size;
     }
 
     const State<StateSet>* Player::getState() const {
         return stateManager.stateMachine.pCurrentState;
     }
 
-    void Player::initShapeSize() {
-        shape.setSize(static_cast<sf::Vector2f>(pTexture->getSize()));
-    }
-
-    void Player::init() {
-        Entity::init();
-        const sf::Vector2f sizeRatio = getWindowToShapeSizeRatio() * height;
-        pShape->setScale(sizeRatio);
-    }
-
     void Player::update() {
         input.update();
         physics.update();
         stateManager.update();
-        render.update();
         animationManager.update();
+        render.update();
     }
 
-    std::string Player::className() const {
+    std::string Player::getClassName() const {
         return "Player";
     }
 }

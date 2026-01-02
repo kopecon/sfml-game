@@ -39,10 +39,6 @@ void player::PhysicsComponent::accelerate(const sf::Vector2f &targetVelocity) co
     player.acceleration = hd::multiply(player.movement.getSpeed(), player.movement.snap, velDiff, environment);
 }
 
-void player::PhysicsComponent::syncRender() const {
-    player.shape.setPosition(player.position);
-}
-
 void player::PhysicsComponent::printPhysics() const {
     std::cout << "Px: " << player.position.x << " Vx: " << player.velocity.x << " Ax: " << player.acceleration.x << "\n";
     std::cout << "Py: " << player.position.y << " Vy: " << player.velocity.y << " Ay: " << player.acceleration.y << "\n";
@@ -61,8 +57,6 @@ void player::PhysicsComponent::update() const {
     if (isGrounded()) {
         ground();
     }
-
-    syncRender();  // Update player position
 
     player.acceleration = {0.f, 0.f};  // Reset acceleration
     if (verbose) printPhysics();

@@ -33,10 +33,6 @@ namespace entity {
         game(world.game),
         render(*this)
         {}
-
-    std::string Entity::className() const {
-        return "Entity";
-    }
 #pragma endregion
 
 #pragma region operators
@@ -57,29 +53,18 @@ namespace entity {
         return name;
     }
 
-    sf::Vector2f Entity::getWindowToShapeSizeRatio() const {
-        const sf::Vector2f windowSize = static_cast<sf::Vector2f>(world.game.video.getWindowSize());
-        const sf::Vector2f shapeSize = pShape->getGlobalBounds().size;
-        const sf::Vector2f sizeRatio = {
-            windowSize.x / shapeSize.x,
-            windowSize.y / shapeSize.y,
-        };
-        return sizeRatio;
+    std::string Entity::getClassName() const {
+        return "Entity";
     }
 
     void Entity::init() {
-        setName(_generateName());
         std::cout << "Base Init: " << name << " Started..." << "\n";
-        pShape = getShape();
-        pTexture = getTexture();
-        initShapeSize();
-        pShape->setOrigin(pShape->getGeometricCenter());
-        pShape->setTexture(pTexture);
+        setName(_generateName());
         std::cout << "Base Init: " << name << " Finished." << "\n\n";
     }
 
     std::string Entity::_generateName() const {
-        auto result = className() + std::to_string(world.getEntityCount(*this) + 1);
+        auto result = getClassName() + std::to_string(world.getEntityCount(*this) + 1);
         return result;
     }
 }

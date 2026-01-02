@@ -45,21 +45,13 @@ namespace player {
         RenderManager renderManager;
         AnimationManager animationManager;
         StateManager stateManager;
-        // RENDERING
-        sf::RectangleShape shape{};
         // GETTERS
-        sf::Vector2f getSize() const;
-        sf::Shape *getShape() override;
-        sf::Texture *getTexture() override;
-        sf::Vector2f getPosition() const;
-        const State<StateSet>* getState() const;
-        // INIT
-        void initShapeSize() override;
-        void init() override;
+        [[nodiscard]] sf::Vector2f getSize() const;
+        [[nodiscard]] const State<StateSet>* getState() const;  //TODO: make return reference instead.
         // UPDATE
         void update() override;
 
-        [[nodiscard]] std::string className() const override;
+        [[nodiscard]] std::string getClassName() const override;
     };
 }
 

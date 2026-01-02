@@ -22,14 +22,10 @@ namespace scenery {
             buildRender();
         }
 
-    std::string Background::className() const {
+    std::string Background::getClassName() const {
         return "Background";
     }
 #pragma endregion
-
-    sf::Texture * Background::getTexture() {
-        return &game.textures.background;
-    }
 
     void Background::buildRender() {
         auto &texture = game.textures.background;
@@ -49,14 +45,4 @@ namespace scenery {
 
         render.addComposite(std::move(composite));
     }
-
-    void Background::init() {
-        Scenery::init();
-        shape.setScale({stretchFactor, 1});
-        shape.setTextureRect(sf::IntRect({0, 0}, static_cast<sf::Vector2i>(shape.getGlobalBounds().size)));
-        const sf::Vector2f sizeRatio = getWindowToShapeSizeRatio();
-        shape.setScale({shape.getScale().x * sizeRatio.x * stretchFactor, shape.getScale().y * sizeRatio.y});
-    }
-
-
 }

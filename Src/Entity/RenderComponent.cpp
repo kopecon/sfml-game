@@ -48,7 +48,7 @@ namespace entity {
         const int texHeight = static_cast<int>(pShape->getTexture()->getSize().y);
         const int shapeWidth = static_cast<int>(pShape->getGlobalBounds().size.x);
         pShape->setTextureRect(
-            sf::IntRect({0, 0}, {std::max(3*texWidth, shapeWidth), texHeight}));
+            sf::IntRect({0, 0}, {std::max(3*texWidth, shapeWidth), texHeight}));  //TODO: Move "3" to looping or somewhere else
     }
 
     void RenderComponent::addComposite(std::unique_ptr<ShapeComposite> composite) {
@@ -76,6 +76,16 @@ namespace entity {
             });
         if (it == composites.end()) std::cout << "Composite not found.\n";
         return *it->get();
+    }
+
+    sf::Vector2f RenderComponent::getWindowToShapeSizeRatio() const {
+        const sf::Vector2f windowSize = static_cast<sf::Vector2f>(entity.game.video.getWindowSize());
+        const sf::Vector2f shapeSize = entity.render.getShape().getGlobalBounds().size;
+        const sf::Vector2f sizeRatio = {
+            windowSize.x / shapeSize.x,
+            windowSize.y / shapeSize.y,
+        };
+        return sizeRatio;
     }
 
     void RenderComponent::update() const {

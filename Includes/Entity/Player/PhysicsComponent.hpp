@@ -32,8 +32,6 @@ namespace player {
 
         void accelerate(const sf::Vector2f &targetVelocity) const;
 
-        void syncRender() const;
-
         void printPhysics() const;
 
         void update() const;

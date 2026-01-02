@@ -22,14 +22,10 @@ namespace scenery {
             buildRender();
         }
 
-    std::string Ground::className() const {
+    std::string Ground::getClassName() const {
         return "Ground";
     }
 #pragma endregion
-
-    sf::Texture * Ground::getTexture() {
-        return &game.textures.topGround;
-    }
 
     void Ground::buildRender() {
         auto &topTex = game.textures.topGround;

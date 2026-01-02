@@ -17,14 +17,11 @@ namespace scenery {
 #pragma region constructors
         explicit Background(World &world, entityID ID);
         explicit Background(World &world, entityID ID, std::string name);
-        [[nodiscard]] std::string className() const override;
+        [[nodiscard]] std::string getClassName() const override;
 #pragma endregion
-
-        sf::Texture* getTexture() override;
 
         void buildRender();
 
-        void init() override;
     };
 }
 

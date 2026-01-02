@@ -28,8 +28,6 @@ namespace entity {
         Entity(World &world, entityID ID);
 
         Entity(World &world, entityID ID, std::string name);
-
-        [[nodiscard]] virtual std::string className() const;
         #pragma endregion
 
         #pragma region operators
@@ -45,11 +43,8 @@ namespace entity {
         sf::Vector2f position{};
         sf::Vector2f velocity{};
         sf::Vector2f acceleration{};
-        sf::Vector2f *pSize{nullptr};
         // RENDER
         RenderComponent render;
-        sf::Shape *pShape{nullptr};
-        sf::Texture *pTexture{nullptr};
         // FLAGS
         bool removalFlag = false;
 
@@ -57,15 +52,9 @@ namespace entity {
 
         std::string_view getName();
 
+        [[nodiscard]] virtual std::string getClassName() const;
+
         [[nodiscard]] entityID getID() const {return ID;}
-
-        [[nodiscard]] virtual sf::Shape* getShape() = 0;
-
-        [[nodiscard]] virtual sf::Vector2f getWindowToShapeSizeRatio() const;
-
-        virtual sf::Texture* getTexture() {return pTexture;}
-
-        virtual void initShapeSize() = 0;
 
         virtual void init();
 

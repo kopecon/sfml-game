@@ -18,19 +18,12 @@ namespace scenery {
         explicit Scenery(World &world, entityID ID, std::string name);
 #pragma endregion
 
-        sf::RectangleShape shape{};
         float stretchFactor = 3.f;
-        const Camera *pCamera{};
+        const Camera *pCamera{};   //TODO: Make protected
 
         void setCamera();
 
-        sf::Shape *getShape() override;
-
         void loop();
-
-        void initShapeSize() override;
-
-        void init() override;
 
         void update() override;
     };
