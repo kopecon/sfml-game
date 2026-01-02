@@ -48,7 +48,7 @@ namespace hadamard {
         || std::is_base_of_v<sf::Vector2u, sfVector>
         || std::is_base_of_v<sf::Vector2f, sfVector> )
     sf::Vector2f divide(const sfVector &first, const Vectors&... vectors) {
-        sfVector result{};
+        sf::Vector2f result{};
         result.x = (first.x / ... / (vectors.x));
         result.y = (first.y / ... / (vectors.y));
         return result;
@@ -85,7 +85,7 @@ namespace scalar {
         || std::is_base_of_v<sf::Vector2u, sfVector>
         || std::is_base_of_v<sf::Vector2f, sfVector> )
     sf::Vector2f divide(const sfVector &vector, const S &scalar) {
-        sfVector result{};
+        sf::Vector2f result{};
         result.x = (vector.x / scalar);
         result.y = (vector.y / scalar);
         return result;
