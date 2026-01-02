@@ -49,8 +49,8 @@ namespace hadamard {
         || std::is_base_of_v<sf::Vector2f, sfVector> )
     sf::Vector2f divide(const sfVector &first, const Vectors&... vectors) {
         sf::Vector2f result{};
-        result.x = (first.x / ... / (vectors.x));
-        result.y = (first.y / ... / (vectors.y));
+        result.x = (first.x / ... / static_cast<float>(vectors.x));
+        result.y = (first.y / ... / static_cast<float>(vectors.y));
         return result;
     }
 
