@@ -36,7 +36,7 @@ namespace entity {
 
     void RenderComponent::stretchToWidth(sf::RectangleShape *pShape) const {
         pShape->setSize({
-            3*static_cast<float>(entity.game.video.getWindow().getSize().x),
+            3*static_cast<float>(entity.game.video.getWindowSize().x),
             pShape->getSize().y
             }
         );
