@@ -20,9 +20,9 @@ class VideoComponent {
     sf::ContextSettings settings;
     unsigned int fps{144};
     // WINDOW
-    float windowSizeRatio = 1.2f;  // Screen size / window size
+    float windowSizeRatio = 2.f;  // Screen size / window size
     sf::State windowState = sf::State::Windowed;  // Initial state when game starts
-    sf::Vector2u initialWindowSize = scalar::divide(screenSize, windowSizeRatio);
+    sf::Vector2u initialWindowSize = static_cast<sf::Vector2u>(scalar::divide(screenSize, windowSizeRatio));
     sf::RenderWindow window{};
 
 public:
@@ -45,6 +45,10 @@ public:
 
     sf::Vector2u getWindowSize() const {
         return window.getSize();
+    }
+
+    [[nodiscard]] sf::Vector2f getWindowToScreenRatio() const {
+        return hd::divide(getWindowSize(), getScreenSize());
     }
 
     const sf::RenderWindow& getWindow();

@@ -1,6 +1,7 @@
 #include "../../Includes/Entity/RenderComponent.hpp"
-#include <iostream>
+#include "../../Includes/Game/Game.hpp"
 #include "../../Includes/Entity/Entity.hpp"
+#include <iostream>
 
 
 namespace entity {
@@ -12,6 +13,16 @@ namespace entity {
         for (const auto &pShape : shapes) {
             pShape->setFillColor(color);
         }
+    }
+
+    void ShapeComposite::enlarge(const float &factor) const {
+        for (const auto &pShape : shapes) {
+            pShape->setScale(scalar::multiply(pShape->getScale(), factor));
+        }
+    }
+
+    void ShapeComposite::enlarge(const sf::Vector2f &factor) {
+        setScale(hd::multiply(this->getScale(), factor));
     }
 
     sf::Shape& ShapeComposite::getShape(const sf::Shape &shape) {
@@ -78,14 +89,10 @@ namespace entity {
         return *it->get();
     }
 
-    sf::Vector2f RenderComponent::getWindowToShapeSizeRatio() const {
-        const sf::Vector2f windowSize = static_cast<sf::Vector2f>(entity.game.video.getWindowSize());
-        const sf::Vector2f shapeSize = entity.render.getShape().getGlobalBounds().size;
-        const sf::Vector2f sizeRatio = {
-            windowSize.x / shapeSize.x,
-            windowSize.y / shapeSize.y,
-        };
-        return sizeRatio;
+    void RenderComponent::init() const {
+        for (const auto &pComposite : composites) {
+            pComposite->enlarge(entity.game.video.getWindowToScreenRatio());
+        }
     }
 
     void RenderComponent::update() const {

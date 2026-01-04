@@ -7,9 +7,11 @@
 #include <memory>
 #include <vector>
 
-#include "../Game/Game.hpp"
+#include "SFML/Graphics/Drawable.hpp"
 #include "SFML/Graphics/RectangleShape.hpp"
+#include "SFML/Graphics/RenderTarget.hpp"
 #include "SFML/Graphics/Shape.hpp"
+#include "SFML/Graphics/Transformable.hpp"
 
 
 namespace entity {
@@ -24,6 +26,15 @@ namespace entity {
         void addShape(std::unique_ptr<sf::Shape> shape);
 
         void setFillColor(const sf::Color &color) const;
+
+        sf::Vector2f getGeometricalCenter() const {
+            //TODO: Implement actual solution
+             return shapes.back()->getGeometricCenter();
+        }
+
+        void enlarge(const float &factor) const;
+
+        void enlarge(const sf::Vector2f &factor);
 
         sf::Shape& getShape(const sf::Shape &shape);
 
@@ -50,6 +61,7 @@ namespace entity {
     protected:
         std::vector<std::unique_ptr<ShapeComposite>> composites{};
         Entity &entity;
+
     public:
         explicit RenderComponent(Entity &entity);
 
@@ -67,13 +79,13 @@ namespace entity {
 
         ShapeComposite& getShapeComposite(const ShapeComposite &composite);
 
-        [[nodiscard]] sf::Vector2f getWindowToShapeSizeRatio() const;
-
         void draw(sf::RenderTarget &target, sf::RenderStates states) const override {
             for (const auto &pComposite : composites) {
                 target.draw(*pComposite);
             }
         }
+
+        void init() const;
 
         void update() const;
     };

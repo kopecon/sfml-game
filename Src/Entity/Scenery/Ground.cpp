@@ -43,15 +43,12 @@ namespace scenery {
         render.repeatToWidth(top.get());
         render.repeatToWidth(bottom.get());
 
-        top->setOrigin(top->getGeometricCenter());
-        bottom->setOrigin(bottom->getGeometricCenter());
-
         bottom->move({top->getPosition().x, top->getPosition().y + top->getSize().y});
 
         auto composite = std::make_unique<entity::ShapeComposite>();
         composite->addShape(std::move(top));
         composite->addShape(std::move(bottom));
-
+        composite->setOrigin(composite->getGeometricalCenter());
         render.addComposite(std::move(composite));
         render.setFillColor(color);
     }

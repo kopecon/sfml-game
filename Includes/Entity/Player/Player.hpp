@@ -32,7 +32,7 @@ namespace player {
         // CHARACTERISTICS
         float health{100.f};
         float attackDamage{20.f};
-        float height{0.2f};  // As a factor of the window height. (from 0 to 1)
+        float height{1.f};
         // CONDITIONS
         bool facingRight{true};
         float eyeDryness{};

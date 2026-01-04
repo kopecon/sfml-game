@@ -74,6 +74,9 @@ void VideoComponent::update(World *pWorld) {
         }
     }
 
+    auto test_shape = sf::CircleShape{10};
+    test_shape.setPosition({0.f, pWorld->groundLevel});
+    window.draw(test_shape);
     window.display();
     // --- Draw on screen ---
 }
