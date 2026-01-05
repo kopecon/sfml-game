@@ -12,7 +12,7 @@
 
 player::AnimationManager::AnimationManager(Player &player) :
     player(player),
-    engine({player.render.getShape().getTexture(), {32, 32}}, player.render.getShape()) {
+    engine({&player.game.textures.player, {32, 32}}, player.getShape()) {
     using enum StateSet::ID;
     engine.add(AnimationEntry(IDLE,         2, true));
     engine.add(AnimationEntry(WINKING,      2, true));

@@ -40,7 +40,7 @@ namespace scenery {
 
         shape->setOrigin(shape->getGeometricCenter());
 
-        auto composite = std::make_unique<entity::ShapeComposite>();
+        auto composite = std::make_unique<Composite>();
         composite->addShape(std::move(shape));
 
         render.addComposite(std::move(composite));

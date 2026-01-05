@@ -71,8 +71,8 @@ add_executable("${CMAKE_PROJECT_NAME}" Src/main.cpp
         Includes/Entity/Player/States/StateSet.hpp
         Includes/Game/Engines/StateMachine/StateSetBase.hpp
         Includes/Entity/Player/States/PlayerState.hpp
-        Src/Entity/Player/StateManager.cpp
-        Includes/Entity/Player/StateManager.hpp
+        Src/Entity/Player/States/StateManager.cpp
+        Includes/Entity/Player/States/StateManager.hpp
         Src/Entity/Player/States/Idle.cpp
         Includes/Entity/Player/States/Idle.hpp
         Src/Entity/Player/States/Walking.cpp
@@ -87,10 +87,12 @@ add_executable("${CMAKE_PROJECT_NAME}" Src/main.cpp
         Includes/Entity/Player/States/Attacking.hpp
         Src/Entity/Player/States/Winking.cpp
         Includes/Entity/Player/States/Winking.hpp
-        Src/Entity/RenderComponent.cpp
-        Includes/Entity/RenderComponent.hpp
-        Includes/Entity/Player/RenderManager.cpp
+        Src/Game/Engines/Render/Render.cpp
+        Includes/Game/Engines/Render/Render.hpp
+        Src/Entity/Player/RenderManager.cpp
         Includes/Entity/Player/RenderManager.hpp
+        Src/Game/Engines/Render/Composite.cpp
+        Includes/Game/Engines/Render/Composite.hpp
 )
 
 if (PRODUCTION_BUILD)

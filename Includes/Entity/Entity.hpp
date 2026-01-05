@@ -8,7 +8,7 @@
 #include <string>
 #include <SFML/Graphics/Shape.hpp>
 
-#include "RenderComponent.hpp"
+#include "../Game/Engines/Render/Render.hpp"
 
 
 using entityID = std::uint64_t;
@@ -18,7 +18,6 @@ class Game;
 
 
 namespace entity {
-
     class Entity {
         const entityID ID;
         std::string name{};
@@ -44,7 +43,7 @@ namespace entity {
         sf::Vector2f velocity{};
         sf::Vector2f acceleration{};
         // RENDER
-        RenderComponent render;
+        Render render;
         // FLAGS
         bool removalFlag = false;
 

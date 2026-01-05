@@ -29,8 +29,8 @@ namespace scenery {
             const auto cameraRBorder = cameraCenter.x + cameraWidth / 2.f;
             const auto cameraLBorder = cameraCenter.x - cameraWidth / 2.f;
 
-            for (const auto &pShapeComposite : render.getShapeComposites()) {
-                const float shapeWidth = pShapeComposite->getShapes().back()->getLocalBounds().size.x;
+            for (const auto &pShapeComposite : render.getComposites()) {
+                const float shapeWidth = pShapeComposite->shapes.back()->getLocalBounds().size.x;
                 // If camera is viewing outside of background
                 if (cameraRBorder > position.x + shapeWidth/2.f) {
                     position = {

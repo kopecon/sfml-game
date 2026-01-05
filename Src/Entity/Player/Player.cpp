@@ -53,11 +53,16 @@ namespace player {
     #pragma endregion
 
     sf::Vector2f Player::getSize() const {
-        return render.getShape().getGlobalBounds().size;
+        return sf::Vector2f(height, width);
     }
 
     const State<StateSet>* Player::getState() const {
         return stateManager.stateMachine.pCurrentState;
+    }
+
+    sf::Shape & Player::getShape() const {
+        //TODO: implement propper shape accessing
+        return *render.getComposites().back()->shapes.back();
     }
 
     void Player::update() {

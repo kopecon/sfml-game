@@ -45,10 +45,12 @@ namespace scenery {
 
         bottom->move({top->getPosition().x, top->getPosition().y + top->getSize().y});
 
-        auto composite = std::make_unique<entity::ShapeComposite>();
+        const auto topCenter = top->getGeometricCenter();
+
+        auto composite = std::make_unique<Composite>();
         composite->addShape(std::move(top));
         composite->addShape(std::move(bottom));
-        composite->setOrigin(composite->getGeometricalCenter());
+        composite->setOrigin({topCenter.x, 0});
         render.addComposite(std::move(composite));
         render.setFillColor(color);
     }

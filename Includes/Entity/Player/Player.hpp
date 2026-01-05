@@ -14,7 +14,7 @@
 #include "MovementComponent.hpp"
 #include "CombatComponent.hpp"
 #include "RenderManager.hpp"
-#include "StateManager.hpp"
+#include "States/StateManager.hpp"
 
 
 class World;
@@ -32,7 +32,8 @@ namespace player {
         // CHARACTERISTICS
         float health{100.f};
         float attackDamage{20.f};
-        float height{1.f};
+        float height{256.f};
+        float width{256.f};
         // CONDITIONS
         bool facingRight{true};
         float eyeDryness{};
@@ -48,6 +49,7 @@ namespace player {
         // GETTERS
         [[nodiscard]] sf::Vector2f getSize() const;
         [[nodiscard]] const State<StateSet>* getState() const;  //TODO: make return reference instead.
+        [[nodiscard]] sf::Shape& getShape() const;
         // UPDATE
         void update() override;
 
