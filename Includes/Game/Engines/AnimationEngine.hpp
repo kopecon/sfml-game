@@ -19,7 +19,7 @@ struct AnimationSheet {
 template<typename States>
 class AnimationEntry {
 public:
-    enum AnimationState {
+    enum AnimationState {  // TODO: MAKE A ENUM CLASS
         READY, PLAYING, END, COMPLETED
     };
 #pragma region constructors
@@ -63,13 +63,12 @@ public:
 
 
 template<typename States>
-class AnimationEngine final {
+class AnimationEngine {
 public:
 #pragma region constructors
-    virtual ~AnimationEngine() = default;
     AnimationEngine(const AnimationSheet &animationSheet, sf::Shape &target) :
         animationSheet(animationSheet),
-        target(&target)
+        target(target)
         {}
 #pragma endregion
 
@@ -77,7 +76,7 @@ public:
     AnimationEntry<States> *pPreviousAnimation{nullptr};
     AnimationEntry<States> *pCurrentAnimation{nullptr};
     std::unordered_map<States, AnimationEntry<States>> animationSet;
-    sf::Shape *target{};
+    sf::Shape &target;
 
     [[nodiscard]] sf::IntRect currentFrame() const {
         auto frameCoord = sf::Vector2i(
@@ -123,12 +122,12 @@ public:
         return false;
     }
 
-    virtual void update(const float &dt) const {
+    void update(const float &dt) const {
         if (pCurrentAnimation->state == AnimationEntry<States>::END) {
             pCurrentAnimation->state = AnimationEntry<States>::COMPLETED;
             return;
         }
-        target->setTextureRect(currentFrame());
+        target.setTextureRect(currentFrame());
         pCurrentAnimation->state = AnimationEntry<States>::PLAYING;
         pCurrentAnimation->timer += dt;
         // When it is the time to move to the next frame

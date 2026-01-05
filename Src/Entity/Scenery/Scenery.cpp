@@ -29,18 +29,27 @@ namespace scenery {
             const auto cameraRBorder = cameraCenter.x + cameraWidth / 2.f;
             const auto cameraLBorder = cameraCenter.x - cameraWidth / 2.f;
 
-            for (const auto &pShapeComposite : render.getComposites()) {
-                const float shapeWidth = pShapeComposite->shapes.back()->getLocalBounds().size.x;
-                // If camera is viewing outside of background
-                if (cameraRBorder > position.x + shapeWidth/2.f) {
-                    position = {
-                        cameraRBorder-cameraWidth/2.f,
-                        position.y};
-                }
-                else if (cameraLBorder < position.x - shapeWidth/2.f) {
-                    position = {
-                        cameraLBorder+cameraWidth/2.f,
-                        position.y};
+
+            for (const auto &pComposite : render.getComposites()) {
+                for (const auto &pShape : pComposite->shapes) {
+                    const float shapeWidth = pShape->getGlobalBounds().size.x;
+                    const auto shapeRBorder = position.x + shapeWidth / 2.f;
+                    const auto shapeLBorder = position.x - shapeWidth / 2.f;
+
+                    std::cout << cameraLBorder << " " << cameraRBorder << "\n";
+                    std::cout << shapeLBorder << " " << shapeRBorder << "\n";
+                    // RIGHT
+                    if (cameraRBorder > shapeRBorder) {
+                        position = {
+                            cameraRBorder-cameraWidth/2.f,
+                            position.y};
+                    }
+                    // LEFT
+                    else if (cameraLBorder < shapeLBorder) {
+                        position = {
+                            cameraLBorder+cameraWidth/2.f,
+                            position.y};
+                    }
                 }
             }
         }

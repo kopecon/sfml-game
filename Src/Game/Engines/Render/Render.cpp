@@ -39,6 +39,17 @@ void Render::setFillColor(const sf::Color &color) const {
     }
 }
 
+void Render::setScale(const sf::Vector2f &amount) {
+    scale = amount;
+    for (const auto &pComposite : composites) {
+        pComposite->setScale(amount);
+    }
+}
+
+sf::Vector2f Render::getScale() const {
+    return scale;
+}
+
 Composite & Render::getComposite(const Composite &composite) {
     const auto it = std::ranges::find_if(
         composites,
@@ -53,10 +64,8 @@ std::vector<std::unique_ptr<Composite>>& Render::getComposites() {
     return composites;
 }
 
-void Render::init() const {
-    for (const auto &pComposite : composites) {
-        pComposite->enlarge(entity.game.video.getWindowToScreenRatio());
-    }
+void Render::init() {
+    setScale(entity.game.video.getWindowToScreenRatio());
 }
 
 void Render::update() const {

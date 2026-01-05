@@ -14,7 +14,7 @@ player::MovementComponent::MovementComponent(Player &player): player(player) {}
 void player::MovementComponent::turn() const {
     brake();
     if (areClose(player.velocity.x, 0.f, 10.f)) {
-        player.getShape().setScale({-player.getShape().getScale().x, player.getShape().getScale().y});
+        player.render.setScale({-player.render.getScale().x, player.render.getScale().y});
         player.facingRight = !player.facingRight;
     }
 }
@@ -49,8 +49,8 @@ void player::MovementComponent::updateSpeed() {
     if (player.getState().ID == RUNNING
         || player.getState().ID == JUMPING
         && player.stateManager.stateMachine.pPreviousState->ID == RUNNING)
-        _speed = hd::multiply(player.getSize(), runningSpeed);
+        _speed = hd::multiply(player.getRelativeSize(), runningSpeed);
     else {
-        _speed = hd::multiply(player.getSize(), walkingSpeed);;
+        _speed = hd::multiply(player.getRelativeSize(), walkingSpeed);;
     }
 }

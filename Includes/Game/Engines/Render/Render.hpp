@@ -10,7 +10,6 @@
 #include "SFML/Graphics/Drawable.hpp"
 #include "SFML/Graphics/RectangleShape.hpp"
 #include "SFML/Graphics/RenderTarget.hpp"
-#include "SFML/Graphics/Shape.hpp"
 #include "Composite.hpp"
 
 
@@ -23,6 +22,7 @@ class Render final: public sf::Drawable {
 protected:
     std::vector<std::unique_ptr<Composite>> composites{};
     entity::Entity &entity;
+    sf::Vector2f scale{1.f, 1.f};
 
 public:
     explicit Render(entity::Entity &entity);
@@ -37,6 +37,10 @@ public:
 
     void setFillColor(const sf::Color &color) const;
 
+    void setScale(const sf::Vector2f &amount);
+
+    sf::Vector2f getScale() const;
+
     Composite& getComposite(const Composite &composite);
 
     [[nodiscard]] std::vector<std::unique_ptr<Composite>>& getComposites();
@@ -47,7 +51,7 @@ public:
         }
     }
 
-    void init() const;
+    void init();
 
     void update() const;
 };

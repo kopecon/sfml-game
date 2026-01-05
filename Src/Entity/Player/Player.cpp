@@ -52,8 +52,12 @@ namespace player {
     }
     #pragma endregion
 
-    sf::Vector2f Player::getSize() const {
+    sf::Vector2f Player::getAbsoluteSize() const {
         return sf::Vector2f(height, width);
+    }
+
+    sf::Vector2f Player::getRelativeSize() const {
+        return hd::multiply(getAbsoluteSize(), hd::abs(render.getScale()));
     }
 
     const State<StateSet>& Player::getState() const {
@@ -62,7 +66,7 @@ namespace player {
 
     sf::Shape & Player::getShape() const {
         //TODO: implement propper shape accessing
-        return *render.getComposites().back()->shapes.back();
+        return *render.getComposites().front()->shapes.front();
     }
 
     void Player::update() {

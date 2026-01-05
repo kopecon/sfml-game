@@ -13,13 +13,13 @@ namespace player {
         const auto &texture = player.game.textures.player;
 
         auto shape = std::make_unique<sf::RectangleShape>();
-        shape->setSize(player.getSize());
+        shape->setSize(player.getAbsoluteSize());
         const auto shapeCenter = shape->getGeometricCenter();
 
         shape->setTexture(&texture);
         shape->setTextureRect(sf::IntRect({0, 0}, {32, 32}));  //32 is defined by the texture used
 
-        auto test_shape = std::make_unique<sf::CircleShape>(10);
+        auto test_shape = std::make_unique<sf::CircleShape>(10.f);
         test_shape->setOrigin(test_shape->getGeometricCenter());
         test_shape->setPosition(shapeCenter);
         test_shape->setFillColor(sf::Color(255, 255, 0));
