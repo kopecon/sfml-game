@@ -20,8 +20,8 @@ namespace player {
         // REFERENCES
         Player &player;
         // CHARACTERISTICS
-        sf::Vector2f walkingSpeed{3.f, 3.f};
-        sf::Vector2f runningSpeed{6.f, 3.5f};
+        sf::Vector2f walkingSpeed{3.f, 2.f};
+        sf::Vector2f runningSpeed{6.f, 2.5f};
         sf::Vector2f snap{0.05f, 0.05f};  // How aggressively player changes speed
 
         void turn() const;

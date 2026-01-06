@@ -8,44 +8,37 @@
 #include <vector>
 
 #include "SFML/Graphics/Drawable.hpp"
-#include "SFML/Graphics/RenderTarget.hpp"
+#include "SFML/Graphics/RectangleShape.hpp"
 #include "SFML/Graphics/Shape.hpp"
 #include "SFML/Graphics/Transformable.hpp"
 
 
 class Composite final : public sf::Drawable, public sf::Transformable {
+    std::unique_ptr<sf::RectangleShape> boundary{};
 public:
     Composite() = default;
 
-    std::vector<std::unique_ptr<sf::Shape>> shapes{};
+    std::vector<std::unique_ptr<sf::Shape>> shapes{};  // TODO: maybe composites could hold other composites
 
     void addShape(std::unique_ptr<sf::Shape> shape);
 
     void setFillColor(const sf::Color &color) const;
 
-    sf::Vector2f getGeometricalCenter() const;
+    void showBoundary(sf::Color color = sf::Color::Red);
+
+    [[nodiscard]] sf::FloatRect getLocalBounds() const;
+
+    [[nodiscard]] sf::FloatRect getGlobalBounds() const;
+
+    [[nodiscard]] sf::Vector2f getGeometricalCenter() const;
+
+    [[nodiscard]] sf::Shape& getShape(const sf::Shape &shape);
 
     void enlarge(const float &factor) const;
 
     void enlarge(const sf::Vector2f &factor);
 
-    sf::Shape& getShape(const sf::Shape &shape);
-
-    void draw(sf::RenderTarget &target, sf::RenderStates states) const override {
-        states.transform *= getTransform(); // getTransform() is defined by sf::Transformable
-
-        for (const auto &pShape : shapes) {
-            // apply the entity's transform -- combine it with the one that was passed by the caller
-
-            // apply the texture
-            states.texture = pShape->getTexture();
-
-            // you may also override states.shader or states.blendMode if you want
-
-            // draw the vertex array
-            target.draw(*pShape, states);
-        }
-    }
+    void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
 };
 
 

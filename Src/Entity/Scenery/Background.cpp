@@ -36,13 +36,9 @@ namespace scenery {
 
         shape->setTexture(&texture);
 
-        render.repeatToWidth(shape.get());
-
-        shape->setOrigin(shape->getGeometricCenter());
-
         auto composite = std::make_unique<Composite>();
         composite->addShape(std::move(shape));
-
         render.addComposite(std::move(composite));
+        render.setOrigin(render.getGeometricalCenter());
     }
 }

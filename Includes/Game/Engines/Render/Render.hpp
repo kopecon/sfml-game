@@ -18,42 +18,38 @@ namespace entity {
 }
 
 
-class Render final: public sf::Drawable {
+class Render final: public sf::Drawable, public sf::Transformable  {
 protected:
     std::vector<std::unique_ptr<Composite>> composites{};
     entity::Entity &entity;
-    sf::Vector2f scale{1.f, 1.f};
+    std::unique_ptr<sf::RectangleShape> boundary{};
 
 public:
     explicit Render(entity::Entity &entity);
 
-    [[nodiscard]] const std::vector<std::unique_ptr<Composite>>& getComposites() const;
-
-    void stretchToWidth(sf::RectangleShape *pShape) const;
-
-    void repeatToWidth(sf::RectangleShape *pShape) const;
-
     void addComposite(std::unique_ptr<Composite> composite);
+
+    void addShape(std::unique_ptr<sf::Shape> shape);
 
     void setFillColor(const sf::Color &color) const;
 
-    void setScale(const sf::Vector2f &amount);
-
-    sf::Vector2f getScale() const;
+    void showBoundary(sf::Color color = sf::Color::Red);
 
     Composite& getComposite(const Composite &composite);
 
     [[nodiscard]] std::vector<std::unique_ptr<Composite>>& getComposites();
 
-    void draw(sf::RenderTarget &target, sf::RenderStates states) const override {
-        for (const auto &pComposite : composites) {
-            target.draw(*pComposite);
-        }
-    }
+    [[nodiscard]] sf::FloatRect getLocalBounds() const;
+
+    [[nodiscard]] sf::FloatRect getGlobalBounds() const;
+
+    [[nodiscard]] sf::Vector2f getGeometricalCenter() const;
+
+    void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
 
     void init();
 
-    void update() const;
+    void update();
 };
 
 

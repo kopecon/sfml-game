@@ -11,11 +11,14 @@ Camera::Camera() = default;
 Camera::Camera(sf::Window &window): pWindow(&window) {
     view.setCenter({0, 0});
     view.setSize(static_cast<sf::Vector2f>(window.getSize()));
-    view.zoom(0.9);
+    view.zoom(zoom);
 }
 
 void Camera::followTarget() {
     if (pTarget) { //TODO: MANAGE DELETION OF TARGET
-        view.setCenter({pTarget->position.x, view.getCenter().y});
+        view.setCenter({pTarget->position.x,
+            // view.getCenter().y
+            pTarget->position.y - view.getSize().y/2.f + pTarget->render.getGlobalBounds().size.y
+        });
     }
 }

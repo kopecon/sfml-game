@@ -19,6 +19,7 @@ public:
 
     sf::Window *pWindow{nullptr};
     sf::View view{};
+    float zoom{0.8};
     entity::Entity *pTarget{nullptr};
 
     void followTarget();

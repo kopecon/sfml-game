@@ -40,9 +40,6 @@ namespace scenery {
         top->setTexture(&topTex);
         bottom->setTexture(&bottomTex);
 
-        render.repeatToWidth(top.get());
-        render.repeatToWidth(bottom.get());
-
         bottom->move({top->getPosition().x, top->getPosition().y + top->getSize().y});
 
         const auto topCenter = top->getGeometricCenter();
@@ -53,5 +50,7 @@ namespace scenery {
         composite->setOrigin({topCenter.x, 0});
         render.addComposite(std::move(composite));
         render.setFillColor(color);
+        render.setOrigin({render.getGeometricalCenter().x, 0});
+        render.showBoundary();
     }
 }

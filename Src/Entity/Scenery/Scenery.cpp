@@ -15,44 +15,60 @@ namespace scenery {
     {}
 #pragma endregion
 
+    void Scenery::scaleToWindowWidth() {
+        const sf::Vector2f windowToRenderRatio = hd::divide(
+            world.game.video.getWindowSize(),
+            render.getGlobalBounds().size
+        );
+        render.setScale({
+            render.getScale().x * static_cast<float>(stretchFactor) * windowToRenderRatio.x,
+            render.getScale().y
+        });
+    }
+
+    void Scenery::repeatToWidth() {
+        for (const auto &pComposite : render.getComposites()) {
+            for (const auto &pShape : pComposite->shapes) {
+                if (pShape->getTexture()) {
+                    const int texWidth = static_cast<int>(pShape->getTexture()->getSize().x);
+                    const int texHeight = static_cast<int>(pShape->getTexture()->getSize().y);
+                    const int renderWidth = static_cast<int>(render.getGlobalBounds().size.x);
+                    pShape->setTextureRect(
+                        sf::IntRect({0, 0}, {std::max(stretchFactor*texWidth, renderWidth), texHeight}));
+                }
+            }
+        }
+    }
+
     void Scenery::setCamera() {
         pCamera = &game.video.camera;
     }
 
     void Scenery::loop() {
-        // FIXME: There is sometimes space between border and ground edge when looping.
-        if (pCamera == nullptr) setCamera();
+        // This could be improved, but I don't care anymore... it works well enough now.
+        if (!pCamera) setCamera();
         else {
             const auto cameraCenter = pCamera->view.getCenter();
-            const auto cameraWidth = pCamera->view.getSize().x;
+            const auto cameraWidth = pCamera->view.getSize().x / pCamera->zoom;
 
             const auto cameraRBorder = cameraCenter.x + cameraWidth / 2.f;
             const auto cameraLBorder = cameraCenter.x - cameraWidth / 2.f;
 
+            const auto renderRBorder = position.x + render.getGlobalBounds().size.x / 2.f;
+            const auto renderLBorder = position.x - render.getGlobalBounds().size.x / 2.f;
 
-            for (const auto &pComposite : render.getComposites()) {
-                for (const auto &pShape : pComposite->shapes) {
-                    const float shapeWidth = pShape->getGlobalBounds().size.x;
-                    const auto shapeRBorder = position.x + shapeWidth / 2.f;
-                    const auto shapeLBorder = position.x - shapeWidth / 2.f;
-
-                    std::cout << cameraLBorder << " " << cameraRBorder << "\n";
-                    std::cout << shapeLBorder << " " << shapeRBorder << "\n";
-                    // RIGHT
-                    if (cameraRBorder > shapeRBorder) {
-                        position = {
-                            cameraRBorder-cameraWidth/2.f,
-                            position.y};
-                    }
-                    // LEFT
-                    else if (cameraLBorder < shapeLBorder) {
-                        position = {
-                            cameraLBorder+cameraWidth/2.f,
-                            position.y};
-                    }
-                }
+            if (cameraRBorder > renderRBorder || cameraLBorder < renderLBorder) {
+                position = {
+                    cameraCenter.x,
+                    position.y};
             }
         }
+    }
+
+    void Scenery::init() {
+        Entity::init();
+        scaleToWindowWidth();
+        repeatToWidth();
     }
 
     void Scenery::update() {

@@ -16,14 +16,20 @@ namespace scenery {
 #pragma region constructors
         explicit Scenery(World &world, entityID ID);
         explicit Scenery(World &world, entityID ID, std::string name);
+
+        void scaleToWindowWidth();
 #pragma endregion
 
-        float stretchFactor = 3.f;
+        const int stretchFactor = 3;
         const Camera *pCamera{};   //TODO: Make protected
+
+        void repeatToWidth();
 
         void setCamera();
 
         void loop();
+
+        void init() override;
 
         void update() override;
     };

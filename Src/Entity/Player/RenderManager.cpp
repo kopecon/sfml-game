@@ -13,7 +13,7 @@ namespace player {
         const auto &texture = player.game.textures.player;
 
         auto shape = std::make_unique<sf::RectangleShape>();
-        shape->setSize(player.getAbsoluteSize());
+        shape->setSize(player.getCharacterSize());
         const auto shapeCenter = shape->getGeometricCenter();
 
         shape->setTexture(&texture);
@@ -27,8 +27,9 @@ namespace player {
         auto composite = std::make_unique<Composite>();
         composite->addShape(std::move(shape));
         composite->addShape(std::move(test_shape));
-        composite->setOrigin(shapeCenter);
 
         player.render.addComposite(std::move(composite));
+        player.render.setOrigin(player.render.getGeometricalCenter());
+        player.render.showBoundary(sf::Color::Blue);
     }
 } // player

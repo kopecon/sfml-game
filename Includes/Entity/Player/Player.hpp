@@ -47,10 +47,10 @@ namespace player {
         AnimationManager animationManager;
         StateManager stateManager;
         // GETTERS
-        [[nodiscard]] sf::Vector2f getAbsoluteSize() const;
-        [[nodiscard]] sf::Vector2f getRelativeSize() const;
+        [[nodiscard]] sf::Vector2f getCharacterSize() const;
+        [[nodiscard]] sf::Vector2f getRenderSize() const;
         [[nodiscard]] const State<StateSet>& getState() const;
-        [[nodiscard]] sf::Shape& getShape() const;
+        [[nodiscard]] sf::Shape& getShape();
         // UPDATE
         void update() override;
 
