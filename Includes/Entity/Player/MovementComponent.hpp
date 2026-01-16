@@ -32,7 +32,7 @@ namespace player {
         void jump() const;
         sf::Vector2f getSpeed();
         // UPDATE
-        void updateSpeed();
+        void update();
     };
 }
 

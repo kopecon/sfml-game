@@ -26,14 +26,15 @@ namespace scenery {
         });
     }
 
-    void Scenery::repeatToWidth() {
-        for (const auto &pComposite : render.getComposites()) {
-            for (const auto &pShape : pComposite->shapes) {
-                if (pShape->getTexture()) {
-                    const int texWidth = static_cast<int>(pShape->getTexture()->getSize().x);
-                    const int texHeight = static_cast<int>(pShape->getTexture()->getSize().y);
+    void Scenery::repeatToWidth() const {
+        // FIXME: not properly recursive yet
+        for (const auto &pComposite : render.composites) {
+            for (const auto &pSubComposite : pComposite->composites) {
+                if (const auto pSprite = pSubComposite->getSprite()) {
+                    const int texWidth = static_cast<int>(pSprite->getTexture().getSize().x);
+                    const int texHeight = static_cast<int>(pSprite->getTexture().getSize().y);
                     const int renderWidth = static_cast<int>(render.getGlobalBounds().size.x);
-                    pShape->setTextureRect(
+                    pSprite->setTextureRect(
                         sf::IntRect({0, 0}, {std::max(stretchFactor*texWidth, renderWidth), texHeight}));
                 }
             }
@@ -67,12 +68,12 @@ namespace scenery {
 
     void Scenery::init() {
         Entity::init();
-        scaleToWindowWidth();
-        repeatToWidth();
+        // scaleToWindowWidth();
+        // repeatToWidth();
     }
 
     void Scenery::update() {
-        loop();
+        // loop();
         render.update();
     }
 }

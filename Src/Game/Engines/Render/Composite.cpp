@@ -7,22 +7,58 @@
 #include "SFML/Graphics/RenderTarget.hpp"
 #include <iostream>
 
+#include "SFML/Graphics/CircleShape.hpp"
 #include "SFML/Graphics/RectangleShape.hpp"
 
+#pragma region constructors
+Composite::Composite() = default;
 
-void Composite::addShape(std::unique_ptr<sf::Shape> shape) {
-    shape->setOrigin({0.f, 0.f});
-    shapes.push_back(std::move(shape));
+Composite::Composite(std::string name):
+    name(std::move(name))
+    {}
+
+Composite::Composite(sf::Texture &texture):
+    sprite(std::make_unique<sf::Sprite>(texture))
+    {}
+
+Composite::Composite(std::unique_ptr<sf::Sprite> sprite):
+    sprite(std::move(sprite))
+    {}
+
+Composite::Composite(std::string name, sf::Texture &texture):
+    name(std::move(name)),
+    sprite(std::make_unique<sf::Sprite>(texture))
+    {}
+
+Composite::Composite(std::string name, std::unique_ptr<sf::Sprite> sprite):
+    name(std::move(name)),
+    sprite(std::move(sprite))
+    {}
+#pragma endregion
+
+void Composite::add(std::unique_ptr<Composite> composite) {
+    composite->setOrigin({0.f, 0.f});
+    composites.push_back(std::move(composite));
 }
 
-void Composite::setFillColor(const sf::Color &color) const {
-    for (const auto &pShape : shapes) {
-        pShape->setFillColor(color);
+void Composite::add(std::unique_ptr<sf::Sprite> newSprite) {
+    newSprite->setOrigin({0.f, 0.f});
+    auto composite = std::make_unique<Composite>("new", std::move(newSprite));
+    add(std::move(composite));
+}
+
+void Composite::setSprite(std::unique_ptr<sf::Sprite> newSprite) {
+    sprite = std::move(newSprite);
+}
+
+void Composite::setColor(const sf::Color &color) const {
+    for (const auto &pSprite : composites) {
+        pSprite->setColor(color);
     }
 }
 
 void Composite::showBoundary(const sf::Color color) {
-    auto bounds = getGlobalBounds();
+    auto bounds = getLocalBounds();
     auto outline = std::make_unique<sf::RectangleShape>(bounds.size);
     outline->setPosition(bounds.position);
     outline->setFillColor(sf::Color::Transparent);
@@ -32,16 +68,27 @@ void Composite::showBoundary(const sf::Color color) {
 }
 
 sf::FloatRect Composite::getLocalBounds() const {
+
     sf::Vector2f minPosition{};
     sf::Vector2f maxSize{};
-    for (const auto &pShape : shapes) {
-        sf::FloatRect bounds = pShape->getGlobalBounds();
+
+    if (sprite) {
+        const auto mainSpriteBounds = sprite->getGlobalBounds();
+
+        minPosition = mainSpriteBounds.position;
+        maxSize = mainSpriteBounds.size;
+    }
+
+    // SCAN COMPOSITES RECURSIVELY
+    for (const auto &pComposite : composites) {
+        sf::FloatRect bounds = pComposite->getGlobalBounds();
         minPosition.x = std::min(minPosition.x, bounds.position.x);
         minPosition.y = std::min(minPosition.y, bounds.position.y);
         maxSize.x = std::max(maxSize.x, bounds.position.x + bounds.size.x);
         maxSize.y = std::max(maxSize.y, bounds.position.y + bounds.size.y);
     }
-    return {minPosition, -minPosition + maxSize};
+    const auto result = sf::FloatRect(minPosition, maxSize);
+    return result;
 }
 
 sf::FloatRect Composite::getGlobalBounds() const {
@@ -58,38 +105,26 @@ sf::Vector2f Composite::getCenter() const {
     return {x, y};
 }
 
-sf::Shape& Composite::getShape(const sf::Shape &shape) {
-    const auto it = std::ranges::find_if(
-        shapes,
-        [&shape](const std::unique_ptr<sf::Shape>& obj) {
-            return obj.get() == &shape;
-        });
-    if (it == shapes.end()) std::cout << "Shape not found.\n";
-    return *it->get();
-}
-
-void Composite::enlarge(const float &factor) const {
-    for (const auto &pShape : shapes) {
-        pShape->setScale(scalar::multiply(pShape->getScale(), factor));
-    }
-}
-
-void Composite::enlarge(const sf::Vector2f &factor) {
-    setScale(hd::multiply(this->getScale(), factor));
+sf::Sprite* Composite::getSprite() const {
+    return sprite.get();
 }
 
 void Composite::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     states.transform *= getTransform(); // getTransform() is defined by sf::Transformable
-    if (boundary) target.draw(*boundary, states);
-    for (const auto &pShape : shapes) {
-        // apply the entity's transform -- combine it with the one that was passed by the caller
 
+    // DRAW MAIN SPRITE
+    if (sprite) {
         // apply the texture
-        states.texture = pShape->getTexture();
+        states.texture = &sprite->getTexture();
+        target.draw(*sprite, states);
+    }
+    // DRAW OTHER COMPOSITES
+    for (const auto &pComposite : composites) {
+        pComposite->draw(target, states);
+    }
 
-        // you may also override states.shader or states.blendMode if you want
-
-        // draw the vertex array
-        target.draw(*pShape, states);
+    // DRAW BOUNDARY
+    if (boundary) {
+        target.draw(*boundary, states);
     }
 }

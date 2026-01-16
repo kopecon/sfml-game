@@ -34,23 +34,18 @@ namespace scenery {
         topTex.setRepeated(true);
         bottomTex.setRepeated(true);
 
-        auto top = std::make_unique<sf::RectangleShape>(sf::Vector2f(topTex.getSize()));
-        auto bottom = std::make_unique<sf::RectangleShape>(sf::Vector2f(bottomTex.getSize()));
+        auto top = std::make_unique<sf::Sprite>(topTex);
+        auto bottom = std::make_unique<sf::Sprite>(bottomTex);
 
-        top->setTexture(&topTex);
-        bottom->setTexture(&bottomTex);
-
-        bottom->move({top->getPosition().x, top->getPosition().y + top->getSize().y});
-
-        const auto topCenter = top->getGeometricCenter();
+        bottom->move({top->getPosition().x, top->getPosition().y + top->getGlobalBounds().size.y});
 
         auto composite = std::make_unique<Composite>();
-        composite->addShape(std::move(top));
-        composite->addShape(std::move(bottom));
-        composite->setOrigin({topCenter.x, 0});
-        render.addComposite(std::move(composite));
-        render.setFillColor(color);
+        composite->add(std::move(top));
+        composite->add(std::move(bottom));
+
+        render.add(std::move(composite));
+        render.setColor(color);
         render.setOrigin({render.getCenter().x, 0});
-        // render.showBoundary();
+        render.showBoundary();
     }
 }

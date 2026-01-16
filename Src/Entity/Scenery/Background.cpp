@@ -29,16 +29,11 @@ namespace scenery {
 
     void Background::buildRender() {
         auto &texture = game.textures.background;
-
         texture.setRepeated(true);
 
-        auto shape = std::make_unique<sf::RectangleShape>(sf::Vector2f(texture.getSize()));
+        auto sprite = std::make_unique<sf::Sprite>(texture);
 
-        shape->setTexture(&texture);
-
-        auto composite = std::make_unique<Composite>();
-        composite->addShape(std::move(shape));
-        render.addComposite(std::move(composite));
+        render.setSprite(std::move(sprite));
         render.setOrigin(render.getCenter());
     }
 }

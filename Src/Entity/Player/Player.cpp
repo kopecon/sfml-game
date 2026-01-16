@@ -1,5 +1,4 @@
 #include "../../../Includes/Entity/Player/Player.hpp"
-#include "../../../Includes/Game/Game.hpp"
 #include "../../../Includes/World/World.hpp"
 
 
@@ -52,6 +51,10 @@ namespace player {
     }
     #pragma endregion
 
+    std::string Player::getClassName() const {
+        return "Player";
+    }
+
     sf::Vector2f Player::getCharacterSize() const {
         return {height, width};
     }
@@ -64,20 +67,17 @@ namespace player {
         return *stateManager.stateMachine.pCurrentState;
     }
 
-    sf::Shape & Player::getShape() {
+    sf::Sprite & Player::getSprite() {
         //TODO: implement propper shape accessing
-        return *render.getComposites().front()->shapes.front();
+        return *render.getSprite();
     }
 
     void Player::update() {
         input.update();
+        // physics.verbose = true;
         physics.update();
         stateManager.update();
         animationManager.update();
         render.update();
-    }
-
-    std::string Player::getClassName() const {
-        return "Player";
     }
 }

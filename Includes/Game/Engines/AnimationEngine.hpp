@@ -66,7 +66,7 @@ template<typename States>
 class AnimationEngine {
 public:
 #pragma region constructors
-    AnimationEngine(const AnimationSheet &animationSheet, sf::Shape &target) :
+    AnimationEngine(const AnimationSheet &animationSheet, sf::Sprite &target) :
         animationSheet(animationSheet),
         target(target)
         {}
@@ -76,7 +76,7 @@ public:
     AnimationEntry<States> *pPreviousAnimation{nullptr};
     AnimationEntry<States> *pCurrentAnimation{nullptr};
     std::unordered_map<States, AnimationEntry<States>> animationSet;
-    sf::Shape &target;
+    sf::Sprite &target;
 
     [[nodiscard]] sf::IntRect currentFrame() const {
         auto frameCoord = sf::Vector2i(

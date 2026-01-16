@@ -41,11 +41,11 @@ void player::MovementComponent::jump() const {
 }
 
 sf::Vector2f player::MovementComponent::getSpeed() {
-    updateSpeed();
+    update();
     return _speed;
 }
 
-void player::MovementComponent::updateSpeed() {
+void player::MovementComponent::update() {
     if (player.getState().ID == RUNNING
         || player.getState().ID == JUMPING
         && player.stateManager.stateMachine.pPreviousState->ID == RUNNING)

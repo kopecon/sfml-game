@@ -47,14 +47,14 @@ namespace player {
         AnimationManager animationManager;
         StateManager stateManager;
         // GETTERS
+        [[nodiscard]] std::string getClassName() const override;
         [[nodiscard]] sf::Vector2f getCharacterSize() const;
         [[nodiscard]] sf::Vector2f getRenderSize() const;
         [[nodiscard]] const State<StateSet>& getState() const;
-        [[nodiscard]] sf::Shape& getShape();
+        [[nodiscard]] sf::Sprite& getSprite();
+
         // UPDATE
         void update() override;
-
-        [[nodiscard]] std::string getClassName() const override;
     };
 }
 

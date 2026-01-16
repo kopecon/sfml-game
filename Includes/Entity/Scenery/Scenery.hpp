@@ -23,7 +23,7 @@ namespace scenery {
         const int stretchFactor = 3;
         const Camera *pCamera{};   //TODO: Make protected
 
-        void repeatToWidth();
+        void repeatToWidth() const;
 
         void setCamera();
 

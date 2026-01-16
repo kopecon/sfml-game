@@ -16,9 +16,11 @@ Camera::Camera(sf::Window &window): pWindow(&window) {
 
 void Camera::followTarget() {
     if (pTarget) { //TODO: MANAGE DELETION OF TARGET
-        view.setCenter({pTarget->position.x,
+        view.setCenter({
+            pTarget->position.x,
+            pTarget->position.y,
             // view.getCenter().y
-            pTarget->position.y - view.getSize().y/2.f + pTarget->render.getGlobalBounds().size.y
+            // pTarget->position.y - view.getSize().y/2.f + pTarget->render.getGlobalBounds().size.y
         });
     }
 }
