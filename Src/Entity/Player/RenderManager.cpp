@@ -16,8 +16,11 @@ namespace player {
         sprite->setTextureRect(sf::IntRect({0, 0}, {32, 32})); //32 is defined by the texture used
 
         player.render.setSprite(std::move(sprite));
-        player.render.setScale(hd::multiply(player.render.getScale(), sf::Vector2f{10.f, 30.f}));
+        player.render.setScale(hd::multiply(
+            player.render.getScale(),
+            hd::divide(player.getCharacterSize(), player.render.getGlobalBounds().size)
+            ));
         player.render.setOrigin(player.render.getCenter());
-        player.render.showBoundary(sf::Color::Blue);
+        // player.render.showBoundary(sf::Color::Blue);
     }
 } // player
