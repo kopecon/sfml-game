@@ -4,14 +4,13 @@
 
 #ifndef BONK_GAME_BACKGROUND_HPP
 #define BONK_GAME_BACKGROUND_HPP
-#include <iostream>
 #include <SFML/Graphics.hpp>
 
-#include "Scenery.hpp"
+#include "../Entity.hpp"
 
 
 namespace scenery {
-    class Background final : public Scenery {
+    class Background final : public entity::Entity {
     public:
 
 #pragma region constructors
@@ -22,6 +21,7 @@ namespace scenery {
 
         void buildRender();
 
+        void update() override;
     };
 }
 

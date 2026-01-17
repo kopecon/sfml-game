@@ -52,7 +52,7 @@ void Composite::setSprite(std::unique_ptr<sf::Sprite> newSprite) {
 }
 
 void Composite::setColor(const sf::Color &color) const {
-    for (const auto &pSprite : composites) {
+    for (const auto &pSprite : getAllSprites()) {
         pSprite->setColor(color);
     }
 }
@@ -107,6 +107,18 @@ sf::Vector2f Composite::getCenter() const {
 
 sf::Sprite* Composite::getSprite() const {
     return sprite.get();
+}
+
+std::vector<sf::Sprite*> Composite::getAllSprites() const {
+    std::vector<sf::Sprite*> sprites{};
+    if (sprite) {
+        sprites.push_back(sprite.get());
+    }
+    for (const auto &pComposite : composites) {
+        std::vector<sf::Sprite*> subSprites = pComposite->getAllSprites();
+        sprites.insert(sprites.begin(), subSprites.begin(), subSprites.end());
+    }
+    return sprites;
 }
 
 void Composite::draw(sf::RenderTarget &target, sf::RenderStates states) const {

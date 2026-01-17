@@ -78,6 +78,5 @@ namespace player {
         physics.update();
         stateManager.update();
         animationManager.update();
-        render.update();
     }
 }

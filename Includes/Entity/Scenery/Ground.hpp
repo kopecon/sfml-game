@@ -5,11 +5,11 @@
 #ifndef BONK_GAME_GROUND_HPP
 #define BONK_GAME_GROUND_HPP
 
-#include "Scenery.hpp"
+#include "../Entity.hpp"
 
 
 namespace scenery {
-    class Ground final : public Scenery {
+    class Ground final : public entity::Entity {
     public:
 
 #pragma region constructors
@@ -21,6 +21,8 @@ namespace scenery {
         sf::Color color = sf::Color({40,30,100});
 
         void buildRender();
+
+        void update() override;
     };
 }
 

@@ -70,6 +70,7 @@ void VideoComponent::update(World *pWorld) {
 
     if (pWorld) {
         for (auto const &entity : *pWorld->getEntities() | std::views::values) {
+            entity->render.update();
             window.draw(entity->render);
         }
     }

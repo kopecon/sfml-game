@@ -59,9 +59,7 @@ namespace entity {
 
     void Entity::init() {
         setName(_generateName());
-        std::cout << "Base Init: " << name << " Started..." << "\n";
-        render.init();
-        std::cout << "Base Init: " << name << " Finished." << "\n\n";
+        std::cout << "Base Init: " << name << "\n";
     }
 
     std::string Entity::_generateName() const {

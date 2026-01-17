@@ -13,6 +13,7 @@ namespace player {
         auto &texture = player.game.textures.player;
 
         auto sprite = std::make_unique<sf::Sprite>(texture);
+
         sprite->setTextureRect(sf::IntRect({0, 0}, {32, 32})); //32 is defined by the texture used
 
         player.render.setSprite(std::move(sprite));

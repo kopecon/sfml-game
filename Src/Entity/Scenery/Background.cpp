@@ -11,13 +11,13 @@ namespace scenery {
 
 #pragma region constructors
     Background::Background(World &world, const entityID ID) :
-        Scenery(world, ID)
+        Entity(world, ID)
         {
             buildRender();
         }
 
     Background::Background(World &world, const entityID ID, std::string name) :
-        Scenery(world, ID, std::move(name))
+        Entity(world, ID, std::move(name))
         {
             buildRender();
         }
@@ -32,8 +32,26 @@ namespace scenery {
         texture.setRepeated(true);
 
         auto sprite = std::make_unique<sf::Sprite>(texture);
+        const auto spriteSize = sprite->getGlobalBounds().size;
 
+        // Fit sprite to window
+        sprite->setScale(
+            hd::divide(game.video.getWindowSize(), spriteSize)
+        );
+        // Make 3 "copies"
+        sprite->setTextureRect(
+            sf::IntRect({0, 0},
+                sf::Vector2i(
+                    static_cast<int>(spriteSize.x)*3,
+                    static_cast<int>(spriteSize.y)
+                )
+            )
+        );
         render.setSprite(std::move(sprite));
         render.setOrigin(render.getCenter());
+    }
+
+    void Background::update() {
+        render.loop();
     }
 }

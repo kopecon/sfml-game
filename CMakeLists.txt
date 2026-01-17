@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.28)
 project(bonk_game LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
@@ -54,8 +54,6 @@ add_executable("${CMAKE_PROJECT_NAME}" Src/main.cpp
         Includes/Game/VideoComponent.hpp
         Src/Game/AudioComponent.cpp
         Includes/Game/AudioComponent.hpp
-        Src/Entity/Scenery/Scenery.cpp
-        Includes/Entity/Scenery/Scenery.hpp
         Src/Game/TimeComponent.cpp
         Includes/Game/TimeComponent.hpp
         Includes/Game/TextureComponent.hpp
@@ -125,6 +123,6 @@ if (WIN32)
     target_link_libraries("${CMAKE_PROJECT_NAME}" PRIVATE SFML::Main)
 endif ()
 
-target_compile_features("${CMAKE_PROJECT_NAME}" PRIVATE cxx_std_23)
+#target_compile_features("${CMAKE_PROJECT_NAME}" PRIVATE cxx_std_23)
 target_link_libraries("${CMAKE_PROJECT_NAME}" PRIVATE SFML::Graphics)
 target_link_libraries("${CMAKE_PROJECT_NAME}" PRIVATE SFML::Audio)

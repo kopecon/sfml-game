@@ -15,11 +15,10 @@ namespace entity {
 class Camera {
 public:
     Camera();
-    explicit Camera(sf::Window &window);
+    explicit Camera(const sf::Window &window);
 
-    sf::Window *pWindow{nullptr};
     sf::View view{};
-    float zoom{0.8};
+    float zoom{0.8f};
     entity::Entity *pTarget{nullptr};
 
     void followTarget();

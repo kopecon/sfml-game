@@ -19,7 +19,7 @@ protected:
 public:
     explicit Render(entity::Entity &entity);
 
-    void init();
+    void loop() const;
 
     void update();
 };
