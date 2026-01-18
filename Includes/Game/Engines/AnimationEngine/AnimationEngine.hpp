@@ -29,7 +29,7 @@ public:
     Animation<AnimationEnum> *pCurrentAnimation{nullptr};
     std::unordered_map<AnimationEnum, Animation<AnimationEnum>> animationSet;
 
-    [[nodiscard]] sf::IntRect currentFrame() const {
+    [[nodiscard]] sf::IntRect getCurrentFrame() const {
         auto frameCoord = sf::Vector2i(
             pCurrentAnimation->frameIndex.x*animationSheet.frameSize.x,
             pCurrentAnimation->frameIndex.y*animationSheet.frameSize.y
@@ -48,7 +48,7 @@ public:
             pCurrentAnimation = pNewAnimation;
             // Reset the animation
             pCurrentAnimation->frameIndex.x = 0;
-            pCurrentAnimation->state = Animation<AnimationEnum>::State::READY;
+            pCurrentAnimation->state = Animation<AnimationEnum>::Status::READY;
         }
     }
 
@@ -61,41 +61,21 @@ public:
     }
 
     void onEnd(const AnimationEnum &animationID, const std::function<void()> &function) {
-        if (animationSet[animationID].state == Animation<AnimationEnum>::State::END) {
+        if (animationSet[animationID].state == Animation<AnimationEnum>::Status::END) {
             function();
         }
     }
 
     bool completed(const AnimationEnum &animationID) {
-        if (animationSet[animationID].state == Animation<AnimationEnum>::State::COMPLETED) {
+        if (animationSet[animationID].state == Animation<AnimationEnum>::Status::COMPLETED) {
             return true;
         }
         return false;
     }
 
     void update(const float &dt) const {
-        if (pCurrentAnimation->state == Animation<AnimationEnum>::State::END) {
-            pCurrentAnimation->state = Animation<AnimationEnum>::State::COMPLETED;
-            return;
-        }
-        target.setTextureRect(currentFrame());
-        pCurrentAnimation->state = Animation<AnimationEnum>::State::PLAYING;
-        pCurrentAnimation->timer += dt;
-        // When it is the time to move to the next frame
-        if (pCurrentAnimation->timer >= pCurrentAnimation->spf) {
-            pCurrentAnimation->frameIndex.x += 1;
-            pCurrentAnimation->timer = 0.f;  // Reset timer
-        }
-        // Evaluate the end of animationManager
-        if (pCurrentAnimation->frameIndex.x+1 > pCurrentAnimation->framesPerRow) {
-            // LOOP
-            if (pCurrentAnimation->looping) pCurrentAnimation->frameIndex.x = 0;
-            // DONT LOOP
-            else {
-                pCurrentAnimation->state = Animation<AnimationEnum>::State::END;
-                pCurrentAnimation->frameIndex.x = pCurrentAnimation->framesPerRow-1;
-            }
-        }
+        pCurrentAnimation->update(dt);
+        target.setTextureRect(getCurrentFrame());
     }
 };
 #endif //BONK_GAME_ANIMATION_ENGINE_HPP
