@@ -11,12 +11,12 @@
 template<typename AnimationEnum>
 requires (std::is_enum_v<AnimationEnum>)
 class Animation {
-    AnimationEnum ID{0};  // Represents row index starting from 0;
-    unsigned frame = 0;
-    float timer{0.0f};  // tracks elapsed time
-    unsigned fpr{};  // frames per row
-    float    fps{};  // frames per second
-    float    spf{};  // seconds per frame
+    AnimationEnum ID_{0};  // Represents row index starting from 0;
+    unsigned frame_ = 0;
+    float timer_{0.0f};  // tracks elapsed time
+    unsigned fpr_{};  // frames per row
+    float    fps_{};  // frames per second  (by default is equal to fpr: "it takes one second to play every frame")
+    float    spf_{};  // seconds per frame
 
 public:
     enum class Status {
@@ -26,27 +26,27 @@ public:
 #pragma region constructors
     Animation() = default;
 
-    Animation(const AnimationEnum &id, const int &framesPerRow, const bool &looping=true) :
-    ID(id),
-    fpr(framesPerRow),
-    fps(static_cast<float>(framesPerRow)),
-    spf(1.f/fps),
+    Animation(const AnimationEnum &id, const int &fpr, const bool &looping=true) :
+    ID_(id),
+    fpr_(fpr),
+    fps_(static_cast<float>(fpr)),
+    spf_(1.f/fps_),
     looping(looping)
     {}
 #pragma endregion
 
 #pragma region operators
     bool operator!=(const Animation &other) const {
-        return this->ID != other.ID;
+        return this->ID_ != other.ID_;
     };
 
     bool operator==(const Animation &other) const {
-        return this->ID == other.ID;
+        return this->ID_ == other.ID_;
     };
 
     struct Hash {
         size_t operator()(const Animation& anim) const noexcept {
-            return std::hash<AnimationEnum>()(anim.ID);
+            return std::hash<AnimationEnum>()(anim.ID_);
         }
     };
 #pragma endregion
@@ -57,34 +57,38 @@ public:
     Status status{Status::READY};
 
     void setFPS(const float &value) {
-        fps = value;
-        spf = 1 / fps;
+        fps_ = value;
+        spf_ = 1 / fps_;
     }
 
     void setSPF(const float &value) {
-        spf = value;
-        fps = 1 / spf;
+        spf_ = value;
+        fps_ = 1 / spf_;
     }
 
     [[nodiscard]] AnimationEnum getID() const {
-        return ID;
+        return ID_;
+    }
+
+    [[nodiscard]] unsigned getFPR() const {
+        return fpr_;
     }
 
     [[nodiscard]] float getFPS() const {
-        return fps;
+        return fps_;
     }
 
     [[nodiscard]] float getSPF() const {
-        return spf;
+        return spf_;
     }
 
     [[nodiscard]] sf::Vector2u getFrameIndex() {
-        return {frame, static_cast<unsigned>(ID)};
+        return {frame_, static_cast<unsigned>(ID_)};
     }
 
     void reset() {
         status = Status::READY;
-        frame = 0;
+        frame_ = 0;
     }
 
     void update(const float &dt) {
@@ -93,20 +97,20 @@ public:
             return;
         }
         status = Status::PLAYING;
-        timer += dt;
+        timer_ += dt;
         // When it is the time to move to the next frame
-        if (timer >= spf) {
-            frame += 1;
-            timer = 0.f;  // Reset timer
+        if (timer_ >= spf_) {
+            frame_ += 1;
+            timer_ = 0.f;  // Reset timer
         }
         // Evaluate the end of animationManager
-        if (frame+1 > fpr) {
+        if (frame_+1 > fpr_) {
             // LOOP
-            if (looping) frame = 0;
+            if (looping) frame_ = 0;
             // DONT LOOP
             else {
                 status = Status::END;
-                frame = fpr-1;
+                frame_ = fpr_-1;
             }
         }
     };

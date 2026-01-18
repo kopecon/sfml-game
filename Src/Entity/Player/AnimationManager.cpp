@@ -79,14 +79,14 @@ void player::AnimationManager::updateFPS() const {
             const float speedFactor = std::fabs(
             player.movement.getSpeed().x / player.velocity.x
             );
-            currentAnim.setSPF(currentAnim.getFPS() * speedFactor);
+            currentAnim.setSPF(1.f/currentAnim.getFPR() * speedFactor);
             break;
         }
         case RUNNING:{
             const float speedFactor = std::fabs(
             player.movement.getSpeed().x / player.velocity.x
             );
-            currentAnim.setSPF(currentAnim.getFPS() * speedFactor * 0.7f);
+            currentAnim.setSPF(1.f/currentAnim.getFPR() * speedFactor * 0.7f);
             break;
         }
         case CROUCHING:{
@@ -96,7 +96,7 @@ void player::AnimationManager::updateFPS() const {
             const float speedFactor = std::fabs(
             player.movement.getSpeed().y / player.velocity.y
             );
-            currentAnim.setSPF(currentAnim.getFPS() * speedFactor * 0.5f);
+            currentAnim.setSPF(1.f/currentAnim.getFPR() * speedFactor * 0.5f);
             break;
         }
         case DISAPPEARING:{
