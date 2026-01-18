@@ -74,18 +74,16 @@ sf::FloatRect Composite::getLocalBounds() const {
 
     if (sprite) {
         const auto mainSpriteBounds = sprite->getGlobalBounds();
-
         minPosition = mainSpriteBounds.position;
         maxSize = mainSpriteBounds.size;
     }
-
-    // SCAN COMPOSITES RECURSIVELY
-    for (const auto &pComposite : composites) {
-        sf::FloatRect bounds = pComposite->getGlobalBounds();
-        minPosition.x = std::min(minPosition.x, bounds.position.x);
-        minPosition.y = std::min(minPosition.y, bounds.position.y);
-        maxSize.x = std::max(maxSize.x, bounds.position.x + bounds.size.x);
-        maxSize.y = std::max(maxSize.y, bounds.position.y + bounds.size.y);
+    // SCAN COMPOSITES
+    for (const auto &pSprite : getAllSprites()) {
+        sf::FloatRect thisSprite = pSprite->getGlobalBounds();
+        minPosition.x = std::min(minPosition.x, thisSprite.position.x);
+        minPosition.y = std::min(minPosition.y, thisSprite.position.y);
+        maxSize.x = std::max(maxSize.x, std::abs(minPosition.x - thisSprite.position.x) + thisSprite.size.x);
+        maxSize.y = std::max(maxSize.y, std::abs(minPosition.y - thisSprite.position.y) + thisSprite.size.y);
     }
     const auto result = sf::FloatRect(minPosition, maxSize);
     return result;
