@@ -51,7 +51,7 @@ namespace player {
         [[nodiscard]] sf::Vector2f getCharacterSize() const;
         [[nodiscard]] sf::Vector2f getRenderSize() const;
         [[nodiscard]] const State<StateSet>& getState() const;
-        [[nodiscard]] sf::Sprite& getSprite();
+        [[nodiscard]] sf::Sprite& getSprite() const;
 
         // UPDATE
         void update() override;

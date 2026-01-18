@@ -1,4 +1,3 @@
-#include <iostream>
 #include <SFML/Graphics.hpp>
 #include "../Includes/Game/Game.hpp"
 #include "../Includes/World/World.hpp"

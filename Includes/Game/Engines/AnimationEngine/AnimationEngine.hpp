@@ -5,7 +5,6 @@
 #ifndef BONK_GAME_ANIMATION_ENGINE_HPP
 #define BONK_GAME_ANIMATION_ENGINE_HPP
 
-#include <functional>
 #include <SFML/Graphics.hpp>
 #include <unordered_map>
 #include "Animation.hpp"
