@@ -90,11 +90,9 @@ sf::FloatRect Composite::getLocalBounds() const {
 }
 
 sf::FloatRect Composite::getGlobalBounds() const {
-    const auto localBounds = getLocalBounds();
-    const auto position = hd::multiply(localBounds.position, getScale());
-    const auto size = hd::multiply(localBounds.size, hd::abs(getScale()));
-    return {position, size};
+    return getTransform().transformRect(getLocalBounds());
 }
+
 
 sf::Vector2f Composite::getCenter() const {
     const auto localBounds = getLocalBounds();
