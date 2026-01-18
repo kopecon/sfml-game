@@ -16,10 +16,7 @@ void player::CombatComponent::attack() const {
     auto pPlayers = player.world.getEntities<Player>();
     std::erase(pPlayers, &player);
     for (Player *opponent : pPlayers) {
-        if (hd::abs(opponent->position - player.position).x <= attackRange &&
-            hd::abs(opponent->position - player.position).y <= attackRange) {
-            player.animationManager.engine.onEnd(ATTACKING, [&opponent, this]{opponent->combat.takeDamage(player.attackDamage);});
-            }
+        // TODO: Implement
     }
 }
 
@@ -28,5 +25,5 @@ void player::CombatComponent::takeDamage(const float &damage) const {
 }
 
 void player::CombatComponent::die() const {
-    player.animationManager.engine.onEnd(DYING, [this]{player.removalFlag=true;});
+    // TODO: Implement
 }

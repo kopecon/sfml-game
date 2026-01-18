@@ -26,7 +26,7 @@ public:
     sf::Sprite &target;
     AnimationSheet animationSheet;
     Animation<AnimationEnum> *pCurrentAnimation{nullptr};
-    std::unordered_map<AnimationEnum, Animation<AnimationEnum>> animationSet;
+    std::unordered_map<AnimationEnum, std::unique_ptr<Animation<AnimationEnum>>> animationSet;
 
     [[nodiscard]] sf::IntRect getCurrentFrame() const {
         auto frameCoord = sf::Vector2i(
@@ -37,7 +37,7 @@ public:
     }
 
     void set(const AnimationEnum &animationID) {
-        auto *pNewAnimation = &animationSet[animationID];
+        auto *pNewAnimation = animationSet[animationID].get();
         if (pCurrentAnimation == nullptr) {
             pCurrentAnimation = pNewAnimation;
         }
@@ -49,25 +49,12 @@ public:
         }
     }
 
-    void add(const Animation<AnimationEnum> &animation) {
-        animationSet.emplace(animation.getID(), animation);
-
+    void add(std::unique_ptr<Animation<AnimationEnum>> animation) {
+        AnimationEnum animID = animation->getID();
+        animationSet.emplace(animID, std::move(animation));
         if (pCurrentAnimation == nullptr) {
-            set(animation.getID());
+            set(animID);
         }
-    }
-
-    void onEnd(const AnimationEnum &animationID, const std::function<void()> &function) {
-        if (animationSet[animationID].status == Animation<AnimationEnum>::Status::END) {
-            function();
-        }
-    }
-
-    bool completed(const AnimationEnum &animationID) {
-        if (animationSet[animationID].status == Animation<AnimationEnum>::Status::COMPLETED) {
-            return true;
-        }
-        return false;
     }
 
     void update(const float &dt) const {
