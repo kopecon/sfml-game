@@ -63,8 +63,8 @@ void player::AnimationManager::selectAnimation() {
 
 void player::AnimationManager::updateFPS() const {
     using enum StateSet::ID;
-    const auto currentAnim = engine.pCurrentAnimation;
-    switch (currentAnim->ID) {
+    auto &currentAnim = *engine.pCurrentAnimation;
+    switch (currentAnim.getID()) {
         case NONE: {
             break;
         }
@@ -76,27 +76,27 @@ void player::AnimationManager::updateFPS() const {
         }
 
         case WALKING:{
-            const float seedFactor = std::fabs(
+            const float speedFactor = std::fabs(
             player.movement.getSpeed().x / player.velocity.x
             );
-            currentAnim->spf = 1.f/currentAnim->fps * seedFactor;
+            currentAnim.setSPF(currentAnim.getFPS() * speedFactor);
             break;
         }
         case RUNNING:{
-            const float seedFactor = std::fabs(
+            const float speedFactor = std::fabs(
             player.movement.getSpeed().x / player.velocity.x
             );
-            currentAnim->spf = 1.f/currentAnim->fps * seedFactor * 0.7f;
+            currentAnim.setSPF(currentAnim.getFPS() * speedFactor * 0.7f);
             break;
         }
         case CROUCHING:{
             break;
         }
         case JUMPING:{
-            const float seedFactor = std::fabs(
+            const float speedFactor = std::fabs(
             player.movement.getSpeed().y / player.velocity.y
             );
-            currentAnim->spf = 1.f/currentAnim->fps * seedFactor * 0.5f;
+            currentAnim.setSPF(currentAnim.getFPS() * speedFactor * 0.5f);
             break;
         }
         case DISAPPEARING:{

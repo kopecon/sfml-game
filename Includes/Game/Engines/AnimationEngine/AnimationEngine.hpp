@@ -25,49 +25,46 @@ public:
 
     sf::Sprite &target;
     AnimationSheet animationSheet;
-    Animation<AnimationEnum> *pPreviousAnimation{nullptr};
     Animation<AnimationEnum> *pCurrentAnimation{nullptr};
     std::unordered_map<AnimationEnum, Animation<AnimationEnum>> animationSet;
 
     [[nodiscard]] sf::IntRect getCurrentFrame() const {
         auto frameCoord = sf::Vector2i(
-            pCurrentAnimation->frameIndex.x*animationSheet.frameSize.x,
-            pCurrentAnimation->frameIndex.y*animationSheet.frameSize.y
+            pCurrentAnimation->getFrameIndex().x*animationSheet.frameSize.x,
+            pCurrentAnimation->getFrameIndex().y*animationSheet.frameSize.y
         );
         return {frameCoord, static_cast<sf::Vector2i>(animationSheet.frameSize)};
     }
+
     void set(const AnimationEnum &animationID) {
         auto *pNewAnimation = &animationSet[animationID];
         if (pCurrentAnimation == nullptr) {
             pCurrentAnimation = pNewAnimation;
         }
         else if (pCurrentAnimation != pNewAnimation) {
-            // Stash previous animation
-            pPreviousAnimation = pCurrentAnimation;
             // Load desired animation
             pCurrentAnimation = pNewAnimation;
             // Reset the animation
-            pCurrentAnimation->frameIndex.x = 0;
-            pCurrentAnimation->state = Animation<AnimationEnum>::Status::READY;
+            pCurrentAnimation->reset();
         }
     }
 
     void add(const Animation<AnimationEnum> &animation) {
-        animationSet.emplace(animation.ID, animation);
+        animationSet.emplace(animation.getID(), animation);
 
         if (pCurrentAnimation == nullptr) {
-            set(animation.ID);
+            set(animation.getID());
         }
     }
 
     void onEnd(const AnimationEnum &animationID, const std::function<void()> &function) {
-        if (animationSet[animationID].state == Animation<AnimationEnum>::Status::END) {
+        if (animationSet[animationID].status == Animation<AnimationEnum>::Status::END) {
             function();
         }
     }
 
     bool completed(const AnimationEnum &animationID) {
-        if (animationSet[animationID].state == Animation<AnimationEnum>::Status::COMPLETED) {
+        if (animationSet[animationID].status == Animation<AnimationEnum>::Status::COMPLETED) {
             return true;
         }
         return false;

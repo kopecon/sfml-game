@@ -11,6 +11,13 @@
 template<typename AnimationEnum>
 requires (std::is_enum_v<AnimationEnum>)
 class Animation {
+    AnimationEnum ID{0};  // Represents row index starting from 0;
+    unsigned frame = 0;
+    float timer{0.0f};  // tracks elapsed time
+    unsigned fpr{};  // frames per row
+    float    fps{};  // frames per second
+    float    spf{};  // seconds per frame
+
 public:
     enum class Status {
         READY, PLAYING, END, COMPLETED
@@ -44,37 +51,62 @@ public:
     };
 #pragma endregion
 
-    AnimationEnum ID{0};  // Represents row index starting from 0;
-    sf::Vector2i frameIndex = {0, static_cast<int>(ID)};
-    float timer{0.0f};  // tracks elapsed time
-    unsigned fpr{};  // frames per row
-    float    fps{};  // frames per second
-    float    spf{};  // seconds per frame
     bool started{false};
     bool finished{false};
     bool looping{true};
-    Status state{Status::READY};
+    Status status{Status::READY};
+
+    void setFPS(const float &value) {
+        fps = value;
+        spf = 1 / fps;
+    }
+
+    void setSPF(const float &value) {
+        spf = value;
+        fps = 1 / spf;
+    }
+
+    [[nodiscard]] AnimationEnum getID() const {
+        return ID;
+    }
+
+    [[nodiscard]] float getFPS() const {
+        return fps;
+    }
+
+    [[nodiscard]] float getSPF() const {
+        return spf;
+    }
+
+    [[nodiscard]] sf::Vector2u getFrameIndex() {
+        return {frame, static_cast<unsigned>(ID)};
+    }
+
+    void reset() {
+        status = Status::READY;
+        frame = 0;
+    }
 
     void update(const float &dt) {
-        if (state == Status::END) {
-            state = Status::COMPLETED;
+        if (status == Status::END) {
+            status = Status::COMPLETED;
             return;
         }
-        state = Status::PLAYING;
+        status = Status::PLAYING;
         timer += dt;
         // When it is the time to move to the next frame
         if (timer >= spf) {
-            frameIndex.x += 1;
+            frame += 1;
             timer = 0.f;  // Reset timer
         }
         // Evaluate the end of animationManager
-        if (frameIndex.x+1 > fpr) {
+        if (frame+1 > fpr) {
             // LOOP
-            if (looping) frameIndex.x = 0;
+            if (looping) frame = 0;
             // DONT LOOP
             else {
-                state = Status::END;
-                frameIndex.x = fpr-1;
+                status = Status::END;
+                frame = fpr-1;
             }
         }
     };
