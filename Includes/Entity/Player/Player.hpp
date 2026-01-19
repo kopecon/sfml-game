@@ -36,14 +36,14 @@ namespace player {
         bool facingRight{true};
         float eyeDryness{};
         // COMPONENTS
-        InputComponent input;
-        PhysicsComponent physics;
-        MovementComponent movement;
-        CombatComponent combat;
+        InputComponent input{*this};
+        PhysicsComponent physics{*this};
+        MovementComponent movement{*this};
+        CombatComponent combat{*this};
         // MANAGERS
-        RenderManager renderManager;
-        AnimationManager animationManager;
-        StateManager stateManager;
+        RenderManager renderManager{*this};
+        AnimationManager animationManager{*this};
+        StateManager stateManager{*this};
         // GETTERS
         [[nodiscard]] static std::string getClassName();
         [[nodiscard]] sf::Vector2f getCharacterSize() const;
