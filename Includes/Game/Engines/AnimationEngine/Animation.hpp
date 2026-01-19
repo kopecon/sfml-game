@@ -113,7 +113,7 @@ public:
                 index_ = fpr_-1;
             }
         }
-    };
+    }
 };
 
 #endif //BONK_GAME_ANIMATION_HPP

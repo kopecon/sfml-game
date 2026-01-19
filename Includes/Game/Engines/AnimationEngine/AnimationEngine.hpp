@@ -38,8 +38,8 @@ public:
         return {framePosition, frameSize};
     }
 
-    void set(const typename AnimationSet::ID &animationID) {
-        auto *pNewAnimation = animationSet[animationID].get();
+    void set(const typename AnimationSet::ID &id) {
+        auto *pNewAnimation = animationSet[id].get();
         if (pCurrentAnimation == nullptr) {
             pCurrentAnimation = pNewAnimation;
         }
