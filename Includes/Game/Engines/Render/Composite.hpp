@@ -18,7 +18,7 @@ class Composite : public sf::Drawable, public sf::Transformable {
 protected:
     std::string name{"composite"};
     std::unique_ptr<sf::Sprite> mainSprite{nullptr};
-    std::unique_ptr<sf::RectangleShape> boundary{nullptr};
+    std::unique_ptr<sf::RectangleShape> outline{nullptr};
 
 public:
 #pragma region constructors
@@ -45,7 +45,7 @@ public:
 
     void setColor(const sf::Color &color) const;
 
-    void showBoundary(sf::Color color = sf::Color::Red);
+    void showOutline(sf::Color color = sf::Color::Red);
 
     [[nodiscard]] sf::FloatRect getLocalBounds() const;
 

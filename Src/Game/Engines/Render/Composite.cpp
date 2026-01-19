@@ -58,14 +58,14 @@ void Composite::setColor(const sf::Color &color) const {
     }
 }
 
-void Composite::showBoundary(const sf::Color color) {
+void Composite::showOutline(const sf::Color color) {
     auto bounds = getLocalBounds();
-    auto outline = std::make_unique<sf::RectangleShape>(bounds.size);
-    outline->setPosition(bounds.position);
-    outline->setFillColor(sf::Color::Transparent);
-    outline->setOutlineColor(color);
-    outline->setOutlineThickness(5.f);
-    boundary = std::move(outline);
+    auto boundary = std::make_unique<sf::RectangleShape>(bounds.size);
+    boundary->setPosition(bounds.position);
+    boundary->setFillColor(sf::Color::Transparent);
+    boundary->setOutlineColor(color);
+    boundary->setOutlineThickness(5.f);
+    outline = std::move(boundary);
 }
 
 sf::FloatRect Composite::getLocalBounds() const {
@@ -136,7 +136,7 @@ void Composite::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     }
 
     // DRAW BOUNDARY
-    if (boundary) {
-        target.draw(*boundary, states);
+    if (outline) {
+        target.draw(*outline, states);
     }
 }

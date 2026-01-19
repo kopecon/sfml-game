@@ -20,6 +20,6 @@ namespace player {
         player.render.setSprite(std::move(sprite));
 
         player.render.setOrigin(player.render.getCenter());
-        player.render.showBoundary(sf::Color::Blue);
+        player.render.showOutline(sf::Color::Blue);
     }
 } // player
