@@ -9,7 +9,6 @@
 #include <unordered_map>
 #include "Animation.hpp"
 #include "AnimationSheet.hpp"
-#include "../../../../Utils/EnumSet.hpp"
 #include "../../../../Utils/utils.hpp"
 
 
