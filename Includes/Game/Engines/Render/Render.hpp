@@ -14,7 +14,7 @@ namespace entity {
 
 class Render final: public Composite {
 protected:
-    entity::Entity &entity;
+    entity::Entity &entity_;
 
 public:
     explicit Render(entity::Entity &entity);
