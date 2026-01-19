@@ -43,7 +43,8 @@ void Composite::add(std::unique_ptr<Composite> composite) {
 
 void Composite::add(std::unique_ptr<sf::Sprite> newSprite, std::string spriteName) {
     newSprite->setOrigin({0.f, 0.f});
-    auto composite = std::make_unique<Composite>(std::move(spriteName), std::move(newSprite));
+    std::string compositeName = name + "_" + std::move(spriteName);
+    auto composite = std::make_unique<Composite>(std::move(compositeName), std::move(newSprite));
     add(std::move(composite));
 }
 
@@ -68,7 +69,6 @@ void Composite::showBoundary(const sf::Color color) {
 }
 
 sf::FloatRect Composite::getLocalBounds() const {
-
     sf::Vector2f minPosition{};
     sf::Vector2f maxSize{};
 
@@ -103,6 +103,10 @@ sf::Vector2f Composite::getCenter() const {
 
 sf::Sprite* Composite::getSprite() const {
     return mainSprite.get();
+}
+
+std::string_view Composite::getName() const {
+    return name;
 }
 
 std::vector<sf::Sprite*> Composite::getAllSprites() const {

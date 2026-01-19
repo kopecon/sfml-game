@@ -1,13 +1,10 @@
 #include "../../../../Includes/Game/Game.hpp"
 #include "../../../../Includes/Game/Engines/Render/Render.hpp"
-
-#include <iostream>
-
 #include "../../../../Includes/Entity/Entity.hpp"
 
 
 Render::Render(entity::Entity &entity) :
-    Composite(entity.getName().data()),
+    Composite(static_cast<std::string>(entity.getName()) + "_render"),
     entity(entity) {
 }
 

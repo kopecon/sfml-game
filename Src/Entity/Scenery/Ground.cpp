@@ -33,9 +33,9 @@ namespace scenery {
 
         bottom->move({top->getPosition().x, top->getPosition().y + top->getGlobalBounds().size.y});
 
-        auto composite = std::make_unique<Composite>();
-        composite->add(std::move(top));
-        composite->add(std::move(bottom));
+        auto composite = std::make_unique<Composite>(static_cast<std::string>(render.getName()) + "_composite");
+        composite->add(std::move(top), "top");
+        composite->add(std::move(bottom), "bottom");
 
         for (const auto &pSprite : composite->getAllSprites()) {
 

@@ -55,6 +55,8 @@ public:
 
     [[nodiscard]] sf::Sprite* getSprite() const;
 
+    [[nodiscard]] std::string_view getName() const;
+
     [[nodiscard]] std::vector<sf::Sprite*> getAllSprites() const;
 
     void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
