@@ -16,22 +16,22 @@ Composite::Composite(std::string name):
     {}
 #pragma endregion
 
-
-void Composite::animate(const float &dt) const {
-    animator.update(dt);
-}
-
 void Composite::add(std::unique_ptr<Composite> composite) {
     composite->setOrigin({0.f, 0.f});
     children.push_back(std::move(composite));
 }
 
 void Composite::add(std::unique_ptr<sf::Sprite> sprite, std::string name) {
-    sprite->setOrigin({0.f, 0.f});
-    std::string compositeName = name_ + "_" + std::move(name);
-    auto composite = std::make_unique<Composite>(std::move(compositeName));
-    composite->setSprite(std::move(sprite));
-    add(std::move(composite));
+    if (!sprite_) {
+        setSprite(std::move(sprite));
+    }
+    else {
+        sprite->setOrigin({0.f, 0.f});
+        std::string compositeName = name_ + "_" + std::move(name);
+        auto composite = std::make_unique<Composite>(std::move(compositeName));
+        composite->setSprite(std::move(sprite));
+        add(std::move(composite));
+    }
 }
 
 void Composite::setSprite(std::unique_ptr<sf::Sprite> sprite) {
@@ -78,7 +78,6 @@ sf::FloatRect Composite::getLocalBounds() const {
 sf::FloatRect Composite::getGlobalBounds() const {
     return getTransform().transformRect(getLocalBounds());
 }
-
 
 sf::Vector2f Composite::getCenter() const {
     const auto localBounds = getLocalBounds();

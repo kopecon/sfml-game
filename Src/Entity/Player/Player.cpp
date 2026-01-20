@@ -30,7 +30,7 @@ namespace player {
 
     sf::Sprite & Player::getSprite() const {
         //TODO: implement propper shape accessing
-        return *render.root.getSprite();
+        return *render.root_.getSprite();
     }
 
     void Player::update() {

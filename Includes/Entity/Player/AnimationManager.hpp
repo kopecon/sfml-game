@@ -12,32 +12,19 @@
 namespace player {
     class Player;
 
-    class AnimationManager final {
+    class AnimationManager {
         // REFERENCES
         Player &player_;
         // CHARACTERISTICS
-        AnimationEngine &animator_;
+        AnimationEngine<StateSet> &animator_;
 
-        template<EnumSetConcept AnimationSet, typename... Args>
-        void addAnimation(const typename AnimationSet::ID &id, Args&&... args) {
-            auto animation = std::make_unique<Animation>(
-                static_cast<animation_id>(id), args...
-            );
-            animator_.add(std::move(animation));
-        }
-
-        template<EnumSetConcept AnimationSet>
-        void setAnimation(const typename AnimationSet::ID &id) {
-            animator_.set(static_cast<animation_id>(id));
-        }
-
-        void selectAnimation_();
+        void selectAnimation_() const;
 
         void updateFPS_() const;
 
     public:
         explicit AnimationManager(Player &player);
-        void update();
+        void update() const;
     };
 }
 

@@ -16,11 +16,18 @@ namespace entity {
 class Render {
 protected:
     entity::Entity &entity_;
+    Composite root_{};
 
 public:
     explicit Render(entity::Entity &entity);
 
-    Composite root{};
+    void setRoot(Composite &composite) {
+        root_ = std::move(composite);
+    }
+
+    Composite& getRoot() {
+        return root_;
+    }
 
     void loop() const;
 

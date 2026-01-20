@@ -41,8 +41,8 @@ namespace scenery {
                 )
             )
         );
-        render.root.setSprite(std::move(sprite));
-        render.root.setOrigin(render.root.getCenter());
+        render.root_.setSprite(std::move(sprite));
+        render.root_.setOrigin(render.root_.getCenter());
     }
 
     void Background::update() {

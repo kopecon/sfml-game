@@ -5,7 +5,7 @@
 
 Render::Render(entity::Entity &entity) :
     entity_(entity),
-    root(static_cast<std::string>(entity_.getName()) + "render_root")
+    root_(static_cast<std::string>(entity_.getName()) + "render_root")
     {}
 
 void Render::loop() const {
@@ -18,8 +18,8 @@ void Render::loop() const {
     const auto cameraRBorder = cameraCenter.x + cameraWidth / 2.f;
     const auto cameraLBorder = cameraCenter.x - cameraWidth / 2.f;
 
-    const auto renderRBorder = entity_.position.x + entity_.render.root.getGlobalBounds().size.x / 2.f;
-    const auto renderLBorder = entity_.position.x - entity_.render.root.getGlobalBounds().size.x / 2.f;
+    const auto renderRBorder = entity_.position.x + entity_.render.root_.getGlobalBounds().size.x / 2.f;
+    const auto renderLBorder = entity_.position.x - entity_.render.root_.getGlobalBounds().size.x / 2.f;
 
     if (cameraRBorder > renderRBorder || cameraLBorder < renderLBorder) {
         entity_.position = {
@@ -29,6 +29,6 @@ void Render::loop() const {
 }
 
 void Render::update() {
-    root.animate(entity_.game.time.get());
-    root.setPosition(entity_.position);
+    root_.animate(entity_.game.time.get());
+    root_.setPosition(entity_.position);
 }

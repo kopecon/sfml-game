@@ -95,6 +95,8 @@ add_executable("${CMAKE_PROJECT_NAME}" Src/main.cpp
         Includes/Game/Engines/AnimationEngine/AnimationSheet.hpp
         Src/Game/Engines/AnimationEngine/Animation.cpp
         Includes/Game/Engines/AnimationEngine/Animation.hpp
+        Includes/Game/Engines/Render/AnimatedSprite.cpp
+        Includes/Game/Engines/Render/AnimatedSprite.hpp
 )
 
 if (PRODUCTION_BUILD)
