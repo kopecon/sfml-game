@@ -10,9 +10,8 @@
 #include "Engines/PhysicsEngine.hpp"
 #include "TextureComponent.hpp"
 #include "TimeComponent.hpp"
+#include "../World/World.hpp"
 
-
-class World;
 
 class Game {
 protected:
