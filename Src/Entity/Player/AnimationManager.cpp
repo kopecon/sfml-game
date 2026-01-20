@@ -71,5 +71,4 @@ void player::AnimationManager::updateFPS_() const {
 void player::AnimationManager::update() const {
     selectAnimation_();
     updateFPS_();
-    artist_.update(player_.game.time.get());
 }

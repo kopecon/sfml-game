@@ -16,7 +16,7 @@ namespace player {
 
         auto aComposite = std::make_unique<AnimatedComposite<StateSet>>(std::move(animationSheet));
 
-        aComposite->setScale(hd::divide(player.getCharacterSize(), aComposite->getGlobalBounds().size));
+        aComposite->getSprite()->setScale(hd::divide(player.getCharacterSize(), aComposite->getGlobalBounds().size));
 
         player.render.setRoot(std::move(aComposite));
         player.render.getRoot().setOrigin(player.render.getRoot().getCenter());
