@@ -40,7 +40,9 @@ void Render::loop() const {
 }
 
 void Render::playAnimations(const float &dt) const {
+    // Own animation
     getRoot().play(dt);
+    // Children animation
     for (const auto &pComposite : getRoot().children) {
         pComposite->play(dt);
     }
