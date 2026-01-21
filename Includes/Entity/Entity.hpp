@@ -9,6 +9,7 @@
 #include <SFML/Graphics/Shape.hpp>
 
 #include "../Game/Engines/Render/Render.hpp"
+#include "../Game/Engines/Render/Composite.hpp"
 
 
 using entityID = std::uint64_t;

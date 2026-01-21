@@ -19,7 +19,7 @@ namespace scenery {
 
         sf::Color color = sf::Color({40,30,100});
 
-        void buildRender();
+        void buildRender() const;
 
         void update() override;
     };

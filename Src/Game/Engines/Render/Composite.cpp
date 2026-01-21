@@ -12,15 +12,17 @@
 #pragma region constructors
 Composite::Composite() = default;
 
-Composite::Composite(std::string name):
-    name_(std::move(name))
-    {}
-
-Composite::Composite(std::string name, std::unique_ptr<sf::Sprite> sprite) :
-    name_(std::move(name)),
+Composite::Composite(std::unique_ptr<sf::Sprite> sprite) :
     sprite_(std::move(sprite))
     {}
 #pragma endregion
+
+bool Composite::hasSprite() const {
+    if (sprite_) {
+        return true;
+    }
+    return false;
+}
 
 void Composite::add(std::unique_ptr<Composite> composite) {
     composite->setOrigin({0.f, 0.f});
@@ -33,8 +35,8 @@ void Composite::add(std::unique_ptr<sf::Sprite> sprite, std::string name) {
     }
     else {
         sprite->setOrigin({0.f, 0.f});
-        std::string compositeName = name_ + "_" + std::move(name);
-        auto composite = std::make_unique<Composite>(std::move(compositeName));
+        auto composite = std::make_unique<Composite>();
+        composite->rename(name_ + "_" + std::move(name));
         composite->setSprite(std::move(sprite));
         add(std::move(composite));
     }
@@ -50,6 +52,10 @@ bool Composite::play(float dt) {
         return true;
     }
     return false;
+}
+
+void Composite::rename(std::string name) {
+    name_ = std::move(name);
 }
 
 void Composite::setSprite(std::unique_ptr<sf::Sprite> sprite) {
@@ -104,8 +110,9 @@ sf::Vector2f Composite::getCenter() const {
     return {x, y};
 }
 
-sf::Sprite* Composite::getSprite() const {
-    return sprite_.get();
+sf::Sprite& Composite::getSprite() const {
+    assert(sprite_);
+    return *sprite_;
 }
 
 std::string_view Composite::getName() const {

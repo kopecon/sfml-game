@@ -1,17 +1,16 @@
 #include "../../../../Includes/Game/Engines/Render/Render.hpp"
+#include "../../../../Includes/Game/Engines/Render/Composite.hpp"
 #include "../../../../Includes/Game/Game.hpp"
 #include "../../../../Includes/Entity/Entity.hpp"
 
 
 Render::Render(entity::Entity &entity) :
     entity_(entity),
-    root_(
-        std::make_unique<Composite>(
-            static_cast<std::string>(entity_.getName()) + "render_root")
-        )
-    {}
+    root_(std::make_unique<Composite>()) {
+        root_->rename(static_cast<std::string>(entity_.getName()) + "render_root");
+    }
 
-void Render::setRoot(std::unique_ptr<Composite> composite) {
+void Render::changeRoot(std::unique_ptr<Composite> composite) {
     root_ = std::move(composite);
 }
 

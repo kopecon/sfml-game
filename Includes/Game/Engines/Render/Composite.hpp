@@ -26,12 +26,13 @@ public:
 #pragma region constructors
     explicit Composite();
 
-    explicit Composite(std::string name);
+    explicit Composite(std::unique_ptr<sf::Sprite> sprite);
 
-    explicit Composite(std::string name, std::unique_ptr<sf::Sprite> sprite);
 #pragma endregion
 
     std::vector<std::unique_ptr<Composite>> children{};
+
+    bool hasSprite() const;
 
     void add(std::unique_ptr<Composite> composite);
 
@@ -39,7 +40,7 @@ public:
 
     virtual Animatable* asAnimatable();
 
-    bool play(float dt);
+    void rename(std::string name);
 
     void setSprite(std::unique_ptr<sf::Sprite> sprite);
 
@@ -53,11 +54,13 @@ public:
 
     [[nodiscard]] sf::Vector2f getCenter() const;
 
-    [[nodiscard]] sf::Sprite* getSprite() const;
+    [[nodiscard]] sf::Sprite& getSprite() const;
 
     [[nodiscard]] std::string_view getName() const;
 
     [[nodiscard]] std::vector<sf::Sprite*> getAllSprites() const;
+
+    bool play(float dt);
 
     void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
 };

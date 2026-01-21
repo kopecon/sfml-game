@@ -16,8 +16,9 @@ protected:
 
 public:
     explicit AnimatedComposite(std::unique_ptr<AnimationSheet> animationSheet) :
-    Composite("animated", std::make_unique<sf::Sprite>(animationSheet->texture)),
+    Composite(std::make_unique<sf::Sprite>(animationSheet->texture)),
     animator(*sprite_, std::move(animationSheet)) {
+        rename("animated");
     }
 
     AnimationEngine<AnimationSet> animator;

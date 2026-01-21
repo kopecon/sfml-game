@@ -17,9 +17,9 @@ namespace player {
 
         auto playerSprite = std::make_unique<PlayerSprite>(player, std::move(animationSheet));
 
-        playerSprite->getSprite()->setScale(hd::divide(player.getCharacterSize(), playerSprite->getGlobalBounds().size));
+        playerSprite->getSprite().setScale(hd::divide(player.getCharacterSize(), playerSprite->getGlobalBounds().size));
         
-        player.render.setRoot(std::move(playerSprite));
+        player.render.changeRoot(std::move(playerSprite));
         player.render.getRoot().setOrigin(player.render.getRoot().getCenter());
         player.render.getRoot().showOutline(sf::Color::Blue);
     }

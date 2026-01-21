@@ -4,13 +4,15 @@
 
 #ifndef BONK_GAME_RENDER_COMPONENT_HPP
 #define BONK_GAME_RENDER_COMPONENT_HPP
-#include "Composite.hpp"
+#include <memory>
 
 
 namespace entity {
     class Entity;
 }
 
+
+class Composite;
 
 class Render {
 protected:
@@ -20,9 +22,9 @@ protected:
 public:
     explicit Render(entity::Entity &entity);
 
-    void setRoot(std::unique_ptr<Composite> composite);
+    void changeRoot(std::unique_ptr<Composite> composite);
 
-    Composite& getRoot() const;
+    [[nodiscard]] Composite& getRoot() const;
 
     void loop() const;
 

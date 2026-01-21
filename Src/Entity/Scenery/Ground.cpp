@@ -21,7 +21,7 @@ namespace scenery {
     }
 #pragma endregion
 
-    void Ground::buildRender() {
+    void Ground::buildRender() const {
         auto &topTex = game.textures.topGround;
         auto &bottomTex = game.textures.bottomGround;
 
@@ -33,7 +33,8 @@ namespace scenery {
 
         bottom->move({top->getPosition().x, top->getPosition().y + top->getGlobalBounds().size.y});
 
-        auto composite = std::make_unique<Composite>(static_cast<std::string>(render.getRoot().getName()) + "_composite");
+        auto composite = std::make_unique<Composite>();
+        composite->rename(static_cast<std::string>(render.getRoot().getName()) + "_composite");
         composite->add(std::move(top), "top");
         composite->add(std::move(bottom), "bottom");
 
