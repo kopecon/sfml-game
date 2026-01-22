@@ -17,17 +17,15 @@ player::PhysicsComponent::PhysicsComponent(Player &player) : player(player) {}
 
 bool player::PhysicsComponent::isGrounded() const {
     const float groundLevel = player.world.groundLevel;
-    const float halfHeight = player.render.getRoot().getGlobalBounds().size.y / 2.f;
 
-    return (player.position.y + halfHeight >= groundLevel)
+    return (player.position.y >= groundLevel)
         && (player.velocity.y >= 0.f);
 }
 
 void player::PhysicsComponent::ground() const {
     const float &groundLevel = player.world.groundLevel;
-    const float halfHeight = player.render.getRoot().getGlobalBounds().size.y / 2.f;
 
-    player.position = {player.position.x, groundLevel - halfHeight};
+    player.position = {player.position.x, groundLevel};
     player.acceleration.y = 0;
     player.velocity.y = 0;
 }
