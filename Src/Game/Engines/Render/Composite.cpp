@@ -82,11 +82,12 @@ void Composite::showOutline(const sf::Color color) {
 }
 
 sf::FloatRect Composite::getLocalBounds() const {
-    sf::Vector2f minPosition{0, 0};
-    sf::Vector2f maxSize{0, 0};
+    sf::Vector2f minPosition{};
+    sf::Vector2f maxSize{};
+    sf::FloatRect mainSpriteBounds{};
 
     if (sprite_) {
-        const auto mainSpriteBounds = sprite_->getGlobalBounds();
+        mainSpriteBounds = sprite_->getGlobalBounds();
         minPosition = mainSpriteBounds.position;
         maxSize = mainSpriteBounds.size;
     }
@@ -95,10 +96,12 @@ sf::FloatRect Composite::getLocalBounds() const {
         sf::FloatRect thisComposite = pComposite->getGlobalBounds();
         minPosition.x = std::min(minPosition.x, thisComposite.position.x);
         minPosition.y = std::min(minPosition.y, thisComposite.position.y);
-        maxSize.x = std::max(maxSize.x, thisComposite.size.x);
-        maxSize.y = std::max(maxSize.y, thisComposite.size.y);
+        maxSize.x = std::max(maxSize.x, std::abs(thisComposite.position.x - minPosition.x) + thisComposite.size.x);
+        maxSize.y = std::max(maxSize.y, std::abs(thisComposite.position.y - minPosition.y) + thisComposite.size.y);
     }
-    const auto result = sf::FloatRect(minPosition, maxSize - minPosition);
+    maxSize.x = std::max(maxSize.x, std::abs(mainSpriteBounds.position.x - minPosition.x) + mainSpriteBounds.size.x);
+    maxSize.y = std::max(maxSize.y, std::abs(mainSpriteBounds.position.y - minPosition.y) + mainSpriteBounds.size.y);
+    const auto result = sf::FloatRect(minPosition, maxSize);
     return result;
 }
 
@@ -144,10 +147,9 @@ void Composite::draw(sf::RenderTarget &target, sf::RenderStates states) const {
         target.draw(*sprite_, states);
     }
     // DRAW OTHER COMPOSITES
-    for (const auto &pComposite : children) {
-        pComposite->draw(target, states);
+    for (const auto &child : children) {
+        target.draw(*child, states);
     }
-
     // DRAW BOUNDARY
     if (outline_) {
         target.draw(*outline_, states);
