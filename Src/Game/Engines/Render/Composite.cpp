@@ -94,8 +94,8 @@ sf::FloatRect Composite::getLocalBounds() const {
     sf::Vector2f maxPos;
 
     auto absorb = [&](const sf::FloatRect& r) {
-        sf::Vector2f rMin = r.position;
-        sf::Vector2f rMax = r.position + r.size;
+        const sf::Vector2f rMin = r.position;
+        const sf::Vector2f rMax = r.position + r.size;
 
         if (!initialized) {
             minPos = rMin;
