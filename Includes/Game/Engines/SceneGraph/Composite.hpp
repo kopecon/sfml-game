@@ -21,28 +21,18 @@ protected:
     std::string name_{"composite"};
     std::unique_ptr<sf::Sprite> sprite_{nullptr};
     std::unique_ptr<sf::RectangleShape> outline_{nullptr};
+    std::vector<std::unique_ptr<Composite>> children_{};
 
 public:
 #pragma region constructors
     explicit Composite();
-
-    explicit Composite(std::unique_ptr<sf::Sprite> sprite);
-
 #pragma endregion
-
-    std::vector<std::unique_ptr<Composite>> children{};
-
-    bool hasSprite() const;
-
-    void add(std::unique_ptr<Composite> composite);
-
-    void add(std::unique_ptr<sf::Sprite> sprite, std::string name = "sprite");
 
     virtual Animatable* asAnimatable();
 
-    void rename(std::string name);
+    void add(std::unique_ptr<Composite> composite);
 
-    void setSprite(std::unique_ptr<sf::Sprite> sprite);
+    void rename(std::string name);
 
     void setColor(const sf::Color &color) const;
 
@@ -54,15 +44,15 @@ public:
 
     [[nodiscard]] sf::Vector2f getCenter() const;
 
-    [[nodiscard]] sf::Sprite& getSprite() const;
-
     [[nodiscard]] std::string_view getName() const;
 
-    [[nodiscard]] std::vector<sf::Sprite*> getAllSprites() const;
+    [[nodiscard]] std::vector<std::unique_ptr<Composite>>& getChildren();
 
     bool play(float dt);
 
     void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
+private:
+    virtual void drawSelf(sf::RenderTarget &target, sf::RenderStates states) const = 0;
 };
 
 

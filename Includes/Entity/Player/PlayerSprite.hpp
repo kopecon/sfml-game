@@ -4,7 +4,7 @@
 
 #ifndef BONK_GAME_PLAYER_SPRITE_HPP
 #define BONK_GAME_PLAYER_SPRITE_HPP
-#include "../../Game/Engines/Render/AnimatedComposite.hpp"
+#include "../../Game/Engines/SceneGraph/AnimatedSprite.hpp"
 #include "States/StateSet.hpp"
 
 
@@ -12,7 +12,7 @@ namespace player {
     class Player;
 
 
-    class PlayerSprite final : public AnimatedComposite<StateSet>{
+    class PlayerSprite final : public AnimatedSprite<StateSet>{
         Player &player;
         void selectAnimation();
         void updateFPS() const;

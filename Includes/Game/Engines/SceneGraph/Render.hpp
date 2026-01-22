@@ -4,7 +4,8 @@
 
 #ifndef BONK_GAME_RENDER_COMPONENT_HPP
 #define BONK_GAME_RENDER_COMPONENT_HPP
-#include <memory>
+
+#include "Composite.hpp"
 
 
 namespace entity {
@@ -12,26 +13,17 @@ namespace entity {
 }
 
 
-class Composite;
-
-class Render {
-protected:
+class Render final : public Composite {
     entity::Entity &entity_;
-    std::unique_ptr<Composite> root_{nullptr};
 
 public:
     explicit Render(entity::Entity &entity);
 
-    void changeRoot(std::unique_ptr<Composite> composite);
-
-    [[nodiscard]] Composite& getRoot() const;
-
     void loop() const;
 
-    void playAnimations(const float &dt) const;
+    void update();
 
-    void update() const;
+private:
+    void drawSelf(sf::RenderTarget &target, sf::RenderStates states) const override {};
 };
-
-
 #endif //BONK_GAME_RENDER_COMPONENT_HPP

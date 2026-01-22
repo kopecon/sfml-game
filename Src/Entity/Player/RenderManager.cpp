@@ -6,7 +6,7 @@
 #include "../../../Includes/Game/Game.hpp"
 #include "../../../Includes/Entity/Player/Player.hpp"
 #include "../../../Includes/Entity/Player/PlayerSprite.hpp"
-#include "../../../Includes/Game/Engines/Render/AnimatedComposite.hpp"
+#include "../../../Includes/Game/Engines/SceneGraph/AnimatedSprite.hpp"
 #include "../../../Includes/World/World.hpp"
 
 
@@ -18,11 +18,11 @@ namespace player {
 
         auto playerSprite = std::make_unique<PlayerSprite>(player, std::move(animationSheet));
 
-        playerSprite->getSprite().setScale(hd::divide(player.getCharacterSize(), playerSprite->getGlobalBounds().size));
+        // FIXME: playerSprite->getSprite().setScale(hd::divide(player.getCharacterSize(), playerSprite->getGlobalBounds().size));
         playerSprite->rename("PlayerSprite");
         // RENDER
-        auto &root = player.render.getRoot();
-        root.add(std::move(playerSprite));
-        root.setOrigin({root.getCenter().x, root.getGlobalBounds().size.y});
+        auto &render = player.render;
+        render.add(std::move(playerSprite));
+        render.setOrigin({render.getCenter().x, render.getGlobalBounds().size.y});
     }
 } // player

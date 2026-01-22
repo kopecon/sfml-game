@@ -8,8 +8,8 @@
 #include <string>
 #include <SFML/Graphics/Shape.hpp>
 
-#include "../Game/Engines/Render/Render.hpp"
-#include "../Game/Engines/Render/Composite.hpp"
+#include "../Game/Engines/SceneGraph/Render.hpp"
+#include "../Game/Engines/SceneGraph/Composite.hpp"
 
 
 using entityID = std::uint64_t;

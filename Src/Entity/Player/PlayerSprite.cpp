@@ -76,7 +76,7 @@ namespace player {
     }
 
     PlayerSprite::PlayerSprite(Player &player, std::unique_ptr<AnimationSheet> animationSheet):
-        AnimatedComposite(std::move(animationSheet)),
+        AnimatedSprite(std::move(animationSheet)),
         player(player) {
         animator.addAnimation(std::make_unique<Animation<StateSet> >(StateSet::ID::IDLE, 2, true));
         animator.addAnimation(std::make_unique<Animation<StateSet> >(StateSet::ID::WINKING, 2, true));

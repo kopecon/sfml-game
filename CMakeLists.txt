@@ -82,19 +82,21 @@ add_executable("${CMAKE_PROJECT_NAME}" Src/main.cpp
         Includes/Entity/Player/States/Attacking.hpp
         Src/Entity/Player/States/Winking.cpp
         Includes/Entity/Player/States/Winking.hpp
-        Src/Game/Engines/Render/Render.cpp
-        Includes/Game/Engines/Render/Render.hpp
+        Src/Game/Engines/SceneGraph/Render.cpp
+        Includes/Game/Engines/SceneGraph/Render.hpp
         Src/Entity/Player/RenderManager.cpp
         Includes/Entity/Player/RenderManager.hpp
-        Src/Game/Engines/Render/Composite.cpp
-        Includes/Game/Engines/Render/Composite.hpp
+        Src/Game/Engines/SceneGraph/Composite.cpp
+        Includes/Game/Engines/SceneGraph/Composite.hpp
         Src/Game/Engines/AnimationEngine/AnimationSheet.cpp
         Includes/Game/Engines/AnimationEngine/AnimationSheet.hpp
         Includes/Game/Engines/AnimationEngine/Animation.hpp
-        Includes/Game/Engines/Render/AnimatedComposite.hpp
+        Includes/Game/Engines/SceneGraph/AnimatedSprite.hpp
         Includes/Game/Engines/AnimationEngine/Animatable.hpp
         Src/Entity/Player/PlayerSprite.cpp
         Includes/Entity/Player/PlayerSprite.hpp
+        Includes/Game/Engines/SceneGraph/Sprite.cpp
+        Includes/Game/Engines/SceneGraph/Sprite.hpp
 )
 
 if (PRODUCTION_BUILD)

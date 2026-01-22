@@ -4,6 +4,7 @@
 
 #include "../../../Includes/Entity/Scenery/Ground.hpp"
 #include "../../../Includes/Game/Game.hpp"
+#include "../../../Includes/Game/Engines/SceneGraph/Sprite.hpp"
 #include "../../../Includes/World/World.hpp"
 
 
@@ -21,42 +22,38 @@ namespace scenery {
     }
 #pragma endregion
 
-    void Ground::buildRender() const {
+    void Ground::buildRender() {
         auto &topTex = game.textures.topGround;
         auto &bottomTex = game.textures.bottomGround;
 
         topTex.setRepeated(true);
         bottomTex.setRepeated(true);
 
-        auto top = std::make_unique<sf::Sprite>(topTex);
-        auto bottom = std::make_unique<sf::Sprite>(bottomTex);
+        auto top = std::make_unique<Sprite>(topTex);
+        auto bottom = std::make_unique<Sprite>(bottomTex);
 
         bottom->move({top->getPosition().x, top->getPosition().y + top->getGlobalBounds().size.y});
 
-        auto composite = std::make_unique<Composite>();
-        composite->rename(static_cast<std::string>(render.getRoot().getName()) + "_composite");
-        composite->add(std::move(top), "top");
-        composite->add(std::move(bottom), "bottom");
 
-        for (const auto &pSprite : composite->getAllSprites()) {
+//        for (const auto &pSprite : composite->getChildren()) {
+//
+//            const auto spriteSize = pSprite->getGlobalBounds().size;
+//
+//            // Make 3 "copies"
+//            pSprite->setTextureRect(
+//                sf::IntRect({0, 0},
+//                    sf::Vector2i(
+//                        static_cast<int>(game.video.getWindowSize().x)*3,
+//                        static_cast<int>(spriteSize.y)
+//                    )
+//                )
+//            );
+//        }
 
-            const auto spriteSize = pSprite->getGlobalBounds().size;
-
-            // Make 3 "copies"
-            pSprite->setTextureRect(
-                sf::IntRect({0, 0},
-                    sf::Vector2i(
-                        static_cast<int>(game.video.getWindowSize().x)*3,
-                        static_cast<int>(spriteSize.y)
-                    )
-                )
-            );
-        }
-
-        render.getRoot().add(std::move(composite));
-        render.getRoot().setColor(color);
-        render.getRoot().setOrigin({render.getRoot().getCenter().x, 0});
-        // render.showBoundary();
+        render.add(std::move(top));
+        render.add(std::move(bottom));
+        render.setColor(color);
+        render.setOrigin({render.getCenter().x, 0});
     }
 
     void Ground::update() {

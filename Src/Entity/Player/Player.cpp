@@ -28,11 +28,6 @@ namespace player {
         return *stateManager.stateMachine.pCurrentState;
     }
 
-    sf::Sprite & Player::getSprite() const {
-        //TODO: implement propper shape accessing
-        return render.getRoot().getSprite();
-    }
-
     void Player::update() {
         input.update();
         // physics.verbose = true;

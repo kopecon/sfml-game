@@ -46,7 +46,6 @@ namespace player {
         [[nodiscard]] static std::string getClassName();
         [[nodiscard]] sf::Vector2f getCharacterSize() const;
         [[nodiscard]] const State<StateSet>& getState() const;
-        [[nodiscard]] sf::Sprite& getSprite() const;
 
         // UPDATE
         void update() override;

@@ -5,7 +5,7 @@
 #include "../../../../Utils/utils.hpp"
 #include "SFML/Graphics/RenderTarget.hpp"
 #include "SFML/Graphics/RectangleShape.hpp"
-#include "../../../../Includes/Game/Engines/Render/Composite.hpp"
+#include "../../../../Includes/Game/Engines/SceneGraph/Composite.hpp"
 
 #include <iostream>
 
@@ -14,66 +14,25 @@
 
 #pragma region constructors
 Composite::Composite() = default;
-
-Composite::Composite(std::unique_ptr<sf::Sprite> sprite) :
-    sprite_(std::move(sprite))
-    {}
 #pragma endregion
-
-bool Composite::hasSprite() const {
-    if (sprite_) {
-        return true;
-    }
-    return false;
-}
-
-void Composite::add(std::unique_ptr<Composite> composite) {
-    composite->setOrigin({0.f, 0.f});
-    children.push_back(std::move(composite));
-}
-
-void Composite::add(std::unique_ptr<sf::Sprite> sprite, std::string name) {
-    if (!sprite_) {
-        setSprite(std::move(sprite));
-    }
-    else {
-        sprite->setOrigin({0.f, 0.f});
-        auto composite = std::make_unique<Composite>();
-        composite->rename(name_ + "_" + std::move(name));
-        composite->setSprite(std::move(sprite));
-        add(std::move(composite));
-    }
-}
 
 Animatable * Composite::asAnimatable() {
     return nullptr;
 }
 
-bool Composite::play(float dt) {
-    // Own animation
-    if (const auto animated = asAnimatable()) {
-        animated->animate(dt);
-        return true;
-    }
-    // Children animation
-    for (const auto &pChild : children) {
-        pChild->play(dt);
-    }
-    return false;
+void Composite::add(std::unique_ptr<Composite> composite) {
+    composite->setOrigin({0.f, 0.f});
+    children_.push_back(std::move(composite));
 }
 
 void Composite::rename(std::string name) {
     name_ = std::move(name);
 }
 
-void Composite::setSprite(std::unique_ptr<sf::Sprite> sprite) {
-    sprite_ = std::move(sprite);
-}
-
 void Composite::setColor(const sf::Color &color) const {
-    for (const auto &pSprite : getAllSprites()) {
-        pSprite->setColor(color);
-    }
+    // for (const auto &pSprite : getChildren()) {
+    // pSprite->setColor(color);
+    // }
 }
 
 void Composite::showOutline(const sf::Color color) {
@@ -113,7 +72,7 @@ sf::FloatRect Composite::getLocalBounds() const {
         absorb(sprite_->getGlobalBounds());
     }
 
-    for (const auto& child : children) {
+    for (const auto& child : children_) {
         absorb(child->getGlobalBounds());
     }
 
@@ -123,10 +82,10 @@ sf::FloatRect Composite::getLocalBounds() const {
     return { minPos, maxPos - minPos };
 }
 
-
 sf::FloatRect Composite::getGlobalBounds() const {
     return getTransform().transformRect(getLocalBounds());
 }
+
 
 sf::Vector2f Composite::getCenter() const {
     const auto localBounds = getLocalBounds();
@@ -135,41 +94,38 @@ sf::Vector2f Composite::getCenter() const {
     return {x, y};
 }
 
-sf::Sprite& Composite::getSprite() const {
-    assert(sprite_);
-    return *sprite_;
-}
-
 std::string_view Composite::getName() const {
     return name_;
 }
 
-std::vector<sf::Sprite*> Composite::getAllSprites() const {
-    std::vector<sf::Sprite*> sprites{};
-    if (sprite_) {
-        sprites.push_back(sprite_.get());
+std::vector<std::unique_ptr<Composite>>& Composite::getChildren() {
+    return children_;
+}
+
+bool Composite::play(const float dt) {
+    // Own animation
+    if (const auto animated = asAnimatable()) {
+        animated->animate(dt);
+        return true;
     }
-    for (const auto &pComposite : children) {
-        std::vector<sf::Sprite*> subSprites = pComposite->getAllSprites();
-        sprites.insert(sprites.begin(), subSprites.begin(), subSprites.end());
+    // Children animation
+    for (const auto &pChild : children_) {
+        pChild->play(dt);
     }
-    return sprites;
+    return false;
 }
 
 void Composite::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     states.transform *= getTransform(); // getTransform() is defined by sf::Transformable
 
-    // DRAW MAIN SPRITE
-    if (sprite_) {
-        // apply the texture
-        states.texture = &sprite_->getTexture();
-        target.draw(*sprite_, states);
-    }
-    // DRAW OTHER COMPOSITES
-    for (const auto &child : children) {
+    // DRAW SELF
+    drawSelf(target, states);
+
+    // DRAW CHILDREN
+    for (const auto &child : children_) {
         target.draw(*child, states);
     }
-    // DRAW BOUNDARY
+    // DRAW OUTLINE
     if (outline_) {
         target.draw(*outline_, states);
     }
