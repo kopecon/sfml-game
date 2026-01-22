@@ -50,9 +50,14 @@ Animatable * Composite::asAnimatable() {
 }
 
 bool Composite::play(float dt) {
+    // Own animation
     if (const auto animated = asAnimatable()) {
         animated->animate(dt);
         return true;
+    }
+    // Children animation
+    for (const auto &pChild : children) {
+        pChild->play(dt);
     }
     return false;
 }
