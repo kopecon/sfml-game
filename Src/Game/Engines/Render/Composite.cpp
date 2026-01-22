@@ -6,6 +6,9 @@
 #include "SFML/Graphics/RenderTarget.hpp"
 #include "SFML/Graphics/RectangleShape.hpp"
 #include "../../../../Includes/Game/Engines/Render/Composite.hpp"
+
+#include <iostream>
+
 #include "../../../../Includes/Game/Engines/AnimationEngine/Animatable.hpp"
 
 
@@ -79,8 +82,8 @@ void Composite::showOutline(const sf::Color color) {
 }
 
 sf::FloatRect Composite::getLocalBounds() const {
-    sf::Vector2f minPosition{};
-    sf::Vector2f maxSize{};
+    sf::Vector2f minPosition{0, 0};
+    sf::Vector2f maxSize{0, 0};
 
     if (sprite_) {
         const auto mainSpriteBounds = sprite_->getGlobalBounds();
@@ -88,14 +91,14 @@ sf::FloatRect Composite::getLocalBounds() const {
         maxSize = mainSpriteBounds.size;
     }
     // SCAN COMPOSITES
-    for (const auto &pSprite : getAllSprites()) {
-        sf::FloatRect thisSprite = pSprite->getGlobalBounds();
-        minPosition.x = std::min(minPosition.x, thisSprite.position.x);
-        minPosition.y = std::min(minPosition.y, thisSprite.position.y);
-        maxSize.x = std::max(maxSize.x, std::abs(minPosition.x - thisSprite.position.x) + thisSprite.size.x);
-        maxSize.y = std::max(maxSize.y, std::abs(minPosition.y - thisSprite.position.y) + thisSprite.size.y);
+    for (const auto &pComposite : children) {
+        sf::FloatRect thisComposite = pComposite->getGlobalBounds();
+        minPosition.x = std::min(minPosition.x, thisComposite.position.x);
+        minPosition.y = std::min(minPosition.y, thisComposite.position.y);
+        maxSize.x = std::max(maxSize.x, thisComposite.size.x);
+        maxSize.y = std::max(maxSize.y, thisComposite.size.y);
     }
-    const auto result = sf::FloatRect(minPosition, maxSize);
+    const auto result = sf::FloatRect(minPosition, maxSize - minPosition);
     return result;
 }
 

@@ -23,27 +23,34 @@ namespace player {
         auto playerSprite = std::make_unique<PlayerSprite>(player, std::move(animationSheet));
 
         playerSprite->getSprite().setScale(hd::divide(player.getCharacterSize(), playerSprite->getGlobalBounds().size));
+        playerSprite->rename("PlayerSprite");
+
+        auto testRootComposite = std::make_unique<Composite>();
         // TEST SPRITE
-        auto testSprite1 = std::make_unique<PlayerSprite>(player, std::move(animationSheet1));
-        auto testSprite2 = std::make_unique<PlayerSprite>(player, std::move(animationSheet2));
-        auto testSprite3 = std::make_unique<PlayerSprite>(player, std::move(animationSheet3));
-        auto testSprite4 = std::make_unique<PlayerSprite>(player, std::move(animationSheet4));
-        float distance = 100;
-        testSprite1->move({-distance, -distance});
-        testSprite2->move({distance, -distance});
-        testSprite3->move({-distance, distance});
-        testSprite4->move({distance, distance});
+        auto testComposite1 = std::make_unique<PlayerSprite>(player, std::move(animationSheet1));
+        auto testComposite2 = std::make_unique<PlayerSprite>(player, std::move(animationSheet2));
+        auto testComposite3 = std::make_unique<PlayerSprite>(player, std::move(animationSheet3));
+        auto testComposite4 = std::make_unique<PlayerSprite>(player, std::move(animationSheet4));
+        float distance = 60;
+        testComposite1->getSprite().move({-distance, -distance});
+        testComposite2->getSprite().move({ distance, -distance});
+        testComposite3->getSprite().move({-distance,  distance});
+        testComposite4->getSprite().move({ distance,  distance});
+        testComposite1->rename("LT");
+        testComposite2->rename("RT");
+        testComposite3->rename("LB");
+        testComposite4->rename("RB");
 
-        playerSprite->add(std::move(testSprite1));
-        playerSprite->add(std::move(testSprite2));
-        playerSprite->add(std::move(testSprite3));
-        playerSprite->add(std::move(testSprite4));
-        playerSprite->showOutline();
-
+        testRootComposite->add(std::move(testComposite1));
+        testRootComposite->add(std::move(testComposite2));
+        testRootComposite->add(std::move(testComposite3));
+        testRootComposite->add(std::move(testComposite4));
+        testRootComposite->showOutline();
         // RENDER
         player.render.changeRoot(std::move(playerSprite));
         auto &root = player.render.getRoot();
+        root.add(std::move(testRootComposite));
         root.setOrigin(player.render.getRoot().getCenter());
-        // root.showOutline(sf::Color::Blue);
+        root.showOutline(sf::Color::Blue);
     }
 } // player

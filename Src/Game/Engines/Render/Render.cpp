@@ -7,7 +7,7 @@
 Render::Render(entity::Entity &entity) :
     entity_(entity),
     root_(std::make_unique<Composite>()) {
-        root_->rename(static_cast<std::string>(entity_.getName()) + "render_root");
+        root_->rename(static_cast<std::string>(entity_.getName()) + "_render_root");
     }
 
 void Render::changeRoot(std::unique_ptr<Composite> composite) {
