@@ -18,11 +18,11 @@ public:
 
     void applyColor(sf::Color color) override;
 
-    [[nodiscard]] sf::FloatRect getLocalBounds() const override;
-
     [[nodiscard]] sf::Sprite& getSprite() const;
 
 private:
+    sf::FloatRect getSelfLocalBounds() const override;
+
     void drawSelf(sf::RenderTarget &target, sf::RenderStates states) const override;
 };
 

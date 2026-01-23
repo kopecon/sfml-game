@@ -8,13 +8,6 @@ Render::Render(entity::Entity &entity) :
     entity_(entity)
     {rename(static_cast<std::string>(entity.getName()) + " render");}
 
-sf::FloatRect Render::getLocalBounds() const {
-    // If children are modified, need to call getChildrenGlobalBounds
-    // const auto childrenBounds = getChildrenLocalBounds();  // Debug: Information about children transformation gets lost
-    const auto childrenBounds = getChildrenGlobalBounds();  // Debug: Works properly
-    return childrenBounds;
-}
-
 void Render::loop() const {
     // This could be improved, but I don't care anymore... it works well enough now.
     const Camera &camera = entity_.game.video.camera;

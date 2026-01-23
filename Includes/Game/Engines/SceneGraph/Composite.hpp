@@ -41,7 +41,7 @@ public:
 
     void showOutline(sf::Color color = sf::Color::Red);
 
-    [[nodiscard]] virtual sf::FloatRect getLocalBounds() const = 0;
+    [[nodiscard]] virtual sf::FloatRect getLocalBounds() const;
 
     [[nodiscard]] sf::FloatRect getGlobalBounds() const;
 
@@ -51,14 +51,12 @@ public:
 
     [[nodiscard]] std::vector<std::unique_ptr<Composite>>& getChildren();
 
-    bool play(float dt);
+    void play(float dt);
 
     void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
 
 protected:
-    [[nodiscard]] sf::FloatRect getChildrenLocalBounds() const;
-
-    [[nodiscard]] sf::FloatRect getChildrenGlobalBounds() const;
+    [[nodiscard]] virtual sf::FloatRect getSelfLocalBounds() const;
 
 private:
     virtual void drawSelf(sf::RenderTarget &target, sf::RenderStates states) const = 0;

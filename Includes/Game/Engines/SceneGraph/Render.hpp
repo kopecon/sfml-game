@@ -19,8 +19,6 @@ class Render final : public Composite {
 public:
     explicit Render(entity::Entity &entity);
 
-    sf::FloatRect getLocalBounds() const override;
-
     void loop() const;
 
     void update();
