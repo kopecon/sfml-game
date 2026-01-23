@@ -26,21 +26,21 @@ namespace scenery {
         texture.setRepeated(true);
 
         auto sprite = std::make_unique<Sprite>(texture);
+        sprite->rename("test");
         const auto spriteSize = sprite->getGlobalBounds().size;
-
         // Fit sprite to window
         sprite->setScale(
             hd::divide(game.video.getWindowSize(), spriteSize)
         );
         // Make 3 "copies"
-        // sprite->setTextureRect(
-        //     sf::IntRect({0, 0},
-        //         sf::Vector2i(
-        //             static_cast<int>(spriteSize.x)*3,
-        //             static_cast<int>(spriteSize.y)
-        //         )
-        //     )
-        // );
+        sprite->getSprite().setTextureRect(
+            sf::IntRect({0, 0},
+                sf::Vector2i(
+                    static_cast<int>(spriteSize.x)*3,
+                    static_cast<int>(spriteSize.y)
+                )
+            )
+        );
         render.add(std::move(sprite));
         render.setOrigin(render.getCenter());
     }

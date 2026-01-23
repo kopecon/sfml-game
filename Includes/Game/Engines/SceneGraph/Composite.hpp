@@ -8,6 +8,7 @@
 #include <string>
 #include <vector>
 
+#include "Colorable.hpp"
 #include "SFML/Graphics/Drawable.hpp"
 #include "SFML/Graphics/Transformable.hpp"
 #include "SFML/Graphics/RectangleShape.hpp"
@@ -30,15 +31,17 @@ public:
 
     virtual Animatable* asAnimatable();
 
+    virtual Colorable* asColorable();
+
     void add(std::unique_ptr<Composite> composite);
 
     void rename(std::string name);
 
-    void setColor(const sf::Color &color) const;
+    void setColor(const sf::Color &color);
 
     void showOutline(sf::Color color = sf::Color::Red);
 
-    [[nodiscard]] sf::FloatRect getLocalBounds() const;
+    [[nodiscard]] virtual sf::FloatRect getLocalBounds() const = 0;
 
     [[nodiscard]] sf::FloatRect getGlobalBounds() const;
 
@@ -51,7 +54,14 @@ public:
     bool play(float dt);
 
     void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
+
+protected:
+    [[nodiscard]] sf::FloatRect getChildrenLocalBounds() const;
+
+    [[nodiscard]] sf::FloatRect getChildrenGlobalBounds() const;
+
 private:
+
     virtual void drawSelf(sf::RenderTarget &target, sf::RenderStates states) const = 0;
 };
 

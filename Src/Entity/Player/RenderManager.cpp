@@ -18,7 +18,7 @@ namespace player {
 
         auto playerSprite = std::make_unique<PlayerSprite>(player, std::move(animationSheet));
 
-        // FIXME: playerSprite->getSprite().setScale(hd::divide(player.getCharacterSize(), playerSprite->getGlobalBounds().size));
+        playerSprite->setScale(hd::divide(player.getCharacterSize(), playerSprite->getGlobalBounds().size));
         playerSprite->rename("PlayerSprite");
         // RENDER
         auto &render = player.render;

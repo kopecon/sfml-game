@@ -6,7 +6,13 @@
 
 Render::Render(entity::Entity &entity) :
     entity_(entity)
-    {}
+    {rename(static_cast<std::string>(entity.getName()) + " render");}
+
+sf::FloatRect Render::getLocalBounds() const {
+    // const auto childrenBounds = getChildrenLocalBounds();  // Debug: Information about children transformation gets lost
+    const auto childrenBounds = getChildrenGlobalBounds();  // Debug: Works properly
+    return childrenBounds;
+}
 
 void Render::loop() const {
     // This could be improved, but I don't care anymore... it works well enough now.
@@ -30,5 +36,6 @@ void Render::loop() const {
 
 
 void Render::update() {
+    play(entity_.game.time.get());
     setPosition(entity_.position);
 }

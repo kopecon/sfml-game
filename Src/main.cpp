@@ -20,6 +20,7 @@ int main() {
     (void) worldForest.createEntity<scenery::Background>();
     (void) worldForest.createEntityAt<scenery::Ground>({0.f, worldForest.groundLevel});
     #pragma endregion
+
     #pragma region player
     Controls p1controls;
     p1controls.left   = sf::Keyboard::Scancode::A;

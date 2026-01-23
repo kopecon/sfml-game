@@ -4,17 +4,26 @@
 
 #ifndef BONK_GAME_SPRITE_HPP
 #define BONK_GAME_SPRITE_HPP
+#include "Colorable.hpp"
 #include "Composite.hpp"
 
 
-class Sprite : public Composite {
+class Sprite : public Composite, public Colorable {
 protected:
     std::unique_ptr<sf::Sprite> sprite_{nullptr};
 public:
     explicit Sprite(const sf::Texture &texture);
 
+    Colorable* asColorable() override;
+
+    void applyColor(sf::Color color) override;
+
+    [[nodiscard]] sf::FloatRect getLocalBounds() const override;
+
+    [[nodiscard]] sf::Sprite& getSprite() const;
+
 private:
-    void drawSelf(sf::RenderTarget &target, sf::RenderStates states) const override;;
+    void drawSelf(sf::RenderTarget &target, sf::RenderStates states) const override;
 };
 
 

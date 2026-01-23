@@ -19,11 +19,13 @@ class Render final : public Composite {
 public:
     explicit Render(entity::Entity &entity);
 
+    sf::FloatRect getLocalBounds() const override;
+
     void loop() const;
 
     void update();
 
 private:
-    void drawSelf(sf::RenderTarget &target, sf::RenderStates states) const override {};
+    void drawSelf(sf::RenderTarget &target, sf::RenderStates states) const override {}
 };
 #endif //BONK_GAME_RENDER_COMPONENT_HPP
