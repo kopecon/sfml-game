@@ -21,7 +21,7 @@ public:
     [[nodiscard]] sf::Sprite& getSprite() const;
 
 private:
-    sf::FloatRect getSelfLocalBounds() const override;
+    std::optional<sf::FloatRect> getSelfGlobalBounds() const override;
 
     void drawSelf(sf::RenderTarget &target, sf::RenderStates states) const override;
 };

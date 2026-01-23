@@ -26,8 +26,8 @@ sf::Sprite& Sprite::getSprite() const {
     return *sprite_;
 }
 
-sf::FloatRect Sprite::getSelfLocalBounds() const {
-    return sprite_->getLocalBounds();
+std::optional<sf::FloatRect> Sprite::getSelfGlobalBounds() const {
+    return sprite_->getGlobalBounds();
 }
 
 void Sprite::drawSelf(sf::RenderTarget &target, const sf::RenderStates states) const {

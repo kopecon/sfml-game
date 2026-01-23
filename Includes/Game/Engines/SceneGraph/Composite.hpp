@@ -56,7 +56,7 @@ public:
     void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
 
 protected:
-    [[nodiscard]] virtual sf::FloatRect getSelfLocalBounds() const;
+    [[nodiscard]] virtual std::optional<sf::FloatRect> getSelfGlobalBounds() const;
 
 private:
     virtual void drawSelf(sf::RenderTarget &target, sf::RenderStates states) const = 0;

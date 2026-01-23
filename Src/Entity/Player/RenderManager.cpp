@@ -18,13 +18,16 @@ namespace player {
         auto animationSheet1 = std::make_unique<AnimationSheet>(texture, sf::Vector2u(32, 32));
 
         auto playerSprite = std::make_unique<PlayerSprite>(player, std::move(animationSheet));
-
-        playerSprite->setScale(hd::divide(player.getCharacterSize(), playerSprite->getGlobalBounds().size));
         playerSprite->rename("PlayerSprite");
+
+        playerSprite->getSprite().setScale(hd::divide(player.getCharacterSize(), playerSprite->getGlobalBounds().size));
         // TEST
         auto testSprite1 = std::make_unique<PlayerSprite>(player, std::move(animationSheet1));
+        testSprite1->getSprite().setScale(hd::divide(player.getCharacterSize(), testSprite1->getGlobalBounds().size));
         testSprite1->rename("testSprite1");
-        testSprite1->move({20.f, 0.f});
+        testSprite1->getSprite().setColor(sf::Color::Cyan);
+        // testSprite1->setColor(sf::Color::Red);  // FIXME
+        testSprite1->move({200.f, -100.f});
         playerSprite->add(std::move(testSprite1));
         // RENDER
         auto &render = player.render;

@@ -24,7 +24,6 @@ Colorable * Composite::asColorable() {
 }
 
 void Composite::add(std::unique_ptr<Composite> composite) {
-    composite->setOrigin({0.f, 0.f});
     children_.push_back(std::move(composite));
 }
 
@@ -72,12 +71,13 @@ sf::FloatRect Composite::getLocalBounds() const {
         }
     };
 
-    for (const auto& child : children_) {
-        // absorb(child->getLocalBounds());  // Debug: If children are transformed in any way, local bounds does not work
-        absorb(child->getGlobalBounds());  // Debug: If children are transformed, global bounds works
+    if (const auto selfBounds = getSelfGlobalBounds()) {
+        absorb(*selfBounds);
     }
 
-    absorb(getSelfLocalBounds());
+    for (const auto& child : children_) {
+        absorb(child->getGlobalBounds());
+    }
 
     if (!initialized)
         return {};
@@ -86,12 +86,13 @@ sf::FloatRect Composite::getLocalBounds() const {
 }
 
 sf::FloatRect Composite::getGlobalBounds() const {
-    return getTransform().transformRect(getLocalBounds());
+    const auto result = getTransform().transformRect(getLocalBounds());
+    return result;
 }
 
 
 sf::Vector2f Composite::getCenter() const {
-    const auto localBounds = getLocalBounds();
+    const auto localBounds = getGlobalBounds();
     const auto x = localBounds.position.x + localBounds.size.x / 2.f;
     const auto y = localBounds.position.y + localBounds.size.y / 2.f;
     return {x, y};
@@ -108,7 +109,6 @@ std::vector<std::unique_ptr<Composite>>& Composite::getChildren() {
 void Composite::play(const float dt) {
     // Own animation
     if (const auto animated = asAnimatable()) {
-        std::cout << name_ << " " << "is playing\n";
         animated->animate(dt);
     }
     // Children animation
@@ -127,8 +127,8 @@ void Composite::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     }
 }
 
-sf::FloatRect Composite::getSelfLocalBounds() const {
-    return {};
+std::optional<sf::FloatRect> Composite::getSelfGlobalBounds() const {
+    return std::nullopt;
 }
 
 void Composite::drawChildren(sf::RenderTarget &target, const sf::RenderStates states) const {
