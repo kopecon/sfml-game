@@ -2,8 +2,8 @@
 // Created by Andrew on 30/12/2025.
 //
 
-#ifndef BONK_GAME_RENDER_COMPONENT_HPP
-#define BONK_GAME_RENDER_COMPONENT_HPP
+#ifndef BONK_GAME_RENDER_HPP
+#define BONK_GAME_RENDER_HPP
 
 #include "Composite.hpp"
 
@@ -26,4 +26,4 @@ public:
 private:
     void drawSelf(sf::RenderTarget &target, sf::RenderStates states) const override {}
 };
-#endif //BONK_GAME_RENDER_COMPONENT_HPP
+#endif //BONK_GAME_RENDER_HPP
