@@ -23,6 +23,7 @@ controls(controls)
     const bool jump = sf::Keyboard::isKeyPressed(controls.jump);
     const bool run = sf::Keyboard::isKeyPressed(controls.run);
     const bool attack = sf::Keyboard::isKeyPressed(controls.attack);
+    const bool concentrate = sf::Keyboard::isKeyPressed(controls.concentrate);
 
     using enum StateSet::ID;
 
@@ -40,6 +41,9 @@ controls(controls)
         if (run) player.stateManager.stateMachine.desiredStateID = RUNNING;
         else player.stateManager.stateMachine.desiredStateID = WALKING;
         }
+    else if (concentrate) {
+
+    }
     else
     player.stateManager.stateMachine.desiredStateID = IDLE;
 }

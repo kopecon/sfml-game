@@ -28,6 +28,7 @@ int main() {
     p1controls.jump   = sf::Keyboard::Scancode::W;
     p1controls.run    = sf::Keyboard::Scancode::LShift;
     p1controls.attack = sf::Keyboard::Scancode::F;
+    p1controls.concentrate = sf::Keyboard::Scancode::C;
 
     Controls p2controls;
     p2controls.left   = sf::Keyboard::Scancode::Left;
