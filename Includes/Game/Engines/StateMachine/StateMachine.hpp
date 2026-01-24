@@ -15,10 +15,25 @@ template<EnumSetConcept StateSet>
 class StateMachine {
 public:
     #pragma region constructors
-    StateMachine() {
-        initWithNoneState();
-    }
+    StateMachine() {initWithNoneState();}
     #pragma endregion
+
+    // ACTIONS
+    template<typename T>
+    T& addState(std::unique_ptr<T> state)
+    requires std::is_base_of_v<State<StateSet>, T> {
+        T& addedState = *state;
+        states_.try_emplace(state->getID(), std::move(state));
+        leaveNoneState(addedState);
+        return addedState;
+    }
+
+    template<typename T, typename ... Args>
+    T& createState(Args&&... args)
+    requires std::is_base_of_v<State<StateSet>, T> {
+        auto createdState = std::make_unique<T>(std::forward<Args>(args)...);
+        return addState(std::move(createdState));
+    }
 
     // SETTERS
     void setDesiredState(const typename StateSet::ID id) {
@@ -55,31 +70,6 @@ public:
         return *pPreviousState_;
     }
 
-    State<StateSet>& getState(typename StateSet::ID stateID) {
-        auto it = states_.find(stateID);
-        if (it == states_.end()) {
-            if (verbose_) std::cout << "Desired state " << StateSet::name(stateID) << " is not implemented!\n";
-            return *pCurrentState_;
-        }
-        return *it->second;
-    }
-
-    template<typename T>
-    T& addState(std::unique_ptr<T> state)
-    requires std::is_base_of_v<State<StateSet>, T> {
-        T& addedState = *state;
-        states_.try_emplace(state->getID(), std::move(state));
-        leaveNoneState(addedState);
-        return addedState;
-    }
-
-    template<typename T, typename ... Args>
-    T& createState(Args&&... args)
-    requires std::is_base_of_v<State<StateSet>, T> {
-        auto createdState = std::make_unique<T>(std::forward<Args>(args)...);
-        return addState(std::move(createdState));
-    }
-
     // UPDATE
     void update() {
         getCurrentState().update();
@@ -108,26 +98,43 @@ private:
     }
 
     void transition() {
-        auto newStateID = getCurrentState().next(desiredStateID_);
-        if (newStateID != getCurrentState().getID()) {
-            auto &newState = getState(newStateID);
-            if (!newState.hasEdges()) generateFallBackEdge(newState);
-            exit(*pCurrentState_);
-            enter(newState);
+        auto &currentState = getCurrentState();
+        typename StateSet::ID nextStateID = currentState.next(desiredStateID_);
+        if (nextStateID != currentState.getID()) {
+            State<StateSet> &nextState = getNextState(nextStateID);
+            if (!nextState.hasEdges()) generateFallBackEdge(nextState);
+            exit(currentState);
+            enter(nextState);
+        }
+    }
+
+    void initWithNoneState() {
+        auto noneCurrentState = std::make_unique<State<StateSet>>(NONE);
+        auto [current_it, current_inserted] = states_.try_emplace(noneCurrentState->getID(), std::move(noneCurrentState));
+        if (current_inserted) {
+            pCurrentState_ = current_it->second.get();
+            pPreviousState_ = current_it->second.get();
+        }
+    }
+    void leaveNoneState(State<StateSet> &nextState) {
+        // This is one-way connection that gets executed immediately.
+        if (getCurrentState().getID() == NONE) {
+            getCurrentState().connect([]{return true;}, nextState);
         }
     }
 
     void generateFallBackEdge(State<StateSet> &state) {
         // Intended as a last resort to prevent stuck states
         state.addEdge(std::make_unique<typename State<StateSet>::Edge>(getCurrentState().getID()));
-#ifndef NDEBUG
+        #ifndef NDEBUG
         std::cerr << "\nWarning: State "
                   << StateSet::name(state.getID())
                   << " has no edges. Auto-generated fallback to "
-                  << StateSet::name(pCurrentState_->getID())
+                  << StateSet::name(getCurrentState().getID())
                   << '\n';
-#endif
+        #endif
     }
+
     // SETTERS
     void setCurrentState(State<StateSet> &state) {
         if (states_.contains(state.getID())) {
@@ -148,20 +155,15 @@ private:
             << StateSet::name(state.getID()) << "\n";
         }
     }
-    // ACTIONS
-    void initWithNoneState() {
-        auto noneCurrentState = std::make_unique<State<StateSet>>(NONE);
-        auto [current_it, current_inserted] = states_.try_emplace(noneCurrentState->getID(), std::move(noneCurrentState));
-        if (current_inserted) {
-            pCurrentState_ = current_it->second.get();
-            pPreviousState_ = current_it->second.get();
+
+    // GETTERS
+    State<StateSet>& getNextState(typename StateSet::ID stateID) {
+        auto it = states_.find(stateID);
+        if (it == states_.end()) {
+            if (verbose_) std::cout << "Desired state " << StateSet::name(stateID) << " is not implemented!\n";
+            return getCurrentState();
         }
-    }
-    void leaveNoneState(State<StateSet> &nextState) {
-        // This is one-way connection that gets executed immediately.
-        if (getCurrentState().getID() == NONE) {
-            getCurrentState().connect([]{return true;}, nextState);
-        }
+        return *it->second;
     }
 };
 
