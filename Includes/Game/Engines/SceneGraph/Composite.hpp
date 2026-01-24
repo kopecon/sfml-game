@@ -13,7 +13,6 @@
 #include "SFML/Graphics/Transformable.hpp"
 #include "SFML/Graphics/RenderTarget.hpp"
 
-
 class Animatable;
 class Colorable;
 

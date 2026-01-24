@@ -6,6 +6,7 @@
 #include "../../../Includes/Game/Game.hpp"
 #include "../../../Includes/Entity/Player/Player.hpp"
 #include "../../../Includes/Entity/Player/PlayerSprite.hpp"
+#include "../../../Includes/Game/Engines/SceneGraph/RectangleShape.hpp"
 #include "../../../Includes/World/World.hpp"
 
 
@@ -18,10 +19,11 @@ namespace player {
         playerSprite->rename("PlayerSprite");
         playerSprite->getSprite().setScale(hd::divide(player.getCharacterSize(), playerSprite->getGlobalBounds().size));
 
+
         // RENDER
         auto &render = player.render;
         render.add(std::move(playerSprite));
         render.setOrigin({render.getCenter().x, render.getCenter().y + 0.5f * render.getGlobalBounds().size.y});
-        render.showOutline(sf::Color::Blue);
+        // render.showOutline(sf::Color::Blue);
     }
 } // player

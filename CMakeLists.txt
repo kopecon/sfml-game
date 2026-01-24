@@ -98,6 +98,8 @@ add_executable("${CMAKE_PROJECT_NAME}" Src/main.cpp
         Src/Game/Engines/SceneGraph/Sprite.cpp
         Includes/Game/Engines/SceneGraph/Sprite.hpp
         Includes/Game/Engines/SceneGraph/Colorable.hpp
+        Src/Game/Engines/SceneGraph/RectangleShape.cpp
+        Includes/Game/Engines/SceneGraph/RectangleShape.hpp
 )
 
 if (PRODUCTION_BUILD)
