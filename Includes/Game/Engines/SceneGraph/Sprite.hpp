@@ -18,7 +18,9 @@ public:
 
     void applyColor(sf::Color color) override;
 
-    [[nodiscard]] sf::Sprite& getSprite() const;
+    [[nodiscard]] sf::Sprite& getSprite();
+
+    [[nodiscard]] const sf::Sprite& getSprite() const;
 
 private:
     std::optional<sf::FloatRect> getSelfGlobalBounds() const override;

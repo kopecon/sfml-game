@@ -21,8 +21,12 @@ void Sprite::applyColor(const sf::Color color) {
     sprite_->setColor(color);
 }
 
-sf::Sprite& Sprite::getSprite() const {
-    // TODO: possibly bad practice... temporary solution?
+sf::Sprite& Sprite::getSprite() {
+    return *sprite_;
+}
+
+const sf::Sprite & Sprite::getSprite() const {
+    // Read only return
     return *sprite_;
 }
 
