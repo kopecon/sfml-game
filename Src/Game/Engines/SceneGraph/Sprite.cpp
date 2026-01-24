@@ -4,9 +4,6 @@
 
 #include "../../../../Includes/Game/Engines/SceneGraph/Sprite.hpp"
 
-#include "SFML/Graphics/RenderTarget.hpp"
-#include "SFML/Graphics/Texture.hpp"
-
 
 Sprite::Sprite(const sf::Texture& texture):
     sprite_(std::make_unique<sf::Sprite>(texture)) {

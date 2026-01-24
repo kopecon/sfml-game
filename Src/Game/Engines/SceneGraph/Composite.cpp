@@ -2,13 +2,10 @@
 // Created by Andrew on 05/01/2026.
 //
 
-#include "SFML/Graphics/RenderTarget.hpp"
-#include "SFML/Graphics/RectangleShape.hpp"
 #include "../../../../Includes/Game/Engines/SceneGraph/Composite.hpp"
-
-#include <iostream>
-
+#include "../../../../Includes/Game/Engines/SceneGraph/Colorable.hpp"
 #include "../../../../Includes/Game/Engines/AnimationEngine/Animatable.hpp"
+#include <iostream>
 
 
 #pragma region constructors

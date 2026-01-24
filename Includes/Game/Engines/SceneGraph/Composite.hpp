@@ -8,14 +8,15 @@
 #include <string>
 #include <vector>
 
-#include "Colorable.hpp"
 #include "SFML/Graphics/Drawable.hpp"
-#include "SFML/Graphics/Transformable.hpp"
 #include "SFML/Graphics/RectangleShape.hpp"
-#include "SFML/Graphics/Sprite.hpp"
+#include "SFML/Graphics/Transformable.hpp"
+#include "SFML/Graphics/RenderTarget.hpp"
 
 
 class Animatable;
+class Colorable;
+
 
 class Composite : public sf::Drawable, public sf::Transformable {
 protected:

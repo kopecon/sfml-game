@@ -6,7 +6,6 @@
 #include "../../../Includes/Game/Game.hpp"
 #include "../../../Includes/Entity/Player/Player.hpp"
 #include "../../../Includes/Entity/Player/PlayerSprite.hpp"
-#include "../../../Includes/Game/Engines/SceneGraph/AnimatedSprite.hpp"
 #include "../../../Includes/World/World.hpp"
 
 

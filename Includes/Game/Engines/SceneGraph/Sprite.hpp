@@ -6,6 +6,7 @@
 #define BONK_GAME_SPRITE_HPP
 #include "Colorable.hpp"
 #include "Composite.hpp"
+#include "SFML/Graphics/Sprite.hpp"
 
 
 class Sprite : public Composite, public Colorable {
