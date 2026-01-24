@@ -4,8 +4,8 @@
 
 #ifndef BONK_GAME_STATE_MANAGER_HPP
 #define BONK_GAME_STATE_MANAGER_HPP
-#include "StateSet.hpp"
-#include "../../../Game/Engines/StateMachine/StateMachine.hpp"
+#include "States/StateSet.hpp"
+#include "../../Game/Engines/StateMachine/StateMachine.hpp"
 
 
 namespace player {

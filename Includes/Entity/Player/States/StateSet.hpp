@@ -27,6 +27,7 @@ struct EnumSetTraits<player::StateSet> {
         ATTACKING,
         BRAKING,
         STOPPING,
+        CONCENTRATING,
     };
 
     static std::string_view name(const Enum &state) {

@@ -13,7 +13,7 @@
 #include "MovementComponent.hpp"
 #include "CombatComponent.hpp"
 #include "RenderManager.hpp"
-#include "States/StateManager.hpp"
+#include "StateManager.hpp"
 
 
 class World;
