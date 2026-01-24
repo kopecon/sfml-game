@@ -32,6 +32,11 @@ void Composite::rename(std::string name) {
 }
 
 void Composite::setColor(const sf::Color &color) {
+    // Color self
+    if (const auto colorable = asColorable()) {
+        colorable->applyColor(color);
+    }
+    // Color children
     for (const auto &child : getChildren()) {
         if (const auto colorable = child->asColorable()) {
             colorable->applyColor(color);
