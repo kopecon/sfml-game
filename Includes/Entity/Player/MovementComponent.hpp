@@ -15,11 +15,9 @@ namespace player {
     class MovementComponent {
     public:
         explicit MovementComponent(Player &player);
-        // COMMANDS
+        // ACTIONS
         void turn() const;
         void walk() const;
-        void walkLeft() const;
-        void walkRight() const;
         void brake() const;
         void jump() const;
         // SETTERS
@@ -43,6 +41,9 @@ namespace player {
         sf::Vector2f snap_{0.05f, 0.05f};  // How aggressively player changes speed
         sf::Vector2f speed_{};
         std::function<void()> walk_{[this](){brake();}};  // If walk direction not decided, break.
+        // ACTIONS
+        void walkLeft() const;
+        void walkRight() const;
     };
 }
 

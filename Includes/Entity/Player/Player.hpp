@@ -25,6 +25,7 @@ namespace player {
         explicit Player(World &world, entityID ID, std::string name);
         explicit Player(World &world, entityID ID, std::string name, const Controls &controls);
 #pragma endregion
+        // ACTIONS
         // SETTERS
         void setDesiredState(typename StateSet::ID state);
         void setFacingRight(bool value);
@@ -38,8 +39,6 @@ namespace player {
         [[nodiscard]] float getEyeDryness() const;
         [[nodiscard]] PhysicsComponent& getPhysics();
         [[nodiscard]] MovementComponent& getMovement();
-        // UPDATE
-        void update() override;
 
     private:
         // CHARACTERISTICS
@@ -56,7 +55,8 @@ namespace player {
         // MANAGERS
         StateManager stateManager_{*this};
         RenderManager renderManager_{*this};
-
+        // UPDATE
+        void update() override;
     };
 } //player
 

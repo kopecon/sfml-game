@@ -23,16 +23,6 @@ void player::MovementComponent::walk() const {
     walk_();
 }
 
-void player::MovementComponent::walkLeft() const {
-    if (player_.isFacingRight()) turn();
-    else player_.getPhysics().accelerate(-player_.getMovement().getSpeed());
-}
-
-void player::MovementComponent::walkRight() const {
-    if (!player_.isFacingRight()) turn();
-    else player_.getPhysics().accelerate(player_.getMovement().getSpeed());
-}
-
 void player::MovementComponent::brake() const {
     if (player_.getPhysics().isGrounded())
         player_.getPhysics().accelerate({0.f, player_.velocity.y});
@@ -81,4 +71,14 @@ void player::MovementComponent::update() {
     else {
         speed_ = hd::multiply(player_.getCharacterSize(), walkingSpeed_);
     }
+}
+
+void player::MovementComponent::walkLeft() const {
+    if (player_.isFacingRight()) turn();
+    else player_.getPhysics().accelerate(-player_.getMovement().getSpeed());
+}
+
+void player::MovementComponent::walkRight() const {
+    if (!player_.isFacingRight()) turn();
+    else player_.getPhysics().accelerate(player_.getMovement().getSpeed());
 }

@@ -16,7 +16,7 @@ namespace player {
         {}
 
     void Player::setDesiredState(const StateSet::ID state) {
-        stateManager_.stateMachine.desiredStateID = state;
+        stateManager_.getEngine().desiredStateID = state;
     }
 
     void Player::setFacingRight(const bool value) {
@@ -38,17 +38,21 @@ namespace player {
     }
 
     const State<StateSet>& Player::getCurrentState() const {
-        assert(stateManager_.stateMachine.pCurrentState);
-        return *stateManager_.stateMachine.pCurrentState;
+        assert(stateManager_.getEngine().pCurrentState);
+        return *stateManager_.getEngine().pCurrentState;
     }
 
     const State<StateSet>& Player::getPreviousState() const {
-        assert(stateManager_.stateMachine.pPreviousState);
-        return *stateManager_.stateMachine.pPreviousState;
+        assert(stateManager_.getEngine().pPreviousState);
+        return *stateManager_.getEngine().pPreviousState;
     }
 
     bool Player::isFacingRight() const {
         return facingRight_;
+    }
+
+    float Player::getEyeDryness() const {
+        return eyeDryness_;
     }
 
     PhysicsComponent & Player::getPhysics() {
@@ -59,13 +63,9 @@ namespace player {
         return movement_;
     }
 
-    float Player::getEyeDryness() const {
-        return eyeDryness_;
-    }
-
     void Player::update() {
         input_.update();
-        // physics.verbose = true;
+        // physics_.setVerbose(true);
         physics_.update();
         stateManager_.update();
     }
