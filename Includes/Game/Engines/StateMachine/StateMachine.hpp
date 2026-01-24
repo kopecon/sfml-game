@@ -15,7 +15,9 @@ template<EnumSetConcept StateSet>
 class StateMachine {
 public:
     #pragma region constructors
-    StateMachine() = default;
+    StateMachine() {
+        initWithNoneState();
+    }
     #pragma endregion
 
     // SETTERS
@@ -32,27 +34,26 @@ public:
 
     // GETTERS
     [[nodiscard]] State<StateSet>& getCurrentState() {
-        assert(pCurrentState_);
+        assert(pCurrentState_);  // Should not happen. Initiated with "none" state.
         return *pCurrentState_;
     }
 
     [[nodiscard]] const State<StateSet>& getCurrentState() const {
         // Read only return.
-        assert(pCurrentState_);
+        assert(pCurrentState_);  // Should not happen. Initiated with "none" state.
         return *pCurrentState_;
     }
 
     [[nodiscard]] State<StateSet>& getPreviousState() {
-        if (!pPreviousState_) return *pCurrentState_;
+        assert(pPreviousState_);  // Should not happen. Initiated with "none" state.
         return *pPreviousState_;
     }
 
     [[nodiscard]] const State<StateSet>& getPreviousState() const {
         // Read only return.
-        if (!pPreviousState_) return *pCurrentState_;
+        assert(pPreviousState_);  // Should not happen. Initiated with "none" state.
         return *pPreviousState_;
     }
-
 
     State<StateSet>& getState(typename StateSet::ID stateID) {
         auto it = states_.find(stateID);
@@ -64,47 +65,37 @@ public:
     }
 
     template<typename T>
-    void addState(std::unique_ptr<T> pState)
+    T& addState(std::unique_ptr<T> state)
     requires std::is_base_of_v<State<StateSet>, T> {
-
-        auto [it, inserted] = states_.try_emplace(pState->ID, std::move(pState));
-
-        State<StateSet>* addedState = it->second.get();
-
-        // Prevent mandatory null-checks
-        if (!pCurrentState_ && inserted) {
-            pCurrentState_ = addedState;
-        }
+        T& addedState = *state;
+        states_.try_emplace(state->getID(), std::move(state));
+        leaveNoneState(addedState);
+        return addedState;
     }
 
     template<typename T, typename ... Args>
-    State<StateSet>* createState(Args&&... args)
+    T& createState(Args&&... args)
     requires std::is_base_of_v<State<StateSet>, T> {
-        auto newState = std::make_unique<T>(std::forward<Args>(args)...);
-        auto [it, inserted] = states_.try_emplace(newState->getID(), std::move(newState));
-        if (!pCurrentState_ && inserted) {
-            pCurrentState_ = it->second.get();
-        }
-        return it->second.get();
+        auto createdState = std::make_unique<T>(std::forward<Args>(args)...);
+        return addState(std::move(createdState));
     }
 
     // UPDATE
     void update() {
-        // 1. Check if we are in a state
-        assert(pCurrentState_);
-        // // 2. Do state action
-        pCurrentState_->update();
-        // // 3. Transition to the new state
+        getCurrentState().update();
         transition();
     }
+
 private:
     // MEMBERS
     std::unordered_map<typename StateSet::ID, std::unique_ptr<State<StateSet>>> states_{};
     State<StateSet> *pCurrentState_{nullptr};
     State<StateSet> *pPreviousState_{nullptr};
     typename StateSet::ID desiredStateID_{};
+    constexpr static StateSet::ID NONE{-1};
     // DEBUG SETTINGS
     bool verbose_{false};
+
     // ACTIONS
     void enter(State<StateSet> &state) {
         setCurrentState(state);
@@ -155,6 +146,21 @@ private:
         else {
             std::cout << "Attempted to set nonexisting previous state: "
             << StateSet::name(state.getID()) << "\n";
+        }
+    }
+    // ACTIONS
+    void initWithNoneState() {
+        auto noneCurrentState = std::make_unique<State<StateSet>>(NONE);
+        auto [current_it, current_inserted] = states_.try_emplace(noneCurrentState->getID(), std::move(noneCurrentState));
+        if (current_inserted) {
+            pCurrentState_ = current_it->second.get();
+            pPreviousState_ = current_it->second.get();
+        }
+    }
+    void leaveNoneState(State<StateSet> &nextState) {
+        // This is one-way connection that gets executed immediately.
+        if (getCurrentState().getID() == NONE) {
+            getCurrentState().connect([]{return true;}, nextState);
         }
     }
 };

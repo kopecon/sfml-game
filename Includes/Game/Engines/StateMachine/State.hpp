@@ -15,16 +15,11 @@
 
 template <EnumSetConcept StateSet>
 class State {
-protected:
-    // STATE IDENTITY
-    typename StateSet::ID id_{};  // Enum value representing the id of the state
-    std::string_view name_{};  // String value representing the name of the state
-
 public:
     struct Edge {
         #pragma region constructors
         Edge() = default;
-        explicit Edge(const typename StateSet::ID &next) : next(next) {}
+        explicit Edge(const typename StateSet::ID &id) : next(id) {}
         Edge(std::function<bool()> condition, const typename StateSet::ID &next) : next(next) {
             this->condition = std::move(condition);
         }
@@ -37,9 +32,9 @@ public:
     #pragma region constructors
     virtual ~State() = default;
 
-    explicit State(const typename StateSet::ID &stateID) :
-        id_(stateID),
-        name_(StateSet::name(stateID))
+    explicit State(const typename StateSet::ID &id) :
+        id_(id),
+        name_(StateSet::name(id_))
         {}
     #pragma endregion
 
@@ -126,6 +121,10 @@ public:
             action();
         }
     };
+protected:
+    // STATE IDENTITY
+    typename StateSet::ID id_{};  // Enum value representing the id of the state
+    std::string_view name_{};  // String value representing the name of the state
 
 private:
     std::vector<std::unique_ptr<Edge>> edges{};  // Connections to other states
