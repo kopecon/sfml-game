@@ -10,18 +10,6 @@
 #include "SFML/System/Vector2.hpp"
 
 
-template <typename T>
-bool areClose(const T &num1, const T &num2, const T &epsilon = std::numeric_limits<T>::epsilon() * 100) {
-    return std::abs(num1 - num2) <= epsilon;
-}
-
-inline bool areClose(const sf::Vector2f &num1, const sf::Vector2f &num2, const float &epsilon=std::numeric_limits<float>::epsilon() * 100) {
-    if (std::abs(num1.x - num2.x) <= epsilon &&
-        std::abs(num1.y - num2.y) <= epsilon )
-        return true;
-    return false;
-}
-
 namespace text {
     inline std::string up(std::string string) {
         // INPLACE UPPERCASE
@@ -30,6 +18,11 @@ namespace text {
         }
         return string;
     }
+}
+
+template <typename T>
+    bool areClose(const T &num1, const T &num2, const T &epsilon = std::numeric_limits<T>::epsilon() * 100) {
+    return std::abs(num1 - num2) <= epsilon;
 }
 
 namespace hadamard {
@@ -64,6 +57,13 @@ namespace hadamard {
         result.y = std::fabs(vector.y);
         return result;
     }
+
+    inline bool areClose(const sf::Vector2f &num1, const sf::Vector2f &num2, const float &epsilon=std::numeric_limits<float>::epsilon() * 100) {
+        if (std::abs(num1.x - num2.x) <= epsilon &&
+            std::abs(num1.y - num2.y) <= epsilon )
+            return true;
+        return false;
+    }
 }
 
 namespace hd = hadamard;
@@ -91,6 +91,18 @@ namespace scalar {
         result.y = (vector.y / scalar);
         return result;
     }
+}
+
+template<typename T>
+float magnitudeRatio(sf::Vector2<T> expected, sf::Vector2<T> current) {
+    // How much bigger is expected than current
+    const float currentMag = std::hypot(current.x, current.y);
+    const float expectedMag = std::hypot(expected.x, expected.y);
+
+    if (currentMag <= std::numeric_limits<float>::epsilon())
+        return 1.f;
+
+    return expectedMag / currentMag;
 }
 
 #endif //BONK_GAME_UTILS_HPP

@@ -13,13 +13,15 @@ namespace player {
 
 
     class PlayerSprite final : public AnimatedSprite<StateSet>{
-        Player &player;
         void selectAnimation();
         void updateFPS() const;
         void update() override;
 
     public:
         PlayerSprite(Player &player, std::unique_ptr<AnimationSheet> animationSheet);
+
+    private:
+        Player &player_;
     };
 } // player
 

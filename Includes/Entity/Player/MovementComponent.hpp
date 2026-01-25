@@ -28,7 +28,10 @@ namespace player {
         void setRightWalkingDirection();
         // GETTERS
         [[nodiscard]] sf::Vector2f getSpeed();
+        [[nodiscard]] sf::Vector2f getWalkingSpeed() const;
+        [[nodiscard]] sf::Vector2f getRunningSpeed() const;
         [[nodiscard]] sf::Vector2f getSnap() const;
+        [[nodiscard]] float getSpeedRatio();
         // UPDATE
         void update();
 
@@ -36,8 +39,8 @@ namespace player {
         // REFERENCES
         Player &player_;
         // CHARACTERISTICS
-        sf::Vector2f walkingSpeed_{3.f, 2.f};
-        sf::Vector2f runningSpeed_{6.f, 2.25f};
+        sf::Vector2f walkingSpeedMultiplier_{3.f, 2.f};
+        sf::Vector2f runningSpeedMultiplier_{6.f, 2.25f};
         sf::Vector2f snap_{0.05f, 0.05f};  // How aggressively player changes speed
         sf::Vector2f speed_{};
         std::function<void()> walk_{[this](){brake();}};  // If walk direction not decided, break.
