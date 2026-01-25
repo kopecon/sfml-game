@@ -35,11 +35,11 @@ void player::MovementComponent::jump() const {
 }
 
 void player::MovementComponent::setWalkingSpeed(const sf::Vector2f speed) {
-    walkingSpeed_ = speed;
+    walkingSpeedMultiplier_ = speed;
 }
 
 void player::MovementComponent::setRunningSpeed(const sf::Vector2f speed) {
-    runningSpeed_ = speed;
+    runningSpeedMultiplier_ = speed;
 }
 
 void player::MovementComponent::setSnap(sf::Vector2f snap) {
@@ -59,17 +59,31 @@ sf::Vector2f player::MovementComponent::getSpeed() {
     return speed_;
 }
 
+sf::Vector2f player::MovementComponent::getWalkingSpeed() const {
+    return hd::multiply(player_.getCharacterSize(), walkingSpeedMultiplier_);;
+}
+
+sf::Vector2f player::MovementComponent::getRunningSpeed() const {
+    return hd::multiply(player_.getCharacterSize(), runningSpeedMultiplier_);
+}
+
 sf::Vector2f player::MovementComponent::getSnap() const {
     return snap_;
+}
+
+float player::MovementComponent::getSpeedRatio() {
+    // Possibly clamping output?
+    // Possibly unnecessary getter.
+    return magnitudeRatio(speed_, player_.velocity);
 }
 
 void player::MovementComponent::update() {
     if (player_.getCurrentState().getID() == RUNNING
         || player_.getCurrentState().getID() == JUMPING
         && player_.getPreviousState().getID() == RUNNING)
-        speed_ = hd::multiply(player_.getCharacterSize(), runningSpeed_);
+        speed_ = getRunningSpeed();
     else {
-        speed_ = hd::multiply(player_.getCharacterSize(), walkingSpeed_);
+        speed_ = getWalkingSpeed();
     }
 }
 

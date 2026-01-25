@@ -8,18 +8,32 @@
 namespace player {
     void PlayerSprite::selectAnimation() {
         using enum StateSet::ID;
-        switch (player.getCurrentState().getID()) {
+
+        auto pickWalkingOrRunning = [&] {
+            // TODO: temporary magic number.
+            if (std::abs(player_.velocity.x) - 100.f <= std::abs(player_.getMovement().getWalkingSpeed().x))
+                animator.setAnimation(WALKING);
+            else
+                animator.setAnimation(RUNNING);;
+        };
+
+        switch (player_.getCurrentState().getID()) {
             case IDLE:
-                animator.setAnimation(IDLE);
+                if (!areClose(player_.velocity.x, 0.f)) {
+                    pickWalkingOrRunning();
+                }
+                else animator.setAnimation(IDLE);
                 break;
             case WINKING:
                 animator.setAnimation(WINKING);
                 break;
             case WALKING:
-                animator.setAnimation(WALKING);
+                pickWalkingOrRunning();
                 break;
             case RUNNING:
-                animator.setAnimation(RUNNING);
+                if (std::abs(player_.velocity.x) > std::abs(player_.getMovement().getWalkingSpeed().x))
+                    animator.setAnimation(RUNNING);
+                else animator.setAnimation(WALKING);
                 break;
             case CROUCHING:
                 animator.setAnimation(CROUCHING);
@@ -36,6 +50,9 @@ namespace player {
             case ATTACKING:
                 animator.setAnimation(ATTACKING);
                 break;
+            case BRAKING:
+                pickWalkingOrRunning();
+                break;
             default:
                 animator.setAnimation(IDLE);
         }
@@ -46,19 +63,20 @@ namespace player {
 
         auto &currentAnimation = animator.getCurrentAnimation();
 
-        const auto speedRatio = hd::abs(hd::divide(player.velocity, player.getMovement().getSpeed()));
-
         switch (currentAnimation.getID()) {
             case WALKING : {
-                currentAnimation.setSPF(1.f/static_cast<float>(currentAnimation.getFPR()) * speedRatio.x);
+                const auto speedRatio = magnitudeRatio(player_.getMovement().getWalkingSpeed(), player_.velocity);
+                currentAnimation.setSPF(1.f/static_cast<float>(currentAnimation.getFPR()) * speedRatio);
                 break;
             }
             case RUNNING : {
-                currentAnimation.setSPF(1.f/static_cast<float>(currentAnimation.getFPR()) * speedRatio.x * 0.7f);
+                const auto speedRatio = magnitudeRatio(player_.getMovement().getRunningSpeed(), player_.velocity);
+                currentAnimation.setSPF(1.f/static_cast<float>(currentAnimation.getFPR()) * speedRatio * 0.7f);
                 break;
             }
             case JUMPING : {
-                currentAnimation.setSPF(1.f/static_cast<float>(currentAnimation.getFPR()) * speedRatio.y * 0.6f);
+                const auto speedRatio = magnitudeRatio(player_.getMovement().getSpeed(), player_.velocity);
+                currentAnimation.setSPF(1.f/static_cast<float>(currentAnimation.getFPR()) * speedRatio * 0.6f);
                 break;
             }
             case ATTACKING : {
@@ -77,7 +95,7 @@ namespace player {
 
     PlayerSprite::PlayerSprite(Player &player, std::unique_ptr<AnimationSheet> animationSheet):
         AnimatedSprite(std::move(animationSheet)),
-        player(player) {
+        player_(player) {
         animator.addAnimation(std::make_unique<Animation<StateSet> >(StateSet::ID::IDLE, 2, true));
         animator.addAnimation(std::make_unique<Animation<StateSet> >(StateSet::ID::WINKING, 2, true));
         animator.addAnimation(std::make_unique<Animation<StateSet> >(StateSet::ID::WALKING, 4, true));
