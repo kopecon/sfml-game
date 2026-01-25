@@ -88,8 +88,8 @@ private:
 
     // ACTIONS
     void enter(State<StateSet> &state) {
+        state.onEnter();
         setCurrentState(state);
-        getCurrentState().onEnter();
     }
 
     void exit(State<StateSet> &state) {
