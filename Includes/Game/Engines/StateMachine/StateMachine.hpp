@@ -93,7 +93,7 @@ private:
     }
 
     void exit(State<StateSet> &state) {
-        getPreviousState().onExit();
+        getCurrentState().onExit();
         setPreviousState(state);
     }
 
