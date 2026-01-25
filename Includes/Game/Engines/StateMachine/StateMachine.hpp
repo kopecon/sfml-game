@@ -23,8 +23,9 @@ public:
     T& addState(std::unique_ptr<T> state)
     requires std::is_base_of_v<State<StateSet>, T> {
         T& addedState = *state;
-        states_.try_emplace(state->getID(), std::move(state));
-        leaveNoneState(addedState);
+        auto [it, inserted] = states_.try_emplace(state->getID(), std::move(state));
+        assert(inserted && "State ID already exists");
+        bootstrap(addedState);
         return addedState;
     }
 
@@ -72,8 +73,8 @@ public:
 
     // UPDATE
     void update() {
-        getCurrentState().update();
         transition();
+        getCurrentState().update();
     }
 
 private:
@@ -82,7 +83,7 @@ private:
     State<StateSet> *pCurrentState_{nullptr};
     State<StateSet> *pPreviousState_{nullptr};
     typename StateSet::ID desiredStateID_{};
-    constexpr static StateSet::ID NONE{-1};
+    constexpr static StateSet::ID NONE{-1};  //TODO: Temporary.
     // DEBUG SETTINGS
     bool verbose_{false};
 
@@ -117,15 +118,13 @@ private:
             pPreviousState_ = current_it->second.get();
         }
     }
-    void leaveNoneState(State<StateSet> &nextState) {
+    void bootstrap(State<StateSet> &first) {
         // This is one-way connection that gets executed immediately.
-        if (getCurrentState().getID() == NONE) {
-            getCurrentState().connect([]{return true;}, nextState);
-        }
+            states_.at(NONE)->connect([]{return true;}, first);
     }
 
     void generateFallBackEdge(State<StateSet> &state) {
-        // Intended as a last resort to prevent stuck states
+        // Intended as a last resort to prevent stuck states. Temporary solution. Implement better state graph validating.
         state.addEdge(std::make_unique<typename State<StateSet>::Edge>(getCurrentState().getID()));
         #ifndef NDEBUG
         std::cerr << "\nWarning: State "
@@ -142,7 +141,7 @@ private:
             pCurrentState_ = &state;
         }
         else {
-            std::cout << "Attempted to set nonexisting current state: "
+            std::cerr << "Attempted to set nonexisting current state: "
             << StateSet::name(state.getID()) << "\n";
         }
     }
@@ -152,7 +151,7 @@ private:
             pPreviousState_ = &state;
         }
         else {
-            std::cout << "Attempted to set nonexisting previous state: "
+            std::cerr << "Attempted to set nonexisting previous state: "
             << StateSet::name(state.getID()) << "\n";
         }
     }
@@ -161,7 +160,7 @@ private:
     State<StateSet>& getNextState(typename StateSet::ID stateID) {
         auto it = states_.find(stateID);
         if (it == states_.end()) {
-            if (verbose_) std::cout << "Desired state " << StateSet::name(stateID) << " is not implemented!\n";
+            if (verbose_) std::cerr << "Desired state " << StateSet::name(stateID) << " is not implemented!\n";
             return getCurrentState();
         }
         return *it->second;
