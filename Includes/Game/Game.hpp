@@ -19,7 +19,7 @@ public:
     Game();
     explicit Game(const std::string &title);
 #pragma endregion
-    World* createWorld(std::string name);
+    World& createWorld(std::string name);
 
     World* getWorld(std::string name);
     // GETTERS

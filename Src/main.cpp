@@ -13,7 +13,7 @@ int main() {
     #pragma endregion
 
     #pragma region world
-    auto &worldForest = *game.createWorld("Forest");
+    auto &worldForest = game.createWorld("Forest");
     #pragma endregion
 
     #pragma region background

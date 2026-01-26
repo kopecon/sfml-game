@@ -14,18 +14,22 @@ title_(title),
 video_(title)
 {}
 
-World* Game::createWorld(std::string name) {
-    auto pWorld = std::make_unique<World>(*this, std::move(name));
-    auto [it, inserted] = worlds_.emplace(pWorld->name, std::move(pWorld));
-    pCurrentWorld_ = it->second.get();
-    return it->second.get();
+World& Game::createWorld(std::string name) {
+    auto world = std::make_unique<World>(*this, std::move(name));
+    const std::string key = world->name;
+    auto [it, inserted] = worlds_.emplace(key, std::move(world));
+    World& worldRef = *it->second.get();
+    pCurrentWorld_ = &worldRef;  //TODO: temporary
+    return worldRef;
 }
 
 World* Game::getWorld(std::string name) {
     const auto NAME = text::up(std::move(name));
     const auto it = worlds_.find(NAME);
-    if (it == worlds_.end())
+    if (it == worlds_.end()) {
+        std::cerr << "World with name: " << name << " was not found.\n";
         return nullptr;
+    }
     return it->second.get();
 }
 
