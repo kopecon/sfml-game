@@ -32,7 +32,15 @@ public:
     void play(float dt);
     void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
     // SETTERS
-    void add(std::unique_ptr<Composite> composite);
+
+    template <typename T>
+    requires (std::is_base_of_v<Composite, T>)
+    T& add(std::unique_ptr<T> composite){
+        T& ref = *composite;
+        children_.push_back(std::move(composite));
+        return ref;
+    }
+
     void rename(std::string name);
     void setColor(const sf::Color &color);
     void showOutline(sf::Color color = sf::Color::Red);

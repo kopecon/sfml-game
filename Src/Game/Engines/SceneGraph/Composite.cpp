@@ -30,10 +30,6 @@ void Composite::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     drawOutline(target, states);
 }
 
-void Composite::add(std::unique_ptr<Composite> composite) {
-    children_.push_back(std::move(composite));
-}
-
 void Composite::rename(std::string name) {
     name_ = std::move(name);
 }
