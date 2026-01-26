@@ -4,6 +4,9 @@
 
 #ifndef BONK_GAME_INPUT_COMPONENT_HPP
 #define BONK_GAME_INPUT_COMPONENT_HPP
+#include <functional>
+
+#include "SFML/Window/Event.hpp"
 #include "SFML/Window/Keyboard.hpp"
 
 
@@ -30,9 +33,9 @@ namespace player {
 
     private:
         // REFERENCES
-        Player &player;
+        Player &player_;
         // CHARACTERISTICS
-        Controls controls{};
+        Controls controls_{};
     };
 }
 

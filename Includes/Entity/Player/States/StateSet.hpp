@@ -45,6 +45,7 @@ struct EnumSetTraits<player::StateSet> {
             case ATTACKING:      return "ATTACKING";
             case BRAKING:        return "BRAKING";
             case STOPPING:       return "STOPPING";
+            case CONCENTRATING:  return "CONCENTRATING";
             default:             return "UNKNOWN";
         }
     }

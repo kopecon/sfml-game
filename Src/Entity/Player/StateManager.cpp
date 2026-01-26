@@ -9,6 +9,7 @@
 #include "../../../Includes/Entity/Player/States/Running.hpp"
 #include "../../../Includes/Entity/Player/States/Stopping.hpp"
 #include "../../../Includes/Entity/Player/States/Attacking.hpp"
+#include "../../../Includes/Entity/Player/States/Concentrating.hpp"
 #include "../../../Includes/Entity/Player/States/Winking.hpp"
 
 
@@ -20,10 +21,11 @@ player::StateManager::StateManager(Player &player) {
     stateMachine_.createState<Stopping>(player);
     stateMachine_.createState<Winking>(player);
     stateMachine_.createState<Attacking>(player);
+    stateMachine_.createState<Concentrating>(player);
     auto &crouching = stateMachine_.createState<State<StateSet>>(StateSet::ID::CROUCHING);
     idle.connect(crouching);
     crouching.connect(idle);
-    stateMachine_.setVerbose(false);
+    stateMachine_.setVerbose(true);
 }
 
 StateMachine<player::StateSet> & player::StateManager::getEngine() {

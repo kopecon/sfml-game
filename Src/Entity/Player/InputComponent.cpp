@@ -8,45 +8,46 @@
 
 
 #pragma region constructors
-player::InputComponent::InputComponent(Player &player) : player(player) {
+player::InputComponent::InputComponent(Player &player) : player_(player) {
 }
 
 player::InputComponent::InputComponent(Player &player, const Controls &controls):
-player(player),
-controls(controls)
+player_(player),
+controls_(controls)
 {}
 #pragma endregion
 
     void player::InputComponent::update() const {
-    const bool left = sf::Keyboard::isKeyPressed(controls.left);
-    const bool right = sf::Keyboard::isKeyPressed(controls.right);
-    const bool jump = sf::Keyboard::isKeyPressed(controls.jump);
-    const bool run = sf::Keyboard::isKeyPressed(controls.run);
-    const bool attack = sf::Keyboard::isKeyPressed(controls.attack);
-    const bool crouch = sf::Keyboard::isKeyPressed(controls.crouch);
-    const bool concentrate = sf::Keyboard::isKeyPressed(controls.concentrate);
+    const bool left        = sf::Keyboard::isKeyPressed(controls_.left       );
+    const bool right       = sf::Keyboard::isKeyPressed(controls_.right      );
+    const bool jump        = sf::Keyboard::isKeyPressed(controls_.jump       );
+    const bool run         = sf::Keyboard::isKeyPressed(controls_.run        );
+    const bool attack      = sf::Keyboard::isKeyPressed(controls_.attack     );
+    const bool crouch      = sf::Keyboard::isKeyPressed(controls_.crouch     );
+    const bool concentrate = sf::Keyboard::isKeyPressed(controls_.concentrate);
 
     using enum StateSet::ID;
 
     // ACTIONS NEED TO BE SORTED BY PRIORITY
-    if (jump) player.setDesiredState(JUMPING);
-    else if (attack) player.setDesiredState(ATTACKING);
-    else if (left && right) player.setDesiredState(STOPPING);
+    if (jump) player_.setDesiredState(JUMPING);
+    else if (attack) player_.setDesiredState(ATTACKING);
+    else if (left && right) player_.setDesiredState(STOPPING);
     else if (left) {
-        player.getMovement().setLeftWalkingDirection();
-        if (run) player.setDesiredState(RUNNING);
-        else player.setDesiredState(WALKING);
+        player_.getMovement().setLeftWalkingDirection();
+        if (run) player_.setDesiredState(RUNNING);
+        else player_.setDesiredState(WALKING);
         }
     else if (right) {
-        player.getMovement().setRightWalkingDirection();
-        if (run) player.setDesiredState(RUNNING);
-        else player.setDesiredState(WALKING);
+        player_.getMovement().setRightWalkingDirection();
+        if (run) player_.setDesiredState(RUNNING);
+        else player_.setDesiredState(WALKING);
         }
     else if (concentrate) {
+        player_.setDesiredState(CONCENTRATING);
     }
     else if (crouch) {
-        player.setDesiredState(CROUCHING);
+        player_.setDesiredState(CROUCHING);
     }
     else
-    player.setDesiredState(IDLE);
+    player_.setDesiredState(IDLE);
 }
