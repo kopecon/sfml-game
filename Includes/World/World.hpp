@@ -39,27 +39,28 @@ public:
 
     // Create Entity at [0, 0]
     template<typename T, typename ... Args>
-    T& createEntity(Args&&... args)
-    requires (std::is_base_of_v<entity::Entity, T>) {
+    requires (std::is_base_of_v<entity::Entity, T>)
+    T& createEntity(Args&&... args) {
         // Count entity
         entityCounter[typeid(T)] += 1;
         auto entityName = T::getClassName() + std::to_string(getEntityCount(typeid(T)));
         // Create entity
-        auto pEntity = std::make_unique<T>(*this, ++newEntityID, entityName, std::forward<Args>(args)...);
+        auto entity = std::make_unique<T>(*this, ++newEntityID, entityName, std::forward<Args>(args)...);
+        T& entityRef = *entity;
         // Store in the list of entities
-        auto [it, inserted] = entities.emplace(pEntity->getID(), std::move(pEntity));
+        entities.emplace(entity->getID(), std::move(entity));
         std::cout << entityName << " created. \n";
-        return getEntity<T>(*it->second);
+        return entityRef;
     }
 
     // Create Entity at [x,y]
     template<typename T, typename ... Args>
-    T& createEntityAt(sf::Vector2f position, Args&&... args)
-    requires (std::is_base_of_v<entity::Entity, T>) {
+    requires (std::is_base_of_v<entity::Entity, T>)
+    T& createEntityAt(sf::Vector2f position, Args&&... args) {
         // Create the entity
-        auto pEntity = &createEntity<T>(args...);
-        pEntity->position = position;
-        return *pEntity;
+        T& entity = createEntity<T>(args...);
+        entity.position = position;
+        return entity;
     }
 
     template<typename T>
@@ -85,13 +86,6 @@ public:
             std::cout << entity->getID() << " ";
         }
         std::cout << "\n";
-    }
-
-    template<typename T>
-    T& getEntity(const entity::Entity &entity)
-    requires (std::is_base_of_v<entity::Entity, T>) {
-        const auto it = entities.find(entity.getID());
-        return dynamic_cast<T&>(*it->second);
     }
 
     std::unordered_map<entityID, std::unique_ptr<entity::Entity>>* getEntities() {
