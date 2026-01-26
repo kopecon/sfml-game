@@ -35,10 +35,10 @@ bool player::PhysicsComponent::isGrounded() const {
 }
 
 void player::PhysicsComponent::update() const {
-    const float &dt = player_.game.time.get();
+    const float &dt = player_.game.getTime().get();
     const float &airFriction = player_.world.airFriction;
     // ReSharper disable once CppUseStructuredBinding
-    const PhysicsEngine &engine = player_.game.engine;
+    const PhysicsEngine &engine = player_.game.getPhysics();
 
     player_.acceleration.y = player_.world.gravity;  // Apply Gravity
 

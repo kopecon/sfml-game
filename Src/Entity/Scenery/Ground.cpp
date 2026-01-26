@@ -23,8 +23,8 @@ namespace scenery {
 #pragma endregion
 
     void Ground::buildRender() {
-        auto &topTex = game.textures.topGround;
-        auto &bottomTex = game.textures.bottomGround;
+        auto &topTex = game.getTextures().topGround;
+        auto &bottomTex = game.getTextures().bottomGround;
 
         topTex.setRepeated(true);
         bottomTex.setRepeated(true);
@@ -37,7 +37,7 @@ namespace scenery {
         top->getSprite().setTextureRect(
             sf::IntRect({0, 0},
                 sf::Vector2i(
-                    static_cast<int>(game.video.getWindowSize().x)*3,
+                    static_cast<int>(game.getVideo().getWindowSize().x)*3,
                     static_cast<int>(top->getGlobalBounds().size.y)
                 )
             )
@@ -45,7 +45,7 @@ namespace scenery {
         bottom->getSprite().setTextureRect(
             sf::IntRect({0, 0},
                 sf::Vector2i(
-                    static_cast<int>(game.video.getWindowSize().x)*3,
+                    static_cast<int>(game.getVideo().getWindowSize().x)*3,
                     static_cast<int>(bottom->getGlobalBounds().size.y)
                 )
             )

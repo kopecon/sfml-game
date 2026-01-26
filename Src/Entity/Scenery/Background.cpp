@@ -22,7 +22,7 @@ namespace scenery {
 #pragma endregion
 
     void Background::buildRender() {
-        auto &texture = game.textures.background;
+        auto &texture = game.getTextures().background;
         texture.setRepeated(true);
 
         auto sprite = std::make_unique<Sprite>(texture);
@@ -30,7 +30,7 @@ namespace scenery {
         const auto spriteSize = sprite->getGlobalBounds().size;
         // Fit sprite to window
         sprite->setScale(
-            hd::divide(game.video.getWindowSize(), spriteSize)
+            hd::divide(game.getVideo().getWindowSize(), spriteSize)
         );
         // Make 3 "copies"
         sprite->getSprite().setTextureRect(

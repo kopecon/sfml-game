@@ -13,7 +13,7 @@
 namespace player {
     RenderManager::RenderManager(Player &player) : player_(player) {
         // PLAYER SPRITE
-        auto &texture = player.game.textures.player;
+        auto &texture = player.game.getTextures().player;
         auto animationSheet = std::make_unique<AnimationSheet>(texture, sf::Vector2u(32, 32));
         auto playerSprite = std::make_unique<PlayerSprite>(player, std::move(animationSheet));
         playerSprite->rename("PlayerSprite");

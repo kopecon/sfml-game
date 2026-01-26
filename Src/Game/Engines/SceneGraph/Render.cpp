@@ -10,7 +10,7 @@ Render::Render(entity::Entity &entity) :
 
 void Render::loop() const {
     // This could be improved, but I don't care anymore... it works well enough now.
-    const Camera &camera = entity_.game.video.camera;
+    const Camera &camera = entity_.game.getVideo().camera;
 
     const auto cameraCenter = camera.view.getCenter();
     const auto cameraWidth = camera.view.getSize().x / camera.zoom;
@@ -30,6 +30,6 @@ void Render::loop() const {
 
 
 void Render::update() {
-    play(entity_.game.time.get());
+    play(entity_.game.getTime().get());
     setPosition(entity_.position);
 }

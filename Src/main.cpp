@@ -9,7 +9,7 @@
 int main() {
     #pragma region game settup
     Game game("Bonk Game");
-    const sf::RenderWindow &window = game.video.getWindow();  // Reference the game window
+    const sf::RenderWindow &window = game.getVideo().getWindow();  // Reference the game window
     #pragma endregion
 
     #pragma region world
@@ -40,7 +40,7 @@ int main() {
 
     auto &player1 = worldForest.createEntityAt<player::Player>({-0.f, 10.f}, p1controls);
     auto &player2 = worldForest.createEntityAt<player::Player>({ 100.f, 10.f}, p2controls);
-    game.video.camera.pTarget = &player1;
+    game.getVideo().camera.pTarget = &player1;
     player2.render.setColor(sf::Color({0,200,255}));
     worldForest.remove(player2);
     #pragma endregion

@@ -14,30 +14,36 @@
 
 
 class Game {
-protected:
-    // WORLDS
-    std::unordered_map<std::string, std::unique_ptr<World>> worlds{};
-    World *pCurrentWorld{nullptr};
 public:
 #pragma region constructors
     Game();
     explicit Game(const std::string &title);
 #pragma endregion
-    // META DATA
-    const std::string title{};
-    // COMPONENTS
-    VideoComponent video{};
-    AudioComponent audio{};
-    TimeComponent time{};
-    TextureComponent textures{};
-    PhysicsEngine engine{};
-
-
     World* createWorld(std::string name);
 
     World* getWorld(std::string name);
-
+    // GETTERS
+    AudioComponent& getAudio();
+    VideoComponent& getVideo();
+    TimeComponent& getTime();
+    TextureComponent& getTextures();
+    PhysicsEngine& getPhysics();
+    // UPDATE
     void update();
+
+private:
+    // LIST OF ADDED WORLDS
+    std::unordered_map<std::string, std::unique_ptr<World>> worlds_{};
+    // WORLD ACCESS
+    World *pCurrentWorld_{nullptr};
+    // META DATA
+    const std::string title_{};
+    // COMPONENTS
+    VideoComponent video_{};
+    AudioComponent audio_{};
+    TimeComponent time_{};
+    TextureComponent textures_{};
+    PhysicsEngine physics_{};
 };
 
 #endif //BONK_GAME_GAME_HPP
