@@ -6,6 +6,7 @@
 #define BONK_GAME_INPUT_COMPONENT_HPP
 #include <functional>
 
+#include "../../../Utils/customTypes.hpp"
 #include "SFML/Window/Event.hpp"
 #include "SFML/Window/Keyboard.hpp"
 
@@ -36,6 +37,9 @@ namespace player {
         Player &player_;
         // CHARACTERISTICS
         Controls controls_{};
+        // HANDLER
+        Handler handler_{[](const sf::Event& ){}};
+        void handlePressedKey(const sf::Event::KeyPressed& keyPressed);
     };
 }
 

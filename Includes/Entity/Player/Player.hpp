@@ -47,14 +47,14 @@ namespace player {
         // CONDITIONS
         bool facingRight_{true};
         float eyeDryness_{};
+        // MANAGERS
+        StateManager stateManager_{*this};
+        RenderManager renderManager_{*this};
         // COMPONENTS
         InputComponent input_{*this};
         PhysicsComponent physics_{*this};
         MovementComponent movement_{*this};
         CombatComponent combat_{*this};
-        // MANAGERS
-        StateManager stateManager_{*this};
-        RenderManager renderManager_{*this};
         // UPDATE
         void update() override;
     };

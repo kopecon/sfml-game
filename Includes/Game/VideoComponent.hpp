@@ -51,14 +51,7 @@ private:
     // EVENTS
     std::vector<sf::Event> frameEvents_;
     // HANDLERS
-    Handler handler_ = [&](const sf::Event& event) {
-        if (event.is<sf::Event::Closed>()) {
-            handleClosing();
-        }
-        if (const auto keyPressed = event.getIf<sf::Event::KeyPressed>()) {
-            handlePressedKey(*keyPressed);
-        }
-    };
+    Handler handler_{[](const sf::Event& event){}};
     // ACTIONS
     void handleClosing();
     void handlePressedKey(const sf::Event::KeyPressed &keyPressed);

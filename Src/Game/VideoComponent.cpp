@@ -10,6 +10,14 @@
 VideoComponent::VideoComponent(Game& game) :
     game(game) {
     window_.setFramerateLimit(fps_);
+    handler_ = [&](const sf::Event& event) {
+        if (event.is<sf::Event::Closed>()) {
+            handleClosing();
+        }
+        if (const auto keyPressed = event.getIf<sf::Event::KeyPressed>()) {
+            handlePressedKey(*keyPressed);
+        }
+    };
     game.getInput().subscribe(handler_);
 }
 

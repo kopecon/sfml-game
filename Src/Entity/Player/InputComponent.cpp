@@ -5,6 +5,7 @@
 #include "../../../Includes/Entity/Player/InputComponent.hpp"
 #include "../../../Includes/Entity/Player/Player.hpp"
 #include "../../../Includes/Entity/Player/States/StateSet.hpp"
+#include "../../../Includes/Game/Game.hpp"
 
 
 #pragma region constructors
@@ -12,9 +13,15 @@ player::InputComponent::InputComponent(Player &player) : player_(player) {
 }
 
 player::InputComponent::InputComponent(Player &player, const Controls &controls):
-player_(player),
-controls_(controls)
-{}
+    player_(player),
+    controls_(controls) {
+    handler_ = [this](const sf::Event& event) {
+        if (const auto keyPressed = event.getIf<sf::Event::KeyPressed>()) {
+            handlePressedKey(*keyPressed);
+        }
+    };
+    player_.game.getInput().subscribe(handler_);
+}
 #pragma endregion
 
     void player::InputComponent::update() const {
@@ -50,4 +57,8 @@ controls_(controls)
     }
     else
     player_.setDesiredState(IDLE);
+}
+
+void player::InputComponent::handlePressedKey(const sf::Event::KeyPressed &keyPressed) {
+    std::cout << StateSet::name(player_.getCurrentState().getID()) << "\n";
 }
