@@ -23,8 +23,8 @@ World& Game::createWorld(std::string name) {
     return worldRef;
 }
 
-EventHandler & Game::getInput() {
-    return input_;
+EventHandler & Game::getEventHandler() {
+    return eventHandler_;
 }
 
 World* Game::getWorld(std::string name) {
@@ -66,5 +66,5 @@ void Game::update() {
     // Update entities in the world
     pCurrentWorld_->update();
     video_.update();
-    input_.process(video_.getEvents());
+    eventHandler_.process(video_.getEvents());
 }

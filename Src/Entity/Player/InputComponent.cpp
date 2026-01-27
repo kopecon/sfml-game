@@ -15,12 +15,12 @@ player::InputComponent::InputComponent(Player &player) : player_(player) {
 player::InputComponent::InputComponent(Player &player, const Controls &controls):
     player_(player),
     controls_(controls) {
-    handler_ = [this](const sf::Event& event) {
-        if (const auto keyPressed = event.getIf<sf::Event::KeyPressed>()) {
-            handlePressedKey(*keyPressed);
-        }
-    };
-    player_.game.getInput().subscribe(handler_);
+    player_.game.getEventHandler().subscribe(eventSubscriber);
+}
+
+player::InputComponent::~InputComponent() {
+    std::cout << eventSubscriber.id << "\n";
+    player_.game.getEventHandler().unsubscribe(eventSubscriber);
 }
 #pragma endregion
 

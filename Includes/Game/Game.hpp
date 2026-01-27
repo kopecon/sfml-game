@@ -24,7 +24,7 @@ public:
     // SETTERS
     World& createWorld(std::string name);
     // GETTERS
-    EventHandler& getInput();
+    EventHandler& getEventHandler();
     AudioComponent& getAudio();
     VideoComponent& getVideo();
     TimeComponent& getTime();
@@ -43,7 +43,7 @@ private:
     // META DATA
     const std::string title_{};
     // COMPONENTS
-    EventHandler input_{};
+    EventHandler eventHandler_{};
     VideoComponent video_;
     AudioComponent audio_{};
     TimeComponent time_{};

@@ -9,6 +9,7 @@
 #include "Camera.hpp"
 #include "../../Utils/customTypes.hpp"
 #include "../../Utils/utils.hpp"
+#include "EventHandler.hpp"
 
 class Game;
 class World;
@@ -18,6 +19,7 @@ class VideoComponent {
 public:
     explicit VideoComponent(Game& game);
     explicit VideoComponent(Game& game, const std::string &title);
+    ~VideoComponent();
 
     // ACTIONS
     // SETTERS
@@ -51,7 +53,14 @@ private:
     // EVENTS
     std::vector<sf::Event> frameEvents_;
     // HANDLERS
-    Handler handler_{[](const sf::Event& event){}};
+    EventHandler::Subscriber eventSubscriber_{0, [&](const sf::Event& event) {
+        if (event.is<sf::Event::Closed>()) {
+            handleClosing();
+        }
+        if (const auto keyPressed = event.getIf<sf::Event::KeyPressed>()) {
+            handlePressedKey(*keyPressed);
+        }
+    }};
     // ACTIONS
     void handleClosing();
     void handlePressedKey(const sf::Event::KeyPressed &keyPressed);

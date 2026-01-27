@@ -10,15 +10,7 @@
 VideoComponent::VideoComponent(Game& game) :
     game(game) {
     window_.setFramerateLimit(fps_);
-    handler_ = [&](const sf::Event& event) {
-        if (event.is<sf::Event::Closed>()) {
-            handleClosing();
-        }
-        if (const auto keyPressed = event.getIf<sf::Event::KeyPressed>()) {
-            handlePressedKey(*keyPressed);
-        }
-    };
-    game.getInput().subscribe(handler_);
+    game.getEventHandler().subscribe(eventSubscriber_);
 }
 
 VideoComponent::VideoComponent(Game& game, const std::string &title) :
@@ -28,7 +20,11 @@ VideoComponent::VideoComponent(Game& game, const std::string &title) :
     window_(sf::VideoMode(initialWindowSize_), title, sf::Style::Default, windowState_, settings_),
     camera_(window_) {
     window_.setFramerateLimit(fps_);
-    game.getInput().subscribe(handler_);
+    game.getEventHandler().subscribe(eventSubscriber_);
+}
+
+VideoComponent::~VideoComponent() {
+    game.getEventHandler().unsubscribe(eventSubscriber_);
 }
 
 void VideoComponent::recreateWindow() {

@@ -42,10 +42,11 @@ int main() {
     auto &player2 = worldForest.createEntityAt<player::Player>({ 100.f, 10.f}, p2controls);
     game.getVideo().getCamera().pTarget = &player1;
     player2.render.setColor(sf::Color({0,200,255}));
+    // worldForest.remove(player1);
     worldForest.remove(player2);
     #pragma endregion
 
-    // game.getAudio().music.play();
+    game.getAudio().music.play();
     #pragma region window loop
     while (window.isOpen()) {
         game.update();

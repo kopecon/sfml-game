@@ -9,6 +9,7 @@
 #include "../../../Utils/customTypes.hpp"
 #include "SFML/Window/Event.hpp"
 #include "SFML/Window/Keyboard.hpp"
+#include "../../Game/EventHandler.hpp"
 
 
 #pragma region controls
@@ -30,6 +31,7 @@ namespace player {
     public:
         explicit InputComponent(Player &player);
         explicit InputComponent(Player &player, const Controls &controls);
+        ~InputComponent();
         void update() const;
 
     private:
@@ -38,7 +40,12 @@ namespace player {
         // CHARACTERISTICS
         Controls controls_{};
         // HANDLER
-        Handler handler_{[](const sf::Event& ){}};
+        EventHandler::Subscriber eventSubscriber{0, [this](const sf::Event& event) {
+            if (const auto keyPressed = event.getIf<sf::Event::KeyPressed>()) {
+                handlePressedKey(*keyPressed);
+            }
+        }};
+
         void handlePressedKey(const sf::Event::KeyPressed& keyPressed);
     };
 }

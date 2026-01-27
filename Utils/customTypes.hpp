@@ -9,6 +9,6 @@
 #include "SFML/Window/Event.hpp"
 
 using Handler = std::function<void(const sf::Event&)>;
-
+using HandlerID = std::size_t;
 
 #endif //BONK_GAME_CUSTOM_TYPES_HPP
