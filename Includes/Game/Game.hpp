@@ -7,6 +7,7 @@
 
 #include "VideoComponent.hpp"
 #include "AudioComponent.hpp"
+#include "EventHandler.hpp"
 #include "Engines/PhysicsEngine.hpp"
 #include "TextureComponent.hpp"
 #include "TimeComponent.hpp"
@@ -23,12 +24,14 @@ public:
     // SETTERS
     World& createWorld(std::string name);
     // GETTERS
+    EventHandler& getInput();
     AudioComponent& getAudio();
     VideoComponent& getVideo();
     TimeComponent& getTime();
     TextureComponent& getTextures();
     PhysicsEngine& getPhysics();
     World* getWorld(std::string name);
+    World& getCurrentWorld() const;
     // UPDATE
     void update();
 
@@ -40,7 +43,8 @@ private:
     // META DATA
     const std::string title_{};
     // COMPONENTS
-    VideoComponent video_{};
+    EventHandler input_{};
+    VideoComponent video_;
     AudioComponent audio_{};
     TimeComponent time_{};
     TextureComponent textures_{};

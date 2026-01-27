@@ -4,17 +4,19 @@
 
 #ifndef BONK_GAME_VIDEO_COMPONENT_HPP
 #define BONK_GAME_VIDEO_COMPONENT_HPP
+#include <functional>
 #include <SFML/Graphics.hpp>
 #include "Camera.hpp"
 #include "../../Utils/utils.hpp"
 
+class Game;
 class World;
 
 
 class VideoComponent {
 public:
-    VideoComponent();
-    explicit VideoComponent(const std::string &title);
+    explicit VideoComponent(Game& game);
+    explicit VideoComponent(Game& game, const std::string &title);
 
     // ACTIONS
     // SETTERS
@@ -25,10 +27,13 @@ public:
     [[nodiscard]] sf::Vector2f getWindowToScreenRatio() const;
     static sf::Vector2u getScreenSize();
     Camera& getCamera();
+    std::vector<sf::Event>& getEvents();
     // UPDATE
-    void update(World *pWorld);
+    void update();
 
 private:
+    // REFERENCES
+    Game& game;
     // METADATA
     const std::string windowTitle_{};
     // HARDWARE PARAMETERS
@@ -40,11 +45,24 @@ private:
     float windowSizeRatio_ = 2.f;  // Screen size / window size
     sf::State windowState_ = sf::State::Windowed;  // Initial state when game starts
     sf::Vector2u initialWindowSize_ = static_cast<sf::Vector2u>(scalar::divide(screenSize_, windowSizeRatio_));
-    sf::RenderWindow window_{};
+        sf::RenderWindow window_{};
     Camera camera_{};
+    // EVENTS
+    std::vector<sf::Event> frameEvents_;
+    // HANDLERS
+    std::function<void(const sf::Event&)> handler_ = [&](const sf::Event& event) {
+        if (event.is<sf::Event::Closed>()) {
+            handleClosing();
+        }
+        if (const auto keyPressed = event.getIf<sf::Event::KeyPressed>()) {
+            handlePressedKey(*keyPressed);
+        }
+    };
     // ACTIONS
-    void onClose(const sf::Event::Closed&);
-    void onKeyPressed(const sf::Event::KeyPressed& keyPressed);
+    void handleClosing();
+    void handlePressedKey(const sf::Event::KeyPressed &keyPressed);
+    // UPDATE
+    void pollEvents();
 };
 
 

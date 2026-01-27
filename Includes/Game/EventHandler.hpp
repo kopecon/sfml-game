@@ -1,0 +1,28 @@
+//
+// Created by Andrew on 26/01/2026.
+//
+
+#ifndef BONK_GAME_EVENT_HANDLER_HPP
+#define BONK_GAME_EVENT_HANDLER_HPP
+#include <functional>
+#include <optional>
+#include <vector>
+
+#include "SFML/Window/Event.hpp"
+
+
+class EventHandler {
+public:
+    using Handler = std::function<void(const sf::Event&)>;
+
+    EventHandler() = default;
+    // SETTER
+    void subscribe(const Handler &handler);
+    // UPDATE
+    void process(const std::vector<sf::Event>& events) const;
+private:
+    std::vector<Handler> handlers_{};
+};
+
+
+#endif //BONK_GAME_EVENT_HANDLER_HPP

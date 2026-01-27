@@ -7,20 +7,24 @@
 #include <unordered_map>
 
 
-Game::Game() = default;
+Game::Game() : video_(*this) {};
 
 Game::Game(const std::string &title):
 title_(title),
-video_(title)
+video_(*this, title)
 {}
 
 World& Game::createWorld(std::string name) {
     auto world = std::make_unique<World>(*this, std::move(name));
     const std::string key = world->name;
     auto [it, inserted] = worlds_.emplace(key, std::move(world));
-    World& worldRef = *it->second.get();
+    World& worldRef = *it->second;
     pCurrentWorld_ = &worldRef;  //TODO: temporary
     return worldRef;
+}
+
+EventHandler & Game::getInput() {
+    return input_;
 }
 
 World* Game::getWorld(std::string name) {
@@ -31,6 +35,10 @@ World* Game::getWorld(std::string name) {
         return nullptr;
     }
     return it->second.get();
+}
+
+World & Game::getCurrentWorld() const {
+    return *pCurrentWorld_;
 }
 
 AudioComponent & Game::getAudio() {
@@ -57,5 +65,6 @@ void Game::update() {
     time_.update();
     // Update entities in the world
     pCurrentWorld_->update();
-    video_.update(pCurrentWorld_);
+    video_.update();
+    input_.process(video_.getEvents());
 }
