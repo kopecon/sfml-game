@@ -18,7 +18,6 @@ HandlerID EventHandler::subscribe(Subscriber &subscriber) {
     const HandlerID id = lastHandlerID_++;
     subscriber.id = id;
     subscribers_.push_back(std::move(subscriber));
-    printVector(subscribers_);
     return id;
 }
 
