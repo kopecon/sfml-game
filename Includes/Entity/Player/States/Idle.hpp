@@ -12,6 +12,10 @@ namespace player {
     class Idle final : public PlayerState {
     public:
         explicit Idle(Player &player);
+
+    private:
+        Action mainAction() const;
+        Condition goToWinking() const;
     };
 }
 

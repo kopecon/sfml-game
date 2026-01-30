@@ -11,12 +11,20 @@ player::Idle::Idle(Player &player): PlayerState(player, StateSet::ID::IDLE) {
     addEdge(std::make_unique<Edge>(StateSet::ID::JUMPING));
     addEdge(std::make_unique<Edge>(StateSet::ID::ATTACKING));
     addEdge(std::make_unique<Edge>(StateSet::ID::CONCENTRATING));
-    // CONDITION
-    auto dryEyes = [&player] {return player.getEyeDryness() >= 100;};
-    addEdge(std::make_unique<Edge>(dryEyes, StateSet::ID::WINKING));
-    // ACTION
-    addAction([&player] {
+    addEdge(std::make_unique<Edge>(goToWinking(), StateSet::ID::WINKING));
+    // ACTIONS
+    addAction(mainAction());
+}
+
+Action player::Idle::mainAction() const {
+    Player& player = player_;
+    return [&player] {
         player.setEyeDryness(player.getEyeDryness() + 0.1f);
         player.getMovement().brake();
-    });
+    };
+}
+
+Condition player::Idle::goToWinking() const {
+    Player& player = player_;
+    return [&player]{return player.getEyeDryness() >= 100;};
 }
