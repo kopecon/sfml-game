@@ -12,6 +12,9 @@
 
 #include "../../../../Utils/EnumSet.hpp"
 
+// ALIASES
+using Condition = std::function<bool()>;
+using Action = std::function<void()>;
 
 template <EnumSetConcept StateSet>
 class State {
@@ -20,12 +23,12 @@ public:
         #pragma region constructors
         Edge() = default;
         explicit Edge(const typename StateSet::ID &id) : next(id) {}
-        Edge(std::function<bool()> condition, const typename StateSet::ID &next) : next(next) {
+        Edge(Condition condition, const typename StateSet::ID &next) : next(next) {
             this->condition = std::move(condition);
         }
         #pragma endregion
 
-        std::function<bool()> condition{};
+        Condition condition{};
         StateSet::ID next{};
     };
 
@@ -60,17 +63,17 @@ public:
         edges_.push_back(std::move(edge));
     }
 
-    void addAction(std::function<void()> action) {
+    void addAction(Action action) {
         // Actions are called in the order they were added in. FIFO.
         actions_.push_back(std::move(action));
     }
 
-    void addEnterAction(std::function<void()> action) {
+    void addEnterAction(Action action) {
         // Actions are called in the order they were added in. FIFO.
         enterActions_.push_back(std::move(action));
     }
 
-    void addExitAction(std::function<void()> action) {
+    void addExitAction(Action action) {
         // Actions are called in the order they were added in. FIFO.
         exitActions_.push_back(std::move(action));
     }
@@ -80,7 +83,7 @@ public:
         edges_.push_back(std::move(edge));
     }
 
-    void connect(std::function<bool()> condition, const State &state) {
+    void connect(Condition condition, const State &state) {
         auto edge = std::make_unique<Edge>(std::move(condition), state.id_);
         edges_.push_back(std::move(edge));
     }
@@ -138,9 +141,9 @@ private:
     // EDGES
     std::vector<std::unique_ptr<Edge>> edges_{};  // Connections to other states
     // ACTIONS
-    std::vector<std::function<void()>> actions_{};
-    std::vector<std::function<void()>> enterActions_{};
-    std::vector<std::function<void()>> exitActions_{};
+    std::vector<Action> actions_{};
+    std::vector<Action> enterActions_{};
+    std::vector<Action> exitActions_{};
     // DEBUG SETTINGS
     bool verbose_{false};
 };
