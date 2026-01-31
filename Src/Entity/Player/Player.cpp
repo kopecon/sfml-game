@@ -1,4 +1,6 @@
 #include "../../../Includes/Entity/Player/Player.hpp"
+
+#include "../../../Includes/Game/Game.hpp"
 #include "../../../Includes/World/World.hpp"
 
 

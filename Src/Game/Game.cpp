@@ -64,9 +64,9 @@ PhysicsEngine & Game::getPhysics() {
 }
 
 void Game::update() {
+    input_.clear();
     time_.update();
-    // Update entities in the world
-    pCurrentWorld_->update();
     video_.update();
     eventHandler_.process(video_.getEvents());
+    pCurrentWorld_->update();
 }
