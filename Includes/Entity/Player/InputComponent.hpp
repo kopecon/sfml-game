@@ -7,9 +7,7 @@
 
 #include "SFML/Window/Event.hpp"
 #include "SFML/Window/Keyboard.hpp"
-
-
-class InputHandler;
+#include "../../Game/Engines/EventHandling/InputHandler.hpp"
 
 
 #pragma region controls
@@ -34,6 +32,7 @@ namespace player {
 
         // GETTERS
         [[nodiscard]] Controls& getControls();
+        [[nodiscard]] const InputHandler::KeyState& key(const sf::Keyboard::Scancode& key) const;
         // UPDATE
         void update() const;
 

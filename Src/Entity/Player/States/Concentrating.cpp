@@ -16,9 +16,8 @@ namespace player {
     }
 
     Condition Concentrating::exit() const {
-        auto &controls = player_.getInput().getControls();
-        auto &input = player_.game.getInput();
-        return [&controls, &input]{return input.key(controls.concentrate).pressed;};
+        auto &input = player_.getInput();
+        return [&input]{return input.key(input.getControls().concentrate).pressed;};
     }
 
     Action Concentrating::changeColor() const {
