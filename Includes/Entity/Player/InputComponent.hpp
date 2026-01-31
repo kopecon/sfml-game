@@ -4,12 +4,12 @@
 
 #ifndef BONK_GAME_INPUT_COMPONENT_HPP
 #define BONK_GAME_INPUT_COMPONENT_HPP
-#include <functional>
 
-#include "../../../Utils/customTypes.hpp"
 #include "SFML/Window/Event.hpp"
 #include "SFML/Window/Keyboard.hpp"
-#include "../../Game/Engines/EventHandling/EventHandler.hpp"
+
+
+class InputHandler;
 
 
 #pragma region controls
@@ -27,17 +27,20 @@ struct Controls {
 namespace player {
     class Player;
 
-    class InputComponent final : public EventSubscriber {
+    class InputComponent final {
     public:
         explicit InputComponent(Player &player);
         explicit InputComponent(Player &player, const Controls &controls);
-        void update() const;
 
-        void handleEvent(const sf::Event &event) override;
+        // GETTERS
+        [[nodiscard]] Controls& getControls();
+        // UPDATE
+        void update() const;
 
     private:
         // REFERENCES
         Player &player_;
+        InputHandler& gameInput_;
         // CHARACTERISTICS
         Controls controls_{};
     };

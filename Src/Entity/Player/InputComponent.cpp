@@ -10,26 +10,30 @@
 
 #pragma region constructors
 player::InputComponent::InputComponent(Player &player) :
-    EventSubscriber(player.game.getEventHandler()),
-    player_(player)
+    player_(player),
+    gameInput_(player.game.getInput())
     {}
 
 player::InputComponent::InputComponent(Player &player, const Controls &controls):
-    EventSubscriber(player.game.getEventHandler()),
     player_(player),
+    gameInput_(player.game.getInput()),
     controls_(controls)
     {}
+
+Controls & player::InputComponent::getControls() {
+    return controls_;
+}
 
 #pragma endregion
 
     void player::InputComponent::update() const {
-    const bool left        = sf::Keyboard::isKeyPressed(controls_.left       );
-    const bool right       = sf::Keyboard::isKeyPressed(controls_.right      );
-    const bool jump        = sf::Keyboard::isKeyPressed(controls_.jump       );
-    const bool run         = sf::Keyboard::isKeyPressed(controls_.run        );
-    const bool attack      = sf::Keyboard::isKeyPressed(controls_.attack     );
-    const bool crouch      = sf::Keyboard::isKeyPressed(controls_.crouch     );
-    const bool concentrate = sf::Keyboard::isKeyPressed(controls_.concentrate);
+    const bool left        = gameInput_.key(controls_.left       ).down;
+    const bool right       = gameInput_.key(controls_.right      ).down;
+    const bool jump        = gameInput_.key(controls_.jump       ).down;
+    const bool run         = gameInput_.key(controls_.run        ).down;
+    const bool attack      = gameInput_.key(controls_.attack     ).down;
+    const bool crouch      = gameInput_.key(controls_.crouch     ).down;
+    const bool concentrate = gameInput_.key(controls_.concentrate).pressed;
 
     using enum StateSet::ID;
 
@@ -38,25 +42,21 @@ player::InputComponent::InputComponent(Player &player, const Controls &controls)
     else if (attack) player_.setDesiredState(ATTACKING);
     else if (left && right) player_.setDesiredState(STOPPING);
     else if (left) {
-        player_.getMovement().setLeftWalkingDirection();
-        if (run) player_.setDesiredState(RUNNING);
-        else player_.setDesiredState(WALKING);
-        }
+    player_.getMovement().setLeftWalkingDirection();
+    if (run) player_.setDesiredState(RUNNING);
+    else player_.setDesiredState(WALKING);
+    }
     else if (right) {
-        player_.getMovement().setRightWalkingDirection();
-        if (run) player_.setDesiredState(RUNNING);
-        else player_.setDesiredState(WALKING);
-        }
+    player_.getMovement().setRightWalkingDirection();
+    if (run) player_.setDesiredState(RUNNING);
+    else player_.setDesiredState(WALKING);
+    }
     else if (concentrate) {
-        player_.setDesiredState(CONCENTRATING);
+    player_.setDesiredState(CONCENTRATING);
     }
     else if (crouch) {
-        player_.setDesiredState(CROUCHING);
+    player_.setDesiredState(CROUCHING);
     }
     else
     player_.setDesiredState(IDLE);
-}
-
-void player::InputComponent::handleEvent(const sf::Event &event) {
-
 }

@@ -55,6 +55,10 @@ namespace player {
         return eyeDryness_;
     }
 
+    InputComponent & Player::getInput() {
+        return input_;
+    }
+
     PhysicsComponent & Player::getPhysics() {
         return physics_;
     }

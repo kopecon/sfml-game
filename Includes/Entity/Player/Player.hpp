@@ -37,6 +37,7 @@ namespace player {
         [[nodiscard]] const State<StateSet>& getPreviousState() const;
         [[nodiscard]] bool isFacingRight() const;
         [[nodiscard]] float getEyeDryness() const;
+        [[nodiscard]] InputComponent& getInput();
         [[nodiscard]] PhysicsComponent& getPhysics();
         [[nodiscard]] MovementComponent& getMovement();
 
