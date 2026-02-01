@@ -60,6 +60,7 @@ public:
 
     // SETTERS
     void addEdge(std::unique_ptr<Edge> edge) {
+        // Edges are called in the order they were added in. FIFO.
         edges_.push_back(std::move(edge));
     }
 
@@ -98,7 +99,7 @@ public:
         return true;
     }
 
-    typename StateSet::ID getNext(const typename StateSet::ID &nextStateID) {
+    typename StateSet::ID getNext(const typename StateSet::ID &desiredStateID) {
         // 0. Warn that state has no edges
         if (edges_.empty()) {
             if (verbose_) std::cout << "State: " << name_ << " has no edges!\n";
@@ -113,7 +114,7 @@ public:
             }
             // 1.b Edge has no specific condition
             else {
-                if (nextStateID == edge->next) {
+                if (desiredStateID == edge->next) {
                     return edge->next;
                 }
             }
